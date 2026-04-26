@@ -118,11 +118,29 @@ class FooterComponent extends HTMLElement {
         if(window.DbCache && window.supabaseClient) {
             const {data} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
             if(data && data.length > 0) {
-                const settings = data[0];
-                const ig = this.querySelector('#footer-instagram');
-                const fb = this.querySelector('#footer-facebook');
-                if(ig) ig.href = settings.instagram;
-                if(fb) fb.href = settings.facebook;
+                const settings = data.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
+                
+                const parseLinks = (val) => {
+                    try { return JSON.parse(val); } catch(e) { return [val]; }
+                };
+
+                const igLinks = parseLinks(settings.instagram_link);
+                const fbLinks = parseLinks(settings.facebook_link);
+                const ttLinks = parseLinks(settings.tiktok_link);
+
+                const igEl = this.querySelector('#footer-instagram');
+                const fbEl = this.querySelector('#footer-facebook');
+                const socialsList = this.querySelector('#footer-socials');
+
+                if(igEl && igLinks.length > 0) igEl.href = igLinks[0];
+                if(fbEl && fbLinks.length > 0) fbEl.href = fbLinks[0];
+
+                // Optionally add TikTok if it exists and wasn't in original HTML
+                if(ttLinks.length > 0 && socialsList && !this.querySelector('#footer-tiktok')) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="${ttLinks[0]}" id="footer-tiktok" target="_blank">TikTok</a>`;
+                    socialsList.appendChild(li);
+                }
             }
         }
     }

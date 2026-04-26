@@ -6,9 +6,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         const {data: settingsData} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
         if(settingsData && settingsData.length > 0) {
             const settings = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
+            
+            // 1. Map Embed
             const mapContainer = document.getElementById('map-container');
             if(mapContainer && settings.map_iframe_source) {
-                mapContainer.innerHTML = `<iframe src="${settings.map_iframe_source}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+                const mapInput = settings.map_iframe_source.trim();
+                if (mapInput.startsWith('<iframe')) {
+                    mapContainer.innerHTML = mapInput;
+                    const iframe = mapContainer.querySelector('iframe');
+                    if(iframe) {
+                        iframe.style.width = '100%';
+                        iframe.style.height = '100%';
+                        iframe.style.border = '0';
+                    }
+                } else {
+                    mapContainer.innerHTML = `<iframe src="${mapInput}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
+                }
+            }
+
+            // 2. Dynamic Contact Info
+            const phoneEl = document.querySelector('p[data-phone]'); // I'll add this data attribute
+            if (phoneEl && settings.phone_number) {
+                try {
+                    const numbers = JSON.parse(settings.phone_number);
+                    if(numbers.length > 0) phoneEl.textContent = numbers[0];
+                } catch(e) { phoneEl.textContent = settings.phone_number; }
             }
         }
     }
