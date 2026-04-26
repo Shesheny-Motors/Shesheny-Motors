@@ -47,9 +47,10 @@ function renderVehicleDetails() {
     document.getElementById('detail-title').textContent = currentVehicle.name;
     document.getElementById('detail-year').textContent = currentVehicle.version || '-';
     
-    document.getElementById('spec-hp').textContent = currentVehicle.fuel_type || '-';
-    document.getElementById('spec-0-60').textContent = currentVehicle.transmission || '-';
     document.getElementById('spec-miles').textContent = currentVehicle.mileage || '-';
+    document.getElementById('spec-trans').textContent = currentVehicle.transmission || '-';
+    document.getElementById('spec-fuel').textContent = currentVehicle.fuel_type || '-';
+    document.getElementById('spec-version').textContent = currentVehicle.version || '-';
 
     updatePriceDisplay();
 
@@ -76,12 +77,14 @@ function updatePriceDisplay() {
 function setupContactButtons(settings) {
     const whatsappBtn = document.getElementById('btn-whatsapp');
     const callBtn = document.getElementById('btn-call');
+    const inquireBtn = document.getElementById('btn-inquire');
 
-    // Create a pre-filled whatsapp message
-    const msg = encodeURIComponent(`Hello, I'm interested in the ${currentVehicle.version} ${currentVehicle.name}.`);
+    const vehicleName = `${currentVehicle.version} ${currentVehicle.name}`;
+    const msg = encodeURIComponent(`Hello, I'm interested in the ${vehicleName}.`);
     
-    whatsappBtn.href = `https://wa.me/${settings.whatsapp_number.replace(/\D/g,'')}?text=${msg}`;
-    callBtn.href = `tel:${settings.phone_number.replace(/\D/g,'')}`;
+    if(whatsappBtn) whatsappBtn.href = `https://wa.me/${settings.whatsapp_number.replace(/\D/g,'')}?text=${msg}`;
+    if(callBtn) callBtn.href = `tel:${settings.phone_number.replace(/\D/g,'')}`;
+    if(inquireBtn) inquireBtn.href = `contact.html?vehicle=${encodeURIComponent(vehicleName)}`;
 }
 
 function setupGallery() {
@@ -137,8 +140,7 @@ function setMainImage(index) {
         if(idx === index) {
             thumb.classList.add('border-2', 'border-[#c5a059]', 'opacity-100');
             thumb.classList.remove('opacity-50');
-            // Scroll thumb into view
-            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            // Removed scrollIntoView as it causes unexpected page scrolling
         } else {
             thumb.classList.remove('border-2', 'border-[#c5a059]', 'opacity-100');
             thumb.classList.add('opacity-50');

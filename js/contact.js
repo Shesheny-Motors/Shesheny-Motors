@@ -3,12 +3,23 @@
 document.addEventListener('DOMContentLoaded', async () => {
     // Fetch Map settings
     if(window.DbCache && window.supabaseClient) {
-        const {data: settings} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
-        if(settings && settings.length > 0 && settings[0].map_embed) {
+        const {data: settingsData} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
+        if(settingsData && settingsData.length > 0) {
+            const settings = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
             const mapContainer = document.getElementById('map-container');
-            if(mapContainer) {
-                mapContainer.innerHTML = settings[0].map_embed;
+            if(mapContainer && settings.map_iframe_source) {
+                mapContainer.innerHTML = `<iframe src="${settings.map_iframe_source}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>`;
             }
+        }
+    }
+
+    // Handle pre-filled vehicle context
+    const params = new URLSearchParams(window.location.search);
+    const vehicle = params.get('vehicle');
+    if(vehicle) {
+        const messageEl = document.getElementById('message');
+        if(messageEl) {
+            messageEl.value = `Hello, I'm interested in the ${vehicle}. Please provide more information.`;
         }
     }
 
@@ -24,18 +35,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             submitBtn.disabled = true;
 
             const formData = {
-                firstName: form.firstName.value,
-                lastName: form.lastName.value,
+                name: `${form.firstName.value} ${form.lastName.value}`,
                 email: form.email.value,
                 phone: form.phone.value,
-                inquiryType: form.inquiryType.value,
-                message: form.message.value,
-                created_at: new Date().toISOString()
+                subject: form.inquiryType.value,
+                message: form.message.value
             };
 
             if(window.supabaseClient) {
-                const { error } = await window.supabaseClient.from('inquiries').insert([formData]);
+                const { error } = await window.supabaseClient.from('messages').insert([formData]);
                 if(error) {
+                    console.error('Supabase error:', error);
                     alert('Error submitting inquiry. Please try again.');
                 } else {
                     alert('Message sent successfully!');
