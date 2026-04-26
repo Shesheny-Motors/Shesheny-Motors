@@ -90,38 +90,28 @@
             background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
     </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-surface text-on-surface font-body antialiased relative min-h-screen flex flex-col">
 <div class="noise-overlay"></div>
+<div class="event-overlay"></div>
+
 <!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-zinc-950/70 backdrop-blur-xl transition-all duration-300">
-<div class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto">
-<div class="text-xl font-headline font-bold tracking-tight text-amber-200">
-                Shesheny Motors
-            </div>
-<div class="hidden md:flex items-center space-x-8">
-<a class="text-amber-200 font-medium border-b-2 border-amber-200 pb-1 font-body text-sm tracking-wide" href="index.html">Home</a>
-<a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="inventory.html">Inventory</a>
-<a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="about.html">About</a>
-<a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="contact.html">Contact</a>
-</div>
-<div>
-<a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="contact.html">Contact</a>
-</div>
-</div>
-</nav>
+<shesheny-header></shesheny-header>
+<!-- TopNavBar -->
+<!-- Nav injected via component -->
 <!-- Hero Section -->
 <main class="flex-grow">
 <section class="relative w-full h-[921px] flex items-center justify-center overflow-hidden">
 <div class="absolute inset-0 z-0 bg-surface-container-lowest">
-<img alt="Dark luxury car front grille macro shot" class="w-full h-full object-cover opacity-50 mix-blend-luminosity" data-alt="Macro shot of a dark metallic luxury sports car front grille under dramatic low-key studio lighting with golden highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF_MybtEdEThKyz-oDXeUMJU2FbzVliP-rdTDwR95WX_xuH9WbkY0hxlCwpiEFtF3cmAmmmMvj4M6i7fU760Nts8uPuc2kCpxSI6PzjQv5bzY2blI3fM3pwLb221DWQOXDmjidr-loPYI637bD9rqcw940_20D6PlqqMiXEJ-3UJwbOwEtefUPKUCFWtUM08LwqOE7ZOFxZW6H6pZ3dMOD7T4QEzJ_ZPEmysTsfqzBAhwiUn7EKgmJ25faloIYIstHPJCYJYuqs2X0"/>
+<img id="hero-img" alt="Hero background" class="w-full h-full object-cover opacity-50 mix-blend-luminosity" src=""/>
 <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/80 to-transparent"></div>
 </div>
 <div class="relative z-10 text-center max-w-4xl px-6 flex flex-col items-center">
-<h1 class="font-headline font-bold text-5xl md:text-7xl leading-tight tracking-tight mb-6 text-on-surface">NO SURPRISES. <br/>JUST PERFECT CARS.</h1>
-<p class="font-body text-lg md:text-xl text-on-surface-variant mb-12 max-w-2xl font-light">No accidents. No hidden issues. Fully verified luxury cars.</p>
+<h1 class="font-headline font-bold text-5xl md:text-7xl leading-tight tracking-tight mb-6 text-on-surface" data-i18n="hero_title">NO SURPRISES. <br/>JUST PERFECT CARS.</h1>
+<p class="font-body text-lg md:text-xl text-on-surface-variant mb-12 max-w-2xl font-light" data-i18n="hero_subtitle">No accidents. No hidden issues. Fully verified luxury cars.</p>
 <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-4 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm tracking-wider uppercase inline-flex items-center space-x-2" href="inventory.html">
-<span>VIEW OUR INVENTORY</span>
+<span data-i18n="hero_btn">VIEW OUR INVENTORY</span>
 </a>
 </div>
 </section>
@@ -166,85 +156,25 @@
                         View All <span class="material-symbols-outlined ml-1 text-sm">arrow_forward</span>
 </a>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-<!-- Car Card 1 -->
-<div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
-<div class="h-64 overflow-hidden relative">
-<img alt="Porsche 911" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" data-alt="Silver Porsche 911 parked in a minimalist concrete modern garage setting with soft directional lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr_96eUdJ2Qys0njzmaEwVxyVu67fSaszoDTwIWNhnEKkNrD9_lZ3KZk7MzSXwQYYZQnZZ3SlbWhV7l-8aENnyu3DA7t-Zo7Qk3WtgpNQKp3mbCu-pdnY44NWRMQF8nzs6skQkAaWMiQr6CtCsV9R46MuMhnEAsiOR5XNj1NWO_9YoYQYEQy1b1dIXhbP2hELifIxCcoUrawaNrEqvf1oIp43cTf2lShTALk0ORNP6X50P_B8a4F6BWc1fMkAE3va8pM5ppC_tTgAe"/>
-</div>
-<div class="p-8">
-<h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">Porsche 911 Carrera 4S</h3>
-<div class="bg-surface-container-lowest p-4 rounded mb-6 mt-4 flex justify-between text-xs font-body text-on-surface-variant uppercase tracking-wider">
-<div class="flex flex-col"><span class="text-outline mb-1">Year</span> 2022</div>
-<div class="flex flex-col"><span class="text-outline mb-1">Miles</span> 4,200</div>
-<div class="flex flex-col"><span class="text-outline mb-1">0-60</span> 3.4s</div>
-<div class="flex flex-col"><span class="text-outline mb-1">HP</span> 443</div>
-</div>
-<a href="details.html" class="block w-full py-3 border border-outline/30 text-primary hover:bg-surface-container-highest transition-colors duration-200 font-label text-sm uppercase tracking-wider rounded text-center">View Details</a>
-</div>
-</div>
-<!-- Car Card 2 -->
-<div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
-<div class="h-64 overflow-hidden relative">
-<img alt="McLaren 720s" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" data-alt="Sleek dark grey McLaren supercar parked on a wet asphalt road at night with distant city lights blurred" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwbL8NHZFCk1yct-OOxYgIcXSddloOEi1q7a5scdlVi6tyy9Hwh65IxHyFyd4gwdS3zn69BYYj0i0ad5V784_uIgaNRmpubXepPCPGGoCd47YrqpvzsmLfyo6Vyc9149wkNCFnisgOPHyQMeuRra19tHsU5DXTJcj3fozvma0FQdNztauZTigzK4v1Z18eGobNOGqaqYJoOyue0hmYMFym8e2t2o1StnhYlqyt2FHZsRbzQUhKFbL9biEXitOKgDJi6SYICuTRKP9f"/>
-</div>
-<div class="p-8">
-<h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">McLaren 720S</h3>
-<div class="bg-surface-container-lowest p-4 rounded mb-6 mt-4 flex justify-between text-xs font-body text-on-surface-variant uppercase tracking-wider">
-<div class="flex flex-col"><span class="text-outline mb-1">Year</span> 2021</div>
-<div class="flex flex-col"><span class="text-outline mb-1">Miles</span> 2,100</div>
-<div class="flex flex-col"><span class="text-outline mb-1">0-60</span> 2.8s</div>
-<div class="flex flex-col"><span class="text-outline mb-1">HP</span> 710</div>
-</div>
-<a href="details.html" class="block w-full py-3 border border-outline/30 text-primary hover:bg-surface-container-highest transition-colors duration-200 font-label text-sm uppercase tracking-wider rounded text-center">View Details</a>
-</div>
-</div>
-<!-- Car Card 3 -->
-<div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
-<div class="h-64 overflow-hidden relative">
-<img alt="Ferrari F8" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" data-alt="Classic red Ferrari F8 Tributo captured in profile against a dark textured studio background with rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9s4Vct6fs1uwwvwJJu-ApxOgXFRkTUPnmWfzQvX7RZvxYT2EJ5utBP-iYbxHcDg0l96lXZz1Hxp8mPAJocXexIzWYTtFPqttWT_UlwoWBCLUx7yZLPpt2BMg0Ebdv8pd5eBjMTpB4kNehQQHER2_4LSNlGTdooIJM99P_C3jaEBVgnMd9nAYJIhqNw7AxLXNmMs21AUk23SEDbNmhUerOlHTB_uQIdaD75H-f9apQm-aFDS_Cro1pW9NG3xJuKV_W58sNR1Z2CcjC"/>
-</div>
-<div class="p-8">
-<h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">Ferrari F8 Tributo</h3>
-<div class="bg-surface-container-lowest p-4 rounded mb-6 mt-4 flex justify-between text-xs font-body text-on-surface-variant uppercase tracking-wider">
-<div class="flex flex-col"><span class="text-outline mb-1">Year</span> 2023</div>
-<div class="flex flex-col"><span class="text-outline mb-1">Miles</span> 850</div>
-<div class="flex flex-col"><span class="text-outline mb-1">0-60</span> 2.9s</div>
-<div class="flex flex-col"><span class="text-outline mb-1">HP</span> 710</div>
-</div>
-<a href="details.html" class="block w-full py-3 border border-outline/30 text-primary hover:bg-surface-container-highest transition-colors duration-200 font-label text-sm uppercase tracking-wider rounded text-center">View Details</a>
-</div>
-</div>
+<div id="featured-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Dynamic Content Loaded by JS -->
 </div>
 </div>
 </section>
 </main>
 <!-- Footer -->
-<footer class="w-full border-t border-zinc-800/20 bg-zinc-950 grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20">
-<div>
-<div class="text-lg font-headline italic text-zinc-500 mb-6">Shesheny Motors</div>
-<p class="font-body text-zinc-500 text-sm">© 2024 Shesheny Motors. Private Gallery.</p>
-</div>
-<div>
-<h4 class="font-headline text-amber-200 mb-6">Legal</h4>
-<ul class="space-y-3 font-body text-sm">
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="#">Privacy Policy</a></li>
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="#">Terms of Service</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-headline text-amber-200 mb-6">Contact</h4>
-<ul class="space-y-3 font-body text-sm">
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html">Inquiries</a></li>
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html">Appointments</a></li>
-</ul>
-</div>
-<div>
-<h4 class="font-headline text-amber-200 mb-6">Corporate</h4>
-<ul class="space-y-3 font-body text-sm">
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="about.html">About Us</a></li>
-<li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="#">Careers</a></li>
-</ul>
-</div>
-</footer>
+<shesheny-footer></shesheny-footer>
+
+<script src="js/supabase.js"></script>
+<script src="js/dbCache.js"></script>
+<script src="js/components.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/index.js"></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js');
+        });
+    }
+</script>
 </body></html>

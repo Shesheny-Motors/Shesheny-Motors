@@ -76,58 +76,47 @@
             },
         }
     </script>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-[#111111] text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
-<!-- Header -->
-<nav class="fixed top-0 w-full z-50 bg-[#111111]/80 backdrop-blur-md flex justify-between items-center px-8 py-5 h-24 border-b border-white/5 transition-all duration-300">
-<div class="flex items-center gap-3">
-<svg class="w-8 h-8 text-primary" fill="currentColor" viewbox="0 0 24 24">
-<path d="M12 2L2 7l10 5 10-5-10-5zm0 7L3.5 6 12 2.5 20.5 6 12 9zm0 2.5l-10-5v5.5l10 5 10-5V6.5l-10 5z"></path>
-</svg>
-<div class="text-xl font-bold font-headline text-on-surface tracking-widest uppercase">Shesheny <span class="text-primary">Motors</span></div>
-</div>
-<div class="hidden md:flex gap-6 items-center">
-<a class="text-stone-400 font-medium hover:text-primary transition-colors duration-200 text-sm tracking-wide" href="index.html">Home</a>
-<span class="w-1 h-1 rounded-full bg-stone-600"></span>
-<a class="text-stone-400 font-medium hover:text-primary transition-colors duration-200 text-sm tracking-wide" href="inventory.html">Inventory</a>
-<span class="w-1 h-1 rounded-full bg-stone-600"></span>
-<a class="text-stone-400 font-medium hover:text-primary transition-colors duration-200 text-sm tracking-wide" href="about.html">About</a>
-</div>
-<a href="contact.html" class="border border-stone-600 text-stone-300 font-medium text-sm px-6 py-2 rounded-full hover:border-primary hover:text-primary transition-all duration-200">
-        Contact
-    </a>
-</nav>
+<div class="noise-overlay"></div>
+<div class="event-overlay"></div>
+<shesheny-header></shesheny-header>
+<!-- Header injected via component -->
 <main>
 <!-- Hero Section -->
 <section class="relative w-full h-[85vh] min-h-[600px] flex flex-col items-center pt-36 overflow-hidden bg-black">
-<div class="absolute inset-0 z-0">
-<img alt="Vehicle Hero" class="w-full h-full object-cover object-center opacity-90" data-alt="A sleek red Ferrari SF90 Stradale parked on a race track" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_OQ5au3urdJVUjYAaia6hv6aooPpy8M3yu8iAEN0r6uVGZOtUwA3IIlJ070dNwxEPN0LAitKfbZeEfqddPE57D9N4vZvUgrbG8C3sV2CumPL2PUVqFCJW-345C-pctoD7hjjQVwqiiEMiJOePlBDG8XMTc9ErJAV01YQ1PID5BoRoboVn298s7TUGUXlEVRFRqtAauwb2LHFAcObriYyziRE4BUOG_e_HwCCeHaPI6aWjJdW_eLrd2oat4X8jdrwCkB970BfgrNwb"/>
-<div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
-</div>
-<div class="relative z-10 text-center mt-12">
-<h1 class="font-headline text-5xl md:text-7xl lg:text-[5rem] font-bold tracking-wider text-[#c5a059] mb-4 drop-shadow-xl" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8);">Ferrari SF90 Stradale</h1>
-<div class="text-white text-3xl font-bold tracking-widest drop-shadow-md">2024</div>
-</div>
+    <div class="absolute inset-0 z-0">
+        <img id="detail-hero-img" class="w-full h-full object-cover object-center opacity-90 transition-opacity duration-500" src=""/>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
+    </div>
+    <div class="relative z-10 text-center mt-12">
+        <h1 id="detail-title" class="font-headline text-5xl md:text-7xl lg:text-[5rem] font-bold tracking-wider text-[#c5a059] mb-4 drop-shadow-xl" style="text-shadow: 0 4px 20px rgba(0,0,0,0.8);">...</h1>
+        <div id="detail-year" class="text-white text-3xl font-bold tracking-widest drop-shadow-md">...</div>
+        <div id="detail-price" class="text-[#c5a059] text-2xl font-bold tracking-widest drop-shadow-md mt-4">...</div>
+    </div>
 </section>
-<!-- Gallery Thumbnails -->
+
+<!-- Gallery Thumbnails & Controls -->
 <section class="bg-black py-6 border-b border-white/5 relative z-20">
-<div class="container mx-auto px-4 max-w-[1400px]">
-<div class="flex items-center gap-4">
-<button class="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-sm text-stone-400 transition-colors">
-<span class="material-symbols-outlined">chevron_left</span>
-</button>
-<div class="flex gap-4 overflow-x-auto pb-2 snap-x hide-scrollbar flex-1 justify-center items-center">
-<img alt="Interior view" class="h-28 w-48 object-cover rounded-sm snap-start cursor-pointer border-2 border-[#c5a059]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBS2vSo2RpyXjjaT-Jw14znChpyxwzcTWRS9zrF301ybKE_T9Kt1FJZ9dHlX53705_xuENHqsBqqtdO7o9CgZezviXFPiw-LoeVo8WGcuvtPw6Bf9lNIjZLRTvtQWQgiA2pD8wWWSS0ki1aN7RON87N0qjeSgR-ZXloZeJkmGJenZm62gbZXFZa9f-hcHeuJp3MyEFm2pfRSEvZD6hwSkh7_QQU3NJVlbpPXKUL1b99Mix255z-mSuuOahNNUf3v2_Fx1EBrT66sdoL"/>
-<img alt="Side view" class="h-28 w-48 object-cover rounded-sm snap-start cursor-pointer opacity-50 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZqLjaZ17kMpEVnaAUbTE8C0_Lgl13LX0gnhIthfOsPahgo6mrpoRByBVdJvO5VLvx9QfLaq6Zp7ortIIZdTjnnzMKWFx61thIHKN5BmOPga24fAIAydN0d6Lw5wSWFJddABogpAnlDZHUyu42JA7roBu6VHz2mdegKZs02Fy99ETnOuuOaduJgAT7w5aetpxipxmFbYWl1z9SJN83cUvfom-w5jR77wyBhq8Nf2HGDh-5TSJybac4QHKECI6cBfefHC1L6SD4CuDO"/>
-<img alt="Rear view" class="h-28 w-48 object-cover rounded-sm snap-start cursor-pointer opacity-50 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFxRSMPpJjouvgoehcJr1Rhm1BCDkj7hYV8cbaL2tFRsMxlHT1ORC1VFZjPVBWOBrSOH4ls1mwY3h74UFEjYcXH4NZTUOHJiMGJdvfVVxNm7_VZ6LJHc9cp5iojd0gsQiRrEYysoDMbmVV8_2FQxER99dWQzINtHLnW518y3qryWodWkOuJ__5A4sPIu4hTyL5ConeBgVOhqFbW4fMhI2ujFYjkCvMprXCKiif2oMUCLexaLtJhJ4uzhBhqoGmR76lArGs9UAyQOKX"/>
-<img alt="Profile view" class="h-28 w-48 object-cover rounded-sm snap-start cursor-pointer opacity-50 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2DSAZGNe_ovliur29gfGVF3XwtCQcetyYEmvP2VrBH-UwyIcnVqtORUWxmwK5inI5-mbM8AWn3z8Wb1Fh83SitJK9mKjjHYXgNHjYGif_d1gsy626pWGuB7fEYeR0DCm43GdETgmwsA8PUbV0JEcwgHemnAqpBsEg0Z2Gg63LOV2YiyIAltSRvztnZLEkNSlS_JOg5wdqUiQ4IK1xk63rzJ4VBW-av4PiR0vzrnx5Pedi9hqfCBUNRxlvfluO4t2vb5faZ2UddDf3"/>
-<img alt="Angle view" class="h-28 w-48 object-cover rounded-sm snap-start cursor-pointer opacity-50 hover:opacity-100 transition-opacity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_OQ5au3urdJVUjYAaia6hv6aooPpy8M3yu8iAEN0r6uVGZOtUwA3IIlJ070dNwxEPN0LAitKfbZeEfqddPE57D9N4vZvUgrbG8C3sV2CumPL2PUVqFCJW-345C-pctoD7hjjQVwqiiEMiJOePlBDG8XMTc9ErJAV01YQ1PID5BoRoboVn298s7TUGUXlEVRFRqtAauwb2LHFAcObriYyziRE4BUOG_e_HwCCeHaPI6aWjJdW_eLrd2oat4X8jdrwCkB970BfgrNwb"/>
-</div>
-<button class="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-sm text-stone-400 transition-colors">
-<span class="material-symbols-outlined">chevron_right</span>
-</button>
-</div>
-</div>
+    <div class="container mx-auto px-4 max-w-[1400px]">
+        <div class="flex flex-col items-center gap-6">
+            <div id="video-container" class="w-full max-w-4xl aspect-video hidden rounded border border-[#c5a059] overflow-hidden mb-6">
+                <!-- iframe injected here -->
+            </div>
+            <div class="flex items-center gap-4 w-full">
+                <button id="gallery-prev" class="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-sm text-stone-400 transition-colors">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <div id="gallery-thumbs" class="flex gap-4 overflow-x-auto pb-2 snap-x hide-scrollbar flex-1 justify-center items-center">
+                    <!-- Dynamic thumbs -->
+                </div>
+                <button id="gallery-next" class="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-sm text-stone-400 transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>
 <!-- Technical Specifications -->
 <section class="bg-[#111111] py-24 relative" style="background-image: radial-gradient(circle at center, #1a1a1a 0%, #111111 100%);">
@@ -139,47 +128,30 @@
 </div>
 <div class="border border-[#333] rounded-2xl bg-[#151515]/80 backdrop-blur-sm overflow-hidden shadow-2xl mb-16">
 <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#333]">
-<!-- Top Row -->
 <div class="p-10 flex flex-col items-center text-center border-b border-[#333]">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">speed</span>
-<h3 class="text-white font-bold text-lg mb-1">Engine</h3>
-<p class="text-stone-400 text-sm">4.0L Twin-Turbo V8 +<br/>3 Electric Motors</p>
-</div>
-<div class="p-10 flex flex-col items-center text-center border-b border-[#333]">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">bolt</span>
-<h3 class="text-white font-bold text-lg mb-1">Horsepower</h3>
-<p class="text-stone-400 text-sm">1000 HP</p>
+<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4">bolt</span>
+<h3 class="text-white font-bold text-lg mb-1" data-i18n="details_hp">HP</h3>
+<p id="spec-hp" class="text-stone-400 text-sm">...</p>
 </div>
 <div class="p-10 flex flex-col items-center text-center border-b border-[#333]">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">timer</span>
-<h3 class="text-white font-bold text-lg mb-1">0-100 km/h</h3>
-<p class="text-stone-400 text-sm">2.5 Seconds</p>
+<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4">timer</span>
+<h3 class="text-white font-bold text-lg mb-1" data-i18n="details_0_60">0-60</h3>
+<p id="spec-0-60" class="text-stone-400 text-sm">...</p>
 </div>
-<!-- Bottom Row -->
-<div class="p-10 flex flex-col items-center text-center">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">sports_score</span>
-<h3 class="text-white font-bold text-lg mb-1">Top Speed</h3>
-<p class="text-stone-400 text-sm">340 km/h</p>
-</div>
-<div class="p-10 flex flex-col items-center text-center">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">settings</span>
-<h3 class="text-white font-bold text-lg mb-1">Transmission</h3>
-<p class="text-stone-400 text-sm">8-Speed DCT</p>
-</div>
-<div class="p-10 flex flex-col items-center text-center">
-<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4" style="font-variation-settings: 'FILL' 0;">drive_eta</span>
-<h3 class="text-white font-bold text-lg mb-1">Drive Type</h3>
-<p class="text-stone-400 text-sm">AWD</p>
+<div class="p-10 flex flex-col items-center text-center border-b border-[#333]">
+<span class="material-symbols-outlined text-[#c5a059] text-4xl mb-4">speed</span>
+<h3 class="text-white font-bold text-lg mb-1" data-i18n="details_miles">Miles</h3>
+<p id="spec-miles" class="text-stone-400 text-sm">...</p>
 </div>
 </div>
 </div>
 <div class="flex flex-col md:flex-row justify-center gap-6">
-<a href="contact.html" class="bg-gradient-to-b from-[#8a6838] to-[#4e3a1f] text-white font-bold px-12 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg shadow-black/50 border border-[#a17e4a] w-full md:w-auto text-center">
-                    INQUIRE NOW
-                </a>
-<button class="border border-[#775a19] bg-transparent text-[#e9c176] font-bold px-12 py-4 rounded-sm hover:bg-[#775a19]/10 transition-all duration-200 uppercase tracking-widest text-sm w-full md:w-auto">
-                    BOOK A TEST DRIVE
-                </button>
+<a id="btn-whatsapp" href="#" target="_blank" class="bg-[#25D366] text-white font-bold px-12 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#1DA851] w-full md:w-auto text-center" data-i18n="btn_whatsapp">
+    Contact via WhatsApp
+</a>
+<a id="btn-call" href="#" class="bg-[#c5a059] text-black font-bold px-12 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#a17e4a] w-full md:w-auto text-center" data-i18n="btn_call">
+    Call Now
+</a>
 </div>
 </div>
 </section>
@@ -219,75 +191,10 @@
 </section>
 </main>
 <!-- Footer -->
-<footer class="bg-[#050505] pt-20 pb-8 border-t border-white/5">
-<div class="container mx-auto px-8 max-w-7xl">
-<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-<!-- Logo Column -->
-<div class="flex flex-col items-start">
-<div class="text-3xl font-serif text-white italic tracking-wider mb-2">elite</div>
-<div class="text-xs text-stone-500 tracking-[0.3em] uppercase ml-1">automotive</div>
-<div class="flex gap-4 mt-8">
-<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-stone-200 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">share</span>
-</a>
-<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-stone-200 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">photo_camera</span>
-</a>
-<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-stone-200 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">smart_display</span>
-</a>
-<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-black hover:bg-stone-200 transition-colors" href="#">
-<span class="material-symbols-outlined text-sm">music_note</span>
-</a>
-</div>
-</div>
-<!-- Quick Links -->
-<div>
-<h4 class="text-white font-semibold mb-6">Quick Links</h4>
-<ul class="flex flex-col gap-4 text-sm text-stone-400">
-<li><a class="hover:text-white transition-colors" href="index.html">Home</a></li>
-<li><a class="hover:text-white transition-colors" href="about.html">About Us</a></li>
-<li><a class="hover:text-white transition-colors" href="inventory.html">Vehicles</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Terms &amp; Conditions</a></li>
-</ul>
-</div>
-<!-- Contact Us -->
-<div>
-<h4 class="text-white font-semibold mb-6">Contact Us</h4>
-<ul class="flex flex-col gap-6 text-sm text-stone-400">
-<li class="flex items-start gap-3">
-<span class="material-symbols-outlined text-[20px] mt-0.5">location_on</span>
-<span>Chillout Boulevard Mall &amp;<br/>Mohamed Naguib Axis, New<br/>Cairo, Egypt</span>
-</li>
-<li class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[20px]">call</span>
-<span>01067776777</span>
-</li>
-<li class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[20px]">chat</span>
-<span>+201067776777</span>
-</li>
-<li class="flex items-center gap-3">
-<span class="material-symbols-outlined text-[20px]">mail</span>
-<span>info@eliteautomotive.eg</span>
-</li>
-</ul>
-</div>
-<!-- Map -->
-<div class="w-full h-48 bg-[#1a1a1a] rounded-lg overflow-hidden border border-[#333] relative">
-<img alt="Map location" class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD58voq0etOhoLb-mBj7c9e2CMnCfvPiNCfNefRpHwjPov4QGwVpsnjA3N_-IOH56SIWzgEiqxgbmrPWLM-SiGe9-EFioR8GmuFddMf59_6BdNcNmq3k9EwfmcyO5dN1x6KBZtcxw5F2bAHyj1ZTKD_l2TGudvux_JhCL8FNtoGCpZqJt3Nb9kq0jJtbMAWuEQV6tMnUfJmDxSUqB8lv-00SScNVRrnJgs016YfiRdG6Ww8wlGdNEvDgV_9YOlMmpB7kUAPRPxxX-lP"/>
-<div class="absolute top-2 left-2 bg-black/80 px-2 py-1 text-xs text-blue-400 rounded">Open in Maps</div>
-<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-<span class="material-symbols-outlined text-red-500 text-3xl">location_on</span>
-</div>
-</div>
-</div>
-<div class="border-t border-white/5 pt-8 text-center">
-<p class="text-stone-500 text-xs max-w-2xl mx-auto leading-relaxed">
-                We use cookies to enhance your browsing experience, serve personalized content and analyze your traffic.<br/>By clicking "Accept", you can consent to our use of cookies.
-            </p>
-</div>
-</div>
-</footer>
+<shesheny-footer></shesheny-footer>
+<script src="js/supabase.js"></script>
+<script src="js/dbCache.js"></script>
+<script src="js/components.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/details.js"></script>
 </body></html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shesheny Motors - Favorites</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#131313",
+                        "on-surface": "#e5e2e1",
+                        "primary": "#e9c176",
+                        "primary-container": "#c5a059",
+                        "on-primary": "#412d00",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-highest": "#353534",
+                        "surface-container-lowest": "#0e0e0e",
+                        "outline": "#9a8f80",
+                        "outline-variant": "#4e4639",
+                        "on-surface-variant": "#d1c5b4"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-surface text-on-surface font-body antialiased flex flex-col min-h-screen">
+    <div class="noise-overlay"></div>
+    <div class="event-overlay"></div>
+    <shesheny-header></shesheny-header>
+
+    <main class="flex-grow pt-32 pb-16 px-6 md:px-12 w-full max-w-screen-2xl mx-auto z-10 relative">
+        <h1 class="font-headline text-4xl md:text-5xl font-bold mb-12 text-[#c5a059]" data-i18n="fav_title">Your Favorites</h1>
+        
+        <div id="favorites-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Dynamic favorites will be loaded here -->
+        </div>
+    </main>
+
+    <shesheny-footer></shesheny-footer>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/dbCache.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/favorites.js"></script>
+</body>
+</html>

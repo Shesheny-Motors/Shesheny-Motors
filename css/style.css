@@ -1,0 +1,62 @@
+/* Custom CSS supplementing Tailwind */
+
+:root {
+  /* Default Colors (matches Tailwind config in index.html) */
+  --theme-surface: #131313;
+  --theme-primary: #e9c176;
+  --theme-primary-container: #c5a059;
+  --theme-overlay: transparent;
+}
+
+/* Dynamic Event Theming Overrides (Admin toggled) */
+.theme-ramadan {
+  --theme-surface: #0a100d;
+  --theme-primary: #d4af37;
+  --theme-primary-container: #997a00;
+  --theme-overlay: rgba(10, 16, 13, 0.4);
+}
+
+.theme-coptic-christmas {
+  --theme-surface: #1a0505;
+  --theme-primary: #e6b325;
+  --theme-primary-container: #b30000;
+  --theme-overlay: rgba(26, 5, 5, 0.4);
+}
+
+.theme-police-day {
+  --theme-surface: #0a1128;
+  --theme-primary: #ffffff;
+  --theme-primary-container: #b80000;
+  --theme-overlay: rgba(10, 17, 40, 0.4);
+}
+
+/* Event Overlay Helper */
+.event-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--theme-overlay);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Smooth transitions for theme changes */
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* LTR/RTL support */
+body[dir="rtl"] {
+  font-family: 'Noto Kufi Arabic', 'Noto Serif', serif;
+}
+
+/* Loader */
+.loader {
+  border-top-color: var(--theme-primary);
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
