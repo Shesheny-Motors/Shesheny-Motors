@@ -1,80 +1,623 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shesheny Motors - Admin Login</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif:wght@400;600;700&display=swap" rel="stylesheet">
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        surface: "#131313",
-                        "on-surface": "#e5e2e1",
-                        primary: "#e9c176",
-                        "surface-container-low": "#1c1b1b",
-                        "outline-variant": "#4e4639"
-                    },
-                    fontFamily: {
-                        headline: ["Noto Serif", "serif"],
-                        body: ["Inter", "sans-serif"]
-                    }
-                }
+    <link rel="preconnect" href="https://pxawiulologsydofnipi.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="https://pxawiulologsydofnipi.supabase.co">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Shesheny Motors</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--color-primary, #c7a230)',
+              "on-primary": "#ffffff",
+              background: "#131313",
+              "surface-card": "#1c1b1b",
+              "outline-variant": "rgba(224, 220, 213, 0.15)",
+            },
+            fontFamily: {
+              headline: ["Manrope", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/images/logo.jpg">
+    <style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+        }
+        .admin-card {
+            background: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(224, 220, 213, 0.1);
+        }
+        .tab-active {
+            color: #c7a230;
+            border-bottom: 2px solid #c7a230;
+        }
+        input, textarea, select {
+            background-color: #0e0e0e !important;
+            border: 1px solid rgba(224, 220, 213, 0.1) !important;
+            color: #e5e2e1 !important;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #c7a230 !important;
+            ring-color: #c7a230 !important;
+        }
+
+        /* Mobile Responsiveness Improvements */
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem !important;
+            }
+            .admin-card {
+                margin-bottom: 1.5rem;
+                border-radius: 1rem;
+            }
+            h2.text-4xl {
+                font-size: 1.875rem !important; /* text-3xl */
+            }
+            .overflow-x-auto {
+                border: none !important;
+            }
+            table {
+                display: block;
+            }
+            thead {
+                display: none;
+            }
+            tbody, tr, td {
+                display: block;
+                width: 100%;
+            }
+            tr {
+                margin-bottom: 1rem;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(224, 220, 213, 0.1);
+                border-radius: 0.75rem;
+                padding: 1rem;
+            }
+            td {
+                padding: 0.5rem 0 !important;
+                border: none !important;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+            }
+            td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.65rem;
+                letter-spacing: 0.1em;
+                color: #c7a230;
+                text-align: left;
+            }
+            td:last-child {
+                border-top: 1px solid rgba(224, 220, 213, 0.1) !important;
+                margin-top: 0.5rem;
+                padding-top: 1rem !important;
+            }
+
+            /* Specific table adjustments */
+            #products-table-body td:first-child { display: none; } /* Hide drag handle on mobile */
+
+            .flex-wrap {
+                gap: 0.75rem !important;
+            }
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+            .bg-surface-card.p-1.5 {
+                width: 100%;
+            }
+            #order-mode-inventory, #order-mode-home {
+                flex: 1;
             }
         }
-    </script>
+
+        /* Modal Responsiveness */
+        @media (max-width: 640px) {
+            #product-modal .admin-card,
+            #brand-modal .admin-card,
+            #category-modal .admin-card {
+                max-height: 95vh;
+                width: 100%;
+                margin: 0;
+                border-radius: 1.5rem 1.5rem 0 0;
+                position: fixed;
+                bottom: 0;
+            }
+            #product-form {
+                padding: 1.5rem !important;
+            }
+            .grid-cols-2 {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-surface text-on-surface font-body h-screen flex items-center justify-center">
-    <div class="bg-surface-container-low p-8 rounded border border-outline-variant/30 w-full max-w-md shadow-2xl">
-        <h1 class="text-3xl font-headline text-primary mb-6 text-center">Admin Access</h1>
-        <form id="login-form" class="space-y-6">
+<body class="font-body antialiased min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant sticky top-0 z-50">
+      <div class="w-full px-6 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-4"><a href="/"><img src="assets/images/logo.jpg" alt="Logo" class="h-16 w-auto"></a><div class="text-2xl font-bold tracking-wider text-primary font-headline uppercase">SHESHENY ADMIN</div></div>
+        </div>
+        <div id="user-info" class="hidden flex items-center gap-6">
+          <span id="user-email" class="text-sm text-neutral-400 font-medium"></span>
+          <button id="logout-btn" class="text-sm font-bold text-red-500 hover:text-red-400 uppercase tracking-widest">
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full overflow-x-hidden">
+      <!-- Login Section -->
+      <div id="login-section" class="max-w-md mx-auto mt-20 hidden">
+        <div class="admin-card p-10 rounded-2xl shadow-2xl">
+          <a href="/"><img src="assets/images/logo.jpg" alt="Logo" class="h-40 w-auto mx-auto mb-8"></a><h2 class="font-headline text-3xl font-extrabold mb-8 text-center tracking-tight">Admin Login</h2>
+          <form id="login-form" class="space-y-6">
             <div>
-                <label class="block text-sm text-on-surface-variant mb-2">Email</label>
-                <input type="email" id="email" required class="w-full bg-surface border-outline-variant/50 rounded px-4 py-2 text-on-surface focus:ring-primary focus:border-primary">
+              <label class="block text-xs font-bold uppercase tracking-widest text-primary mb-2">Email</label>
+              <input type="email" id="email" class="w-full rounded-lg px-4 py-3 outline-none transition-all" required />
             </div>
             <div>
-                <label class="block text-sm text-on-surface-variant mb-2">Password</label>
-                <input type="password" id="password" required class="w-full bg-surface border-outline-variant/50 rounded px-4 py-2 text-on-surface focus:ring-primary focus:border-primary">
+              <label class="block text-xs font-bold uppercase tracking-widest text-primary mb-2">Password</label>
+              <input type="password" id="password" class="w-full rounded-lg px-4 py-3 outline-none transition-all" required />
             </div>
-            <button type="submit" class="w-full bg-primary text-black font-semibold py-3 rounded hover:brightness-110 transition-all">Sign In</button>
-            <div id="login-error" class="text-red-500 text-sm text-center hidden">Invalid credentials</div>
+            <div id="login-error" class="text-red-500 text-sm hidden font-medium text-center"></div>
+            <button type="submit" class="w-full gold-shimmer text-on-primary font-headline font-bold py-4 rounded-lg transition-all hover:brightness-110 active:scale-95 shadow-xl">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div id="dashboard-section" class="hidden">
+        <!-- Tabs -->
+        <div class="flex gap-8 border-b border-outline-variant mb-10 overflow-x-auto no-scrollbar">
+          <button id="tab-products" class="px-2 py-4 text-sm font-bold uppercase tracking-widest tab-active transition-colors whitespace-nowrap">Products</button>
+          <button id="tab-brands" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Brands</button>
+          <button id="tab-categories" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Categories</button>
+          <button id="tab-inquiries" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Inquiries</button>
+          <button id="tab-settings" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Settings</button>
+        </div>
+
+        <!-- Products View -->
+        <div id="view-products" class="space-y-8">
+          <div class="flex justify-between items-center flex-wrap gap-6">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Inventory</h2>
+            <div class="flex items-center gap-4">
+              <div class="bg-surface-card p-1.5 rounded-xl flex items-center border border-outline-variant">
+                <button id="order-mode-inventory" class="px-4 py-2 text-xs font-bold rounded-lg bg-primary text-white shadow-lg transition-all">Inventory Order</button>
+                <button id="order-mode-home" class="px-4 py-2 text-xs font-bold rounded-lg text-neutral-500 hover:text-primary transition-all">Home Order</button>
+              </div>
+              <button id="save-order-btn" class="hidden bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-lg">
+                <span class="material-symbols-outlined text-[18px]">save</span> Save Order
+              </button>
+              <button id="add-product-btn" class="gold-shimmer text-on-primary px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg hover:brightness-110 transition-all">
+                <span class="material-symbols-outlined text-[18px]">add</span> Add Vehicle
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[800px]">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-4 md:px-8 py-5 w-10"></th>
+                  <th class="px-4 md:px-8 py-5">Preview</th>
+                  <th class="px-4 md:px-8 py-5">Vehicle</th>
+                  <th class="px-4 md:px-8 py-5">Sold</th>
+                  <th class="px-4 md:px-8 py-5">Price</th>
+                  <th class="px-4 md:px-8 py-5">Category</th>
+                  <th class="px-4 md:px-8 py-5">Brand</th>
+                  <th class="px-4 md:px-8 py-5">Visibility</th>
+                  <th class="px-4 md:px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Brands View -->
+        <div id="view-brands" class="hidden space-y-8">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Brands</h2>
+            <button id="add-brand-btn" class="gold-shimmer text-on-primary px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg hover:brightness-110">
+              <span class="material-symbols-outlined text-[18px]">add</span> Add Brand
+            </button>
+          </div>
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[500px]">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-8 py-5">Logo</th>
+                  <th class="px-8 py-5">Name</th>
+                  <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="brands-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Inquiries View -->
+        <div id="view-inquiries" class="hidden space-y-8">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Inquiries</h2>
+            <select id="filter-inquiries" class="rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest outline-none transition-all">
+              <option value="all">All</option>
+              <option value="unread" selected>Unread</option>
+              <option value="read">Read</option>
+            </select>
+          </div>
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[900px]">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-8 py-5">Status</th>
+                  <th class="px-8 py-5">Date</th>
+                  <th class="px-8 py-5">Customer</th>
+                  <th class="px-8 py-5">Subject</th>
+                  <th class="px-8 py-5">Message</th>
+                  <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiries-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Categories View -->
+        <div id="view-categories" class="hidden space-y-8">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Categories</h2>
+            <button id="add-category-btn" class="gold-shimmer text-on-primary px-6 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shadow-lg hover:brightness-110">
+              <span class="material-symbols-outlined text-[18px]">add</span> Add Category
+            </button>
+          </div>
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-8 py-5">Name</th>
+                  <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categories-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="view-settings" class="hidden space-y-8">
+          <h2 class="font-headline text-4xl font-extrabold tracking-tight">Settings</h2>
+          <div class="admin-card p-10 rounded-2xl shadow-xl max-w-3xl">
+            <form id="settings-form" class="space-y-10">
+              <section>
+                <h3 class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-6 border-b border-outline-variant pb-4">Currency Exchange</h3>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">1 USD to EGP Rate</label>
+                  <input type="number" id="setting-egp-usd" step="0.01" class="w-full rounded-lg px-4 py-3 outline-none" required />
+                </div>
+              </section>
+
+              <section>
+                <h3 class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-6 border-b border-outline-variant pb-4">Hero Section</h3>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Hero Background Image</label>
+                  <input type="file" id="setting-hero-image" accept="image/*" class="w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-on-primary" />
+                  <p id="current-hero-image" class="mt-2 text-[10px] text-neutral-500"></p>
+                </div>
+              </section>
+
+              <section>
+                <h3 class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-6 border-b border-outline-variant pb-4">Location & Map</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-neutral-400 mb-2">Google Maps Embed URL (or Iframe code)</label>
+                        <textarea id="setting-map-embed" rows="3" class="w-full rounded-lg px-4 py-3 outline-none text-xs" placeholder="Paste embed code or URL here"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-neutral-400 mb-2">Location Pin Link (Google Maps Share Link)</label>
+                        <input type="text" id="setting-location-pin" class="w-full rounded-lg px-4 py-3 outline-none text-xs" placeholder="https://goo.gl/maps/..." />
+                    </div>
+                </div>
+              </section>
+
+              <section>
+                <h3 class="text-primary font-bold uppercase tracking-[0.2em] text-xs mb-6 border-b border-outline-variant pb-4">Social Presence</h3>
+                <div class="space-y-8" id="social-containers">
+                    <div id="container-social-instagram">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-[10px] font-bold uppercase text-neutral-400">Instagram</label>
+                            <button type="button" onclick="addSocialLink('instagram')" class="text-primary text-xs font-bold">+ Add</button>
+                        </div>
+                        <div class="social-links-list"></div>
+                    </div>
+                    <div id="container-social-facebook">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-[10px] font-bold uppercase text-neutral-400">Facebook</label>
+                            <button type="button" onclick="addSocialLink('facebook')" class="text-primary text-xs font-bold">+ Add</button>
+                        </div>
+                        <div class="social-links-list"></div>
+                    </div>
+                    <div id="container-social-tiktok">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-[10px] font-bold uppercase text-neutral-400">TikTok</label>
+                            <button type="button" onclick="addSocialLink('tiktok')" class="text-primary text-xs font-bold">+ Add</button>
+                        </div>
+                        <div class="social-links-list"></div>
+                    </div>
+                    <div id="container-social-whatsapp">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-[10px] font-bold uppercase text-neutral-400">WhatsApp (Numbers only)</label>
+                            <button type="button" onclick="addSocialLink('whatsapp')" class="text-primary text-xs font-bold">+ Add</button>
+                        </div>
+                        <div class="social-links-list"></div>
+                    </div>
+                    <div id="container-social-phone">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-[10px] font-bold uppercase text-neutral-400">Phone</label>
+                            <button type="button" onclick="addSocialLink('phone')" class="text-primary text-xs font-bold">+ Add</button>
+                        </div>
+                        <div class="social-links-list"></div>
+                    </div>
+                </div>
+              </section>
+
+              <div class="pt-6 border-t border-outline-variant flex justify-end">
+                <button type="submit" id="save-settings-btn" class="gold-shimmer text-on-primary font-headline font-bold py-4 px-12 rounded-lg transition-all hover:brightness-110 active:scale-95 shadow-xl">
+                  Save All Settings
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="admin-card w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl">
+        <div class="p-8 border-b border-outline-variant flex justify-between items-center sticky top-0 bg-background/95 backdrop-blur-md z-10">
+          <h3 id="modal-title" class="font-headline text-2xl font-bold">Add Vehicle</h3>
+          <button id="modal-close" class="text-neutral-400 hover:text-white transition-colors">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form id="product-form" class="p-4 md:p-8 space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-6">
+              <h4 class="text-primary font-bold uppercase tracking-widest text-[10px]">Basic Information</h4>
+              <div>
+                <label class="block text-xs font-medium text-neutral-400 mb-2">Vehicle Name (English)</label>
+                <input type="text" id="p-name" class="w-full rounded-lg px-4 py-3 outline-none" required />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-neutral-400 mb-2">Vehicle Name (Arabic)</label>
+                <input type="text" id="p-name-ar" class="w-full rounded-lg px-4 py-3 outline-none" dir="rtl" required />
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Price (EGP)</label>
+                  <input type="number" id="p-price" class="w-full rounded-lg px-4 py-3 outline-none" required />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Discount (EGP)</label>
+                  <input type="number" id="p-discount" class="w-full rounded-lg px-4 py-3 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Category</label>
+                  <select id="p-category" class="w-full rounded-lg px-4 py-3 outline-none">
+                    <option value="Sedan">Sedan</option>
+                    <option value="SUV">SUV</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Luxury">Luxury</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-neutral-400 mb-2">Origin</label>
+                <input type="text" id="p-origin" class="w-full rounded-lg px-4 py-3 outline-none" placeholder="e.g. Germany" />
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <h4 class="text-primary font-bold uppercase tracking-widest text-[10px]">Specifications</h4>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Mileage</label>
+                  <input type="text" id="p-mileage" class="w-full rounded-lg px-4 py-3 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Transmission</label>
+                  <input type="text" id="p-trans" class="w-full rounded-lg px-4 py-3 outline-none" />
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Fuel Type</label>
+                  <input type="text" id="p-fuel" class="w-full rounded-lg px-4 py-3 outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-neutral-400 mb-2">Version/Year</label>
+                  <input type="text" id="p-version" class="w-full rounded-lg px-4 py-3 outline-none" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Variants Section -->
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <h4 class="text-primary font-bold uppercase tracking-widest text-[10px]">Color Variants</h4>
+              <button type="button" id="add-color-variant-btn" class="text-xs font-bold text-primary border border-primary/30 px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">add</span> Add Color
+              </button>
+            </div>
+            <div id="color-variants-container" class="space-y-4">
+              <!-- Variants injected by JS -->
+            </div>
+          </div>
+
+
+
+          <div class="space-y-6">
+            <h4 class="text-primary font-bold uppercase tracking-widest text-[10px]">Brand & Status</h4>
+            <input type="hidden" id="p-brand-id" />
+            <div id="p-brand-container" class="flex flex-wrap gap-4">
+              <!-- Injected by JS -->
+            </div>
+            <div class="flex flex-wrap gap-8">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="p-featured" class="rounded text-primary bg-transparent border-white/20" />
+                <span class="text-sm font-medium">Spotlight (Home Page)</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="p-upon-request" class="rounded text-primary bg-transparent border-white/20" />
+                <span class="text-sm font-medium">Upon Request</span>
+              </label>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="p-sold-out" class="rounded text-primary bg-transparent border-white/20" />
+                <span class="text-sm font-medium text-red-400">Mark as Sold Out</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label class="block text-xs font-medium text-neutral-400 mb-2">Description (English)</label>
+              <textarea id="p-desc" rows="4" class="w-full rounded-lg px-4 py-3 outline-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-neutral-400 mb-2">Description (Arabic)</label>
+              <textarea id="p-desc-ar" rows="4" class="w-full rounded-lg px-4 py-3 outline-none" dir="rtl"></textarea>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label class="block text-xs font-medium text-neutral-400 mb-2">Main Image</label>
+              <input type="file" id="p-image" accept="image/*" class="w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-on-primary hover:file:brightness-110" />
+              <div id="p-main-preview" class="mt-4 hidden">
+                <img id="p-main-img" src="" class="h-20 w-auto rounded border border-outline-variant">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-neutral-400 mb-2">Diagnostics (Optional)</label>
+              <input type="file" id="p-diagnostics" accept="image/*,application/pdf" class="w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-surface-card file:text-on-surface hover:file:bg-surface-bright" />
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <h4 class="text-primary font-bold uppercase tracking-widest text-[10px]">Gallery Images</h4>
+            <div class="border-2 border-dashed border-outline-variant rounded-xl p-8 text-center transition-all hover:border-primary group">
+                <input type="file" id="p-gallery" accept="image/*" multiple class="hidden" />
+                <button type="button" onclick="document.getElementById('p-gallery').click()" class="flex flex-col items-center gap-4 mx-auto">
+                    <span class="material-symbols-outlined text-4xl text-neutral-500 group-hover:text-primary">add_a_photo</span>
+                    <span class="text-sm font-medium text-neutral-400">Click to upload multiple images</span>
+                </button>
+            </div>
+            <div id="gallery-preview-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Gallery items with drag and drop -->
+            </div>
+          </div>
+
+          <div class="pt-8 border-t border-outline-variant flex justify-end gap-4">
+            <button type="button" id="modal-cancel" class="px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest text-neutral-400 hover:text-white transition-colors">Cancel</button>
+            <button type="submit" id="save-btn" class="gold-shimmer text-on-primary font-headline font-bold px-12 py-4 rounded-lg shadow-xl hover:brightness-110 active:scale-95 transition-all">Save Vehicle</button>
+          </div>
         </form>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase.js"></script>
-    <script>
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if(window.supabaseClient) {
-                const { data, error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
-                if(error) {
-                    document.getElementById('login-error').classList.remove('hidden');
-                } else {
-                    window.location.href = 'admin1.html';
-                }
-            } else {
-                // Mock success if supabase not fully integrated
-                if(email === 'admin@shesheny.com' && password === 'admin') {
-                    localStorage.setItem('admin_auth', 'true');
-                    window.location.href = 'admin1.html';
-                } else {
-                    document.getElementById('login-error').classList.remove('hidden');
-                }
-            }
-        });
+    <!-- Brand Modal -->
+    <div id="brand-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="admin-card w-full max-w-md rounded-2xl shadow-2xl p-8">
+        <div class="flex justify-between items-center mb-8">
+          <h3 id="brand-modal-title" class="font-headline text-2xl font-bold">Add Brand</h3>
+          <button id="brand-modal-close" class="text-neutral-400 hover:text-white transition-colors">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form id="brand-form" class="space-y-6">
+          <div>
+            <label class="block text-xs font-medium text-neutral-400 mb-2">Brand Name</label>
+            <input type="text" id="b-name" class="w-full rounded-lg px-4 py-3 outline-none" required />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-400 mb-2">Logo</label>
+            <input type="file" id="b-logo" accept="image/*" class="w-full text-xs text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-on-primary" />
+            <div id="b-logo-preview" class="mt-4 hidden">
+              <img id="b-logo-img" src="" class="h-16 w-auto object-contain rounded bg-white/5 p-2" />
+            </div>
+          </div>
+          <div class="pt-6 flex justify-end gap-4">
+            <button type="button" id="brand-modal-cancel" class="text-xs font-bold uppercase tracking-widest text-neutral-400">Cancel</button>
+            <button type="submit" id="save-brand-btn" class="gold-shimmer text-on-primary px-8 py-3 rounded-lg text-xs font-bold shadow-lg">Save Brand</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
-            });
-        }
-    </script>
+    <!-- Category Modal -->
+    <div id="category-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="admin-card w-full max-w-md rounded-2xl shadow-2xl p-8">
+        <div class="flex justify-between items-center mb-8">
+          <h3 id="category-modal-title" class="font-headline text-2xl font-bold">Add Category</h3>
+          <button id="category-modal-close" class="text-neutral-400 hover:text-white transition-colors">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form id="category-form" class="space-y-6">
+          <div>
+            <label class="block text-xs font-medium text-neutral-400 mb-2">Category Name (EN)</label>
+            <input type="text" id="cat-name" class="w-full rounded-lg px-4 py-3 outline-none" required />
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-neutral-400 mb-2">Category Name (AR)</label>
+            <input type="text" id="cat-name-ar" class="w-full rounded-lg px-4 py-3 outline-none" dir="rtl" required />
+          </div>
+          <div class="pt-6 flex justify-end gap-4">
+            <button type="button" id="category-modal-cancel" class="text-xs font-bold uppercase tracking-widest text-neutral-400">Cancel</button>
+            <button type="submit" id="save-category-btn" class="gold-shimmer text-on-primary px-8 py-3 rounded-lg text-xs font-bold shadow-lg">Save Category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="db/products.js"></script>
+    <script src="db/brands.js"></script>
+    <script src="db/categories.js"></script>
+    <script src="db/messages.js"></script>
+    <script src="db/settings.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

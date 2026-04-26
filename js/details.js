@@ -16,8 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 1. Fetch data
     if(window.DbCache && window.supabaseClient) {
-        const {data: vehicles} = await window.DbCache.fetch('vehicles', () => window.supabaseClient.from('vehicles').select('*'));
-        const {data: settings} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
+        const {data: settingsData} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
+        if(settingsData && settingsData.length > 0) {
+            window.settingsData = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
+        }
+
+        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
         
         if(vehicles) {
             currentVehicle = vehicles.find(v => v.id === id);
@@ -27,8 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        if(settings && settings.length > 0) {
-            setupContactButtons(settings[0]);
+        if(settingsData && settingsData.length > 0) {
+            setupContactButtons(window.settingsData);
         }
     }
 });
@@ -40,26 +44,32 @@ document.addEventListener('currencyChanged', (e) => {
 });
 
 function renderVehicleDetails() {
-    document.getElementById('detail-title').textContent = `${currentVehicle.brand} ${currentVehicle.model}`;
-    document.getElementById('detail-year').textContent = currentVehicle.year;
+    document.getElementById('detail-title').textContent = currentVehicle.name;
+    document.getElementById('detail-year').textContent = currentVehicle.version || '-';
     
-    document.getElementById('spec-hp').textContent = currentVehicle.hp;
-    document.getElementById('spec-0-60').textContent = currentVehicle.acceleration + 's';
-    document.getElementById('spec-miles').textContent = currentVehicle.miles.toLocaleString();
+    document.getElementById('spec-hp').textContent = currentVehicle.fuel_type || '-';
+    document.getElementById('spec-0-60').textContent = currentVehicle.transmission || '-';
+    document.getElementById('spec-miles').textContent = currentVehicle.mileage || '-';
 
     updatePriceDisplay();
 
-    if(currentVehicle.video_url) {
+    if(currentVehicle.diagnostics_url) {
         const videoContainer = document.getElementById('video-container');
         videoContainer.classList.remove('hidden');
-        videoContainer.innerHTML = `<iframe class="w-full h-full" src="${currentVehicle.video_url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        if (currentVehicle.diagnostics_url.match(/\.(mp4|webm)$/i)) {
+             videoContainer.innerHTML = `<video class="w-full h-full object-cover" controls src="${currentVehicle.diagnostics_url}"></video>`;
+        } else {
+             videoContainer.innerHTML = `<iframe class="w-full h-full" src="${currentVehicle.diagnostics_url}" frameborder="0" allowfullscreen></iframe>`;
+        }
     }
 }
 
 function updatePriceDisplay() {
     const priceEl = document.getElementById('detail-price');
     const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-    const priceStr = window.I18n ? window.I18n.formatPrice(currentVehicle.price_egp, currentVehicle.price_usd) : (isUsd ? `$${currentVehicle.price_usd.toLocaleString()}` : `${currentVehicle.price_egp.toLocaleString()} EGP`);
+    const exchangeRate = window.settingsData?.exchange_rate || 50;
+    const priceUsd = currentVehicle.price_egp / exchangeRate;
+    const priceStr = window.I18n ? window.I18n.formatPrice(currentVehicle.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${currentVehicle.price_egp.toLocaleString()} EGP`);
     priceEl.textContent = priceStr;
 }
 
@@ -68,14 +78,14 @@ function setupContactButtons(settings) {
     const callBtn = document.getElementById('btn-call');
 
     // Create a pre-filled whatsapp message
-    const msg = encodeURIComponent(`Hello, I'm interested in the ${currentVehicle.year} ${currentVehicle.brand} ${currentVehicle.model}.`);
+    const msg = encodeURIComponent(`Hello, I'm interested in the ${currentVehicle.version} ${currentVehicle.name}.`);
     
     whatsappBtn.href = `https://wa.me/${settings.whatsapp_number.replace(/\D/g,'')}?text=${msg}`;
-    callBtn.href = `tel:${settings.call_number.replace(/\D/g,'')}`;
+    callBtn.href = `tel:${settings.phone_number.replace(/\D/g,'')}`;
 }
 
 function setupGallery() {
-    galleryImages = [currentVehicle.thumbnail, ...(currentVehicle.gallery || [])];
+    galleryImages = [currentVehicle.image_url, ...(currentVehicle.gallery || [])];
     
     const thumbsContainer = document.getElementById('gallery-thumbs');
     thumbsContainer.innerHTML = galleryImages.map((img, idx) => `

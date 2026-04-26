@@ -2,7 +2,12 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
     if(window.DbCache && window.supabaseClient) {
-        const {data: vehicles} = await window.DbCache.fetch('vehicles', () => window.supabaseClient.from('vehicles').select('*'));
+        const {data: settingsData} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
+        if(settingsData && settingsData.length > 0) {
+            window.settingsData = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
+        }
+
+        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
         if(vehicles) {
             renderFavorites(vehicles);
         }
@@ -12,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.addEventListener('currencyChanged', (e) => {
     // Re-render to show new currency
     if(window.DbCache && window.supabaseClient) {
-        window.DbCache.fetch('vehicles', () => window.supabaseClient.from('vehicles').select('*')).then(({data}) => {
+        window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*')).then(({data}) => {
             if(data) renderFavorites(data);
         });
     }
@@ -33,7 +38,9 @@ function renderFavorites(allVehicles) {
 
     grid.innerHTML = favVehicles.map(v => {
         const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, v.price_usd) : (isUsd ? `$${v.price_usd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
+        const exchangeRate = window.settingsData?.exchange_rate || 50;
+        const priceUsd = v.price_egp / exchangeRate;
+        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
 
         return `
         <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative">
@@ -41,30 +48,30 @@ function renderFavorites(allVehicles) {
                 <span class="material-symbols-outlined">favorite</span>
             </button>
             <div class="w-full aspect-[16/9] overflow-hidden relative">
-                <img alt="${v.model}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${v.thumbnail}"/>
+                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${v.image_url}"/>
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-2xl font-serif text-on-surface">${v.brand} ${v.model}</h3>
+                        <h3 class="text-2xl font-serif text-on-surface">${v.name}</h3>
                         <span class="text-xl font-serif text-primary">${priceStr}</span>
                     </div>
                 </div>
                 <!-- Specs Blade Mini -->
                 <div class="bg-surface-container-lowest p-4 rounded flex items-center justify-between text-xs font-body text-on-surface-variant mb-6 border border-outline-variant/10">
                     <div class="flex flex-col items-center">
-                        <span class="uppercase tracking-wider opacity-60 mb-1" data-i18n="details_year">Year</span>
-                        <span class="text-on-surface font-medium">${v.year}</span>
+                        <span class="uppercase tracking-wider opacity-60 mb-1" data-i18n="details_year">Year/Ver</span>
+                        <span class="text-on-surface font-medium">${v.version || '-'}</span>
                     </div>
                     <div class="w-px h-8 bg-outline-variant/30"></div>
                     <div class="flex flex-col items-center">
                         <span class="uppercase tracking-wider opacity-60 mb-1" data-i18n="details_miles">Miles</span>
-                        <span class="text-on-surface font-medium">${v.miles}</span>
+                        <span class="text-on-surface font-medium">${v.mileage || '-'}</span>
                     </div>
                     <div class="w-px h-8 bg-outline-variant/30"></div>
                     <div class="flex flex-col items-center">
-                        <span class="uppercase tracking-wider opacity-60 mb-1" data-i18n="details_0_60">0-60</span>
-                        <span class="text-on-surface font-medium">${v.acceleration}s</span>
+                        <span class="uppercase tracking-wider opacity-60 mb-1" data-i18n="details_trans">Trans</span>
+                        <span class="text-on-surface font-medium">${v.transmission || '-'}</span>
                     </div>
                 </div>
                 <a href="details.html?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
