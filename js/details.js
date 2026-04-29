@@ -34,6 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         if(settingsData && settingsData.length > 0) {
             setupContactButtons(window.settingsData);
         }
+
+        setupDepositModal();
     }
 });
 
@@ -160,4 +162,134 @@ function startSlideshow() {
 function resetSlideshow() {
     clearInterval(slidesInterval);
     startSlideshow();
+}
+
+function setupDepositModal() {
+    const btnDeposit = document.getElementById('btn-deposit');
+    const modal = document.getElementById('deposit-modal');
+    const closeBtn = document.getElementById('close-deposit');
+    
+    const step1 = document.getElementById('deposit-step-1');
+    const step2 = document.getElementById('deposit-step-2');
+    const btnAgree = document.getElementById('btn-agree-terms');
+    
+    const form = document.getElementById('deposit-form');
+    const receiptInput = document.getElementById('dep-receipt');
+    const fileNameDisplay = document.getElementById('dep-file-name');
+    const btnSubmit = document.getElementById('btn-submit-deposit');
+
+    if(!btnDeposit || !modal) return;
+
+    // Check if car already has deposit
+    if (currentVehicle.is_sold_out) {
+        btnDeposit.textContent = "Sold Out";
+        btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
+        btnDeposit.disabled = true;
+    }
+
+    btnDeposit.addEventListener('click', () => {
+        if (currentVehicle.is_sold_out) return;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        step1.classList.remove('hidden');
+        step2.classList.add('hidden');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    });
+
+    btnAgree.addEventListener('click', () => {
+        step1.classList.add('hidden');
+        step2.classList.remove('hidden');
+    });
+
+    receiptInput.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+            fileNameDisplay.textContent = e.target.files[0].name;
+            fileNameDisplay.classList.add('text-white');
+            fileNameDisplay.classList.remove('text-stone-400');
+        } else {
+            fileNameDisplay.textContent = "Click or drag image here";
+            fileNameDisplay.classList.add('text-stone-400');
+            fileNameDisplay.classList.remove('text-white');
+        }
+    });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('dep-name').value;
+        const phone = document.getElementById('dep-phone').value;
+        const email = document.getElementById('dep-email').value;
+        const receipt = receiptInput.files[0];
+        
+        if(!receipt) {
+            alert("Please upload a receipt.");
+            return;
+        }
+
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Uploading...";
+
+        try {
+            // Upload receipt to Supabase Storage
+            const fileExt = receipt.name.split('.').pop();
+            const fileName = `receipt-${Date.now()}.${fileExt}`;
+            const { data: uploadData, error: uploadError } = await window.supabaseClient.storage
+                .from('vehicle-images')
+                .upload(`deposits/${fileName}`, receipt);
+
+            if(uploadError) throw uploadError;
+
+            const receiptUrl = window.supabaseClient.storage
+                .from('vehicle-images')
+                .getPublicUrl(`deposits/${fileName}`).data.publicUrl;
+
+            // Insert into deposits table
+            const { error: insertError } = await window.supabaseClient.from('deposits').insert([
+                {
+                    car_id: currentVehicle.id,
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    image_url: receiptUrl,
+                    status: 'pending'
+                }
+            ]);
+
+            if(insertError) throw insertError;
+
+            // Also mark car as sold_out immediately to prevent others from making deposits
+            // Assuming this is what we want (or maybe wait for approval). 
+            // The prompt asks for an indicator. Let's just create the deposit for now.
+            // "put an indecator for cars that have a deposit on them"
+            
+            // Mark it temporarily locally to give user feedback
+            
+            alert("Deposit submitted successfully! We will contact you shortly.");
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            // Add to local deposits for UI indicator
+            let depositIds = JSON.parse(localStorage.getItem('deposits') || '[]');
+            if(!depositIds.includes(currentVehicle.id)) {
+                depositIds.push(currentVehicle.id);
+                localStorage.setItem('deposits', JSON.stringify(depositIds));
+            }
+
+            // Re-fetch or update UI
+            btnDeposit.textContent = "Deposit Pending";
+            btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
+            btnDeposit.disabled = true;
+
+        } catch (error) {
+            console.error("Error submitting deposit:", error);
+            alert("Failed to submit deposit. Please try again or contact support.");
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = "Submit Deposit";
+        }
+    });
 }

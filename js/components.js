@@ -11,9 +11,13 @@ class HeaderComponent extends HTMLElement {
                     <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="index.html" data-i18n="nav_home">Home</a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="inventory.html" data-i18n="nav_inventory">Inventory</a>
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="favorites.html" data-i18n="nav_favorites">Favorites</a>
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide flex items-center gap-1" href="cart.html" data-i18n="nav_cart">
+                            <span class="material-symbols-outlined text-base">shopping_cart</span>
+                            Cart
+                        </a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="about.html" data-i18n="nav_about">About</a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="contact.html" data-i18n="nav_contact">Contact</a>
+                        <a class="text-amber-200/80 hover:text-amber-200 transition-colors duration-200 font-body text-sm tracking-wide font-medium" href="request.html" data-i18n="nav_custom_request">Custom Request</a>
                     </div>
                     <div class="flex items-center space-x-3 md:space-x-4">
                         <button id="lang-toggle" class="text-zinc-400 hover:text-amber-200 font-body text-sm font-medium transition-colors">عربي</button>
@@ -32,9 +36,10 @@ class HeaderComponent extends HTMLElement {
                 </button>
                 <a href="index.html" class="text-2xl font-headline text-amber-200" data-i18n="nav_home">Home</a>
                 <a href="inventory.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_inventory">Inventory</a>
-                <a href="favorites.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_favorites">Favorites</a>
+                <a href="cart.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_cart">Cart</a>
                 <a href="about.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_about">About</a>
                 <a href="contact.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_contact">Contact</a>
+                <a href="request.html" class="text-2xl font-headline text-amber-200/80" data-i18n="nav_custom_request">Custom Request</a>
             </div>
         `;
 
@@ -97,6 +102,7 @@ class FooterComponent extends HTMLElement {
                     <h4 class="font-headline text-amber-200 mb-6" data-i18n="footer_contact">Contact</h4>
                     <ul class="space-y-3 font-body text-sm">
                         <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html" data-i18n="footer_inquiries">Inquiries</a></li>
+                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="request.html" data-i18n="footer_custom_request">Custom Request</a></li>
                         <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html" data-i18n="footer_appointments">Appointments</a></li>
                     </ul>
                 </div>

@@ -1,279 +1,185 @@
 <!DOCTYPE html>
-
-<html class="dark" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>About Shesheny Motors</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>About Us | Shesheny Motors</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Noto+Serif:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "primary": "#c5a059",
-                        "primary-hover": "#dcb76d",
-                        "background": "#1a1a1a",
-                        "surface": "#222222",
-                        "surface-light": "#2a2a2a",
-                        "text-main": "#ffffff",
-                        "text-muted": "#a3a3a3",
-                        "border-color": "#c5a05940"
+                        "tertiary-container": "#8fa5d6",
+                        "surface-container-highest": "#353534",
+                        "secondary-fixed": "#e4e2e1",
+                        "on-primary-container": "#4e3700",
+                        "tertiary": "#b0c6f9",
+                        "primary-container": "#c5a059",
+                        "outline": "#9a8f80",
+                        "on-error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#b0c6f9",
+                        "secondary-container": "#474747",
+                        "background": "#131313",
+                        "on-background": "#e5e2e1",
+                        "primary": "#e9c176",
+                        "primary-fixed-dim": "#e9c176",
+                        "error-container": "#93000a",
+                        "on-secondary-container": "#b6b5b4",
+                        "primary-fixed": "#ffdea5",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-fixed": "#261900",
+                        "on-surface-variant": "#d1c5b4",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed-variant": "#304671",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-bright": "#3a3939",
+                        "on-secondary": "#303030",
+                        "on-primary": "#412d00",
+                        "inverse-primary": "#775a19",
+                        "surface": "#131313",
+                        "on-tertiary-container": "#233a65",
+                        "on-error": "#690005",
+                        "surface-variant": "#353534",
+                        "on-surface": "#e5e2e1",
+                        "outline-variant": "#4e4639",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed-variant": "#5d4201",
+                        "surface-tint": "#e9c176",
+                        "on-tertiary": "#173059",
+                        "inverse-on-surface": "#313030",
+                        "surface-dim": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "tertiary-fixed": "#d8e2ff",
+                        "secondary": "#c8c6c5",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface-container-lowest": "#0e0e0e",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-fixed": "#001a41",
+                        "on-secondary-fixed": "#1b1c1c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
                     },
                     "fontFamily": {
-                        "headline": ["Noto Serif"],
-                        "body": ["Inter"]
+                        "headline": ["Noto Serif", "serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
-<style>
-        body { font-family: 'Inter', sans-serif; background-color: #1a1a1a; color: #ffffff; }
-        h1, h2, h3, h4, h5, h6, .font-serif { font-family: 'Noto Serif', serif; }
-        /* Subtle texture for background */
-        .bg-texture {
-            background-image: radial-gradient(#333 1px, transparent 1px);
-            background-size: 20px 20px;
+    <style>
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
         }
     </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-background min-h-screen flex flex-col antialiased bg-texture">
-<!-- TopNavBar -->
-<nav class="w-full z-50 bg-[#151515] border-b border-border-color">
-<div class="flex justify-between items-center w-full px-8 py-4 max-w-[1400px] mx-auto">
-<a class="flex items-center gap-3 text-xl md:text-2xl font-bold font-serif text-primary tracking-tight" href="index.html">
-<span class="material-symbols-outlined text-3xl" data-icon="token">token</span>
-<div class="flex flex-col leading-none">
-<span>SHESHENY</span>
-<span class="text-[0.6rem] tracking-[0.2em] text-text-muted mt-1 uppercase">Motors</span>
-</div>
-</a>
-<div class="hidden md:flex gap-8 items-center text-sm">
-<a class="text-text-main hover:text-primary transition-colors" href="index.html">Home</a>
-<a class="text-text-main hover:text-primary transition-colors" href="inventory.html">Inventory</a>
-<a class="text-primary border-b border-primary pb-0.5" href="about.html">About</a>
-<a class="text-text-main hover:text-primary transition-colors" href="contact.html">Contact</a>
-</div>
-<div class="flex items-center gap-4">
-<button class="bg-primary hover:bg-primary-hover text-background px-4 py-2 rounded flex items-center justify-center transition-colors">
-<span class="material-symbols-outlined text-sm" data-icon="call">call</span>
-</button>
-<button class="md:hidden text-primary">
-<span class="material-symbols-outlined" data-icon="menu">menu</span>
-</button>
-</div>
-</div>
-</nav>
-<main class="flex-grow">
-<!-- Hero Section -->
-<section class="py-16 text-center">
-<h1 class="font-headline text-4xl md:text-5xl font-bold text-primary tracking-tight mb-12">ABOUT SHESHENY MOTORS</h1>
-<div class="w-full max-w-[1400px] mx-auto px-4 md:px-8">
-<img alt="Luxury cars lined up in a moody, dimly lit high-end showroom with spotlights reflecting off pristine paint jobs" class="w-full h-auto object-cover rounded shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxfqeOh9_2xTZhR13rp2yacE5YIHjkM48xWavgAtlWH9BxYbHTZu5ckH5ftDiCp2TWU5NL748B0u9wIxY80CH6YhHjOmdDkLS0xmxEpK9yLGh4Zp1briO5dY_3Wwxf66jLPL7AWJr_QjAebVclyYkLi3HEqreIGz7OB0NT1gwvfw_idgaYLZotC2fzUILiUJWXoBJSzv0k-LeGuYw7ZkaND010qkXJ70C3RPcekT-gsEPLUwp8rs1-xuXOsARUnYi0owMwSLf67EMw"/>
-</div>
-</section>
-<!-- Our Story Section -->
-<section class="py-24 px-4 md:px-8">
-<div class="max-w-[1200px] mx-auto grid md:grid-cols-2 gap-16 items-center">
-<div class="relative w-full rounded overflow-hidden shadow-2xl">
-<img alt="Historic brick automotive factory building with modern luxury cars parked outside under overcast sky" class="w-full h-[500px] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsV_0c32TerE3NNWVcIShEk5mOH-CMl9oIhViJjY53DZygtSIWSo8nbZPCYr6DoxHtk4s9kCk73ZVKszHtB9bERO7HSxn2mgYEan-t_vDqnTUoXM__92PB7wBKzNiYEELg_l8dtnMKpNOh0BtNa7kQupifVQzoW-L3pTRsFU3KSqVQ_gilj-4H8cVz9X0XNQfKV6Bf16Ti1C3Msu12ECaU7D8H3ceJKhUyhNH32twvcvrlT6TH9b9uzd4HmySt4KEXCxu4Q6TMEtBZ"/>
-<div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-6 text-center">
-<p class="text-white font-medium tracking-wide">A Legacy of Excellence</p>
-</div>
-</div>
-<div class="space-y-6">
-<h2 class="font-headline text-3xl text-primary tracking-tight">OUR STORY</h2>
-<p class="font-body text-text-main text-sm leading-relaxed">
-                        For over two decades, <span class="text-primary">Shesheny Motors</span> has been the premier destination for automotive enthusiasts seeking unparalleled luxury and performance. Founded on a passion for extraordinary vehicles and a commitment to transparency, we curate a collection of the world's finest automobiles, ensuring every client finds their perfect drive.
-                    </p>
-<p class="font-body text-text-main text-sm leading-relaxed">
-                        Our journey began with a simple promise: <span class="text-primary">No Surprises. Just Perfect Cars.</span>
-</p>
-<button class="bg-primary text-background px-6 py-2.5 text-sm font-semibold rounded hover:bg-primary-hover transition-colors mt-4">
-                        EXPLORE OUR HISTORY
-                    </button>
-</div>
-</div>
-</section>
-<!-- Our Mission Section -->
-<section class="py-24 px-4 md:px-8">
-<div class="max-w-[1200px] mx-auto text-center mb-16">
-<h2 class="font-headline text-3xl text-primary tracking-tight">OUR MISSION</h2>
-</div>
-<div class="max-w-[1200px] mx-auto grid md:grid-cols-3 gap-6">
-<!-- Transparency Card -->
-<div class="border border-border-color bg-surface-light/30 p-10 flex flex-col items-center text-center rounded">
-<span class="material-symbols-outlined text-5xl text-primary mb-6 font-light" data-icon="shield_person">shield</span>
-<h3 class="font-body font-bold text-lg text-text-main mb-4 tracking-wider">TRANSPARENCY</h3>
-<p class="font-body text-sm text-text-main leading-relaxed">We believe in complete openness. Every vehicle undergoes a rigorous inspection and comes with a detailed report, ensuring peace of mind.</p>
-</div>
-<!-- Excellence Card -->
-<div class="border border-border-color bg-surface-light/30 p-10 flex flex-col items-center text-center rounded">
-<span class="material-symbols-outlined text-5xl text-primary mb-6 font-light" data-icon="diamond">diamond</span>
-<h3 class="font-body font-bold text-lg text-text-main mb-4 tracking-wider">EXCELLENCE</h3>
-<p class="font-body text-sm text-text-main leading-relaxed">Our standards are uncompromising. We offer only the highest quality, accident-free vehicles with original paint and verified condition.</p>
-</div>
-<!-- Trust Card -->
-<div class="border border-border-color bg-surface-light/30 p-10 flex flex-col items-center text-center rounded">
-<span class="material-symbols-outlined text-5xl text-primary mb-6 font-light" data-icon="handshake">handshake</span>
-<h3 class="font-body font-bold text-lg text-text-main mb-4 tracking-wider">TRUST</h3>
-<p class="font-body text-sm text-text-main leading-relaxed">Building lasting relationships through integrity and exceptional service. Your satisfaction is our ultimate goal.</p>
-</div>
-</div>
-</section>
-<!-- Meet The Experts Section -->
-<section class="py-24 px-4 md:px-8">
-<div class="max-w-[1400px] mx-auto">
-<div class="text-center mb-16">
-<h2 class="font-headline text-3xl text-primary tracking-tight">MEET THE EXPERTS</h2>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-<!-- Row 1 -->
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzrKoKLHaGTJOoLiJt_23l_IbHmUdkakVHATPhH2H_1pdQJaDgB_eZTC8FuQSTprXVsqobOauMXyVdIAqexcebW6vutOjrqPW0WvAvVM2tyByjpeHvk8todBJ_Q4ycPi5MrF4oOgM8tkRl_hIVWQr-kglfwT9uAC0LFtvq7B_LBy0CPbIsUAe68G6VTK7djD8nxRw23D4bfoUZ5X16T1iPUcevDEQMyFN9viSiE4PzPnGJ2on7BW00KzO1eOokM7w5unTtCVXm6SjR"/>
-<h3 class="font-body font-semibold text-primary">David Shesheny</h3>
-<p class="font-body text-xs text-text-main mb-2">Founder &amp; CEO</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASu9Xcpw5qhwk-R1HjdbeoZ3fu4019L08LvqxUiZ84hySaZ79WK9YP-CKa9eYh6sAYKqp3DOuIDgySOa2N_mGJPh8vOuejh_xkuO6Qpgyo_UDDjOfDWEh6Et-O-T9O0Y688U67z7R3eiXoQ5qGXRssfN-XBu_IvLR2vJwxhKXHRkoDcwovwvCcvW48H1LwgySOAcfRsjisA4lQ5fXWUY1gPsZawnyz6SVTA-CQ3lGH7OhgZr2fzx7UFjwJUihczZs2OgjnE4oZVSqs"/>
-<h3 class="font-body font-semibold text-primary">Sarah Chen</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJf-pNMbgPx9vkVsHbwYiVKeuTOKNbOMFdPLDWKnTvh8A-HD8FcJ6Qb7ms1twci3GanGe5uUUQ7TuwNFFh0TJaNkHR1a3Kln-DeuAxV75HV4kI_GSoPDGr3VKtv30KOwzcN04XM-IzCGPw2jLa6HD2iX_pFLJTSZhKOL_Y7keKEA2k9ak7e-fV8tMrhgLN4XzxXNrxtUUowJ6l55NHfx2Y_5bMck_UiE46mkvi4WnzgaxiRtd2jYdDmanY1dSKLM_x0lXtzdBSyLK5"/>
-<h3 class="font-body font-semibold text-primary">Michael Rossi</h3>
-<p class="font-body text-xs text-text-main mb-2">Senior Service Manager</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzrKoKLHaGTJOoLiJt_23l_IbHmUdkakVHATPhH2H_1pdQJaDgB_eZTC8FuQSTprXVsqobOauMXyVdIAqexcebW6vutOjrqPW0WvAvVM2tyByjpeHvk8todBJ_Q4ycPi5MrF4oOgM8tkRl_hIVWQr-kglfwT9uAC0LFtvq7B_LBy0CPbIsUAe68G6VTK7djD8nxRw23D4bfoUZ5X16T1iPUcevDEQMyFN9viSiE4PzPnGJ2on7BW00KzO1eOokM7w5unTtCVXm6SjR"/>
-<h3 class="font-body font-semibold text-primary">Flarcli Saoney</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJf-pNMbgPx9vkVsHbwYiVKeuTOKNbOMFdPLDWKnTvh8A-HD8FcJ6Qb7ms1twci3GanGe5uUUQ7TuwNFFh0TJaNkHR1a3Kln-DeuAxV75HV4kI_GSoPDGr3VKtv30KOwzcN04XM-IzCGPw2jLa6HD2iX_pFLJTSZhKOL_Y7keKEA2k9ak7e-fV8tMrhgLN4XzxXNrxtUUowJ6l55NHfx2Y_5bMck_UiE46mkvi4WnzgaxiRtd2jYdDmanY1dSKLM_x0lXtzdBSyLK5"/>
-<h3 class="font-body font-semibold text-primary">Davin Rosi</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<!-- Row 2 -->
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzrKoKLHaGTJOoLiJt_23l_IbHmUdkakVHATPhH2H_1pdQJaDgB_eZTC8FuQSTprXVsqobOauMXyVdIAqexcebW6vutOjrqPW0WvAvVM2tyByjpeHvk8todBJ_Q4ycPi5MrF4oOgM8tkRl_hIVWQr-kglfwT9uAC0LFtvq7B_LBy0CPbIsUAe68G6VTK7djD8nxRw23D4bfoUZ5X16T1iPUcevDEQMyFN9viSiE4PzPnGJ2on7BW00KzO1eOokM7w5unTtCVXm6SjR"/>
-<h3 class="font-body font-semibold text-primary">Rarry Shaby</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJf-pNMbgPx9vkVsHbwYiVKeuTOKNbOMFdPLDWKnTvh8A-HD8FcJ6Qb7ms1twci3GanGe5uUUQ7TuwNFFh0TJaNkHR1a3Kln-DeuAxV75HV4kI_GSoPDGr3VKtv30KOwzcN04XM-IzCGPw2jLa6HD2iX_pFLJTSZhKOL_Y7keKEA2k9ak7e-fV8tMrhgLN4XzxXNrxtUUowJ6l55NHfx2Y_5bMck_UiE46mkvi4WnzgaxiRtd2jYdDmanY1dSKLM_x0lXtzdBSyLK5"/>
-<h3 class="font-body font-semibold text-primary">Jarah Bois</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASu9Xcpw5qhwk-R1HjdbeoZ3fu4019L08LvqxUiZ84hySaZ79WK9YP-CKa9eYh6sAYKqp3DOuIDgySOa2N_mGJPh8vOuejh_xkuO6Qpgyo_UDDjOfDWEh6Et-O-T9O0Y688U67z7R3eiXoQ5qGXRssfN-XBu_IvLR2vJwxhKXHRkoDcwovwvCcvW48H1LwgySOAcfRsjisA4lQ5fXWUY1gPsZawnyz6SVTA-CQ3lGH7OhgZr2fzx7UFjwJUihczZs2OgjnE4oZVSqs"/>
-<h3 class="font-body font-semibold text-primary">Jasla Cenra</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzrKoKLHaGTJOoLiJt_23l_IbHmUdkakVHATPhH2H_1pdQJaDgB_eZTC8FuQSTprXVsqobOauMXyVdIAqexcebW6vutOjrqPW0WvAvVM2tyByjpeHvk8todBJ_Q4ycPi5MrF4oOgM8tkRl_hIVWQr-kglfwT9uAC0LFtvq7B_LBy0CPbIsUAe68G6VTK7djD8nxRw23D4bfoUZ5X16T1iPUcevDEQMyFN9viSiE4PzPnGJ2on7BW00KzO1eOokM7w5unTtCVXm6SjR"/>
-<h3 class="font-body font-semibold text-primary">Jore Saiilemn</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-<div class="border border-border-color bg-surface-light/30 rounded p-4 text-center">
-<img alt="Portrait" class="w-full aspect-[4/5] object-cover rounded mb-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJf-pNMbgPx9vkVsHbwYiVKeuTOKNbOMFdPLDWKnTvh8A-HD8FcJ6Qb7ms1twci3GanGe5uUUQ7TuwNFFh0TJaNkHR1a3Kln-DeuAxV75HV4kI_GSoPDGr3VKtv30KOwzcN04XM-IzCGPw2jLa6HD2iX_pFLJTSZhKOL_Y7keKEA2k9ak7e-fV8tMrhgLN4XzxXNrxtUUowJ6l55NHfx2Y_5bMck_UiE46mkvi4WnzgaxiRtd2jYdDmanY1dSKLM_x0lXtzdBSyLK5"/>
-<h3 class="font-body font-semibold text-primary">Alieh Duren</h3>
-<p class="font-body text-xs text-text-main mb-2">Head of Sales</p>
-<a class="inline-flex items-center gap-1 text-xs text-text-main hover:text-primary transition-colors" href="#">
-<span class="material-symbols-outlined text-[14px]" data-icon="call">call</span> Contact
-</a>
-</div>
-</div>
-</div>
-</section>
-</main>
-<!-- Footer -->
-<footer class="bg-[#151515] w-full border-t border-border-color pt-16 pb-8">
-<div class="max-w-[1400px] mx-auto px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-<div>
-<div class="text-2xl font-bold text-text-main mb-2">elito</div>
-<div class="text-[0.6rem] tracking-[0.3em] text-text-muted uppercase mb-6">AUTOMOTIVE</div>
-</div>
-<div>
-<h4 class="text-primary font-semibold mb-4">Quick Links</h4>
-<ul class="space-y-2 text-sm text-text-muted">
-<li><a class="hover:text-primary transition-colors" href="index.html">Home</a></li>
-<li><a class="hover:text-primary transition-colors" href="about.html">About Us</a></li>
-<li><a class="hover:text-primary transition-colors" href="inventory.html">Vehicles</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-<li><a class="hover:text-primary transition-colors" href="#">Terms &amp; Conditions</a></li>
-</ul>
-</div>
-<div>
-<h4 class="text-primary font-semibold mb-4">Contact Us</h4>
-<ul class="space-y-4 text-sm text-text-muted">
-<li class="flex items-start gap-2">
-<span class="material-symbols-outlined text-lg text-primary" data-icon="location_on">location_on</span>
-<span>Chilicutt Boulevard Mall B,<br/>Mohamed fssgulb Axis,<br/>New Cairo, Egypt</span>
-</li>
-<li class="flex items-center gap-2">
-<span class="material-symbols-outlined text-lg text-primary" data-icon="call">call</span>
-<span>+461057776177</span>
-</li>
-<li class="flex items-center gap-2">
-<span class="material-symbols-outlined text-lg text-primary" data-icon="phone_iphone">phone_iphone</span>
-<span>+201087776777</span>
-</li>
-<li class="flex items-center gap-2">
-<span class="material-symbols-outlined text-lg text-primary" data-icon="mail">mail</span>
-<span>info@elitoautomotive.eg</span>
-</li>
-</ul>
-</div>
-<div>
-<div class="flex gap-4 mb-6">
-<a class="text-text-muted hover:text-primary" href="#"><span class="material-symbols-outlined" data-icon="facebook">facebook</span></a>
-<a class="text-text-muted hover:text-primary" href="#"><span class="material-symbols-outlined" data-icon="camera_alt">camera_alt</span></a>
-<a class="text-text-muted hover:text-primary" href="#"><span class="material-symbols-outlined" data-icon="work">work</span></a>
-<a class="text-text-muted hover:text-primary" href="#"><span class="material-symbols-outlined" data-icon="music_note">music_note</span></a>
-</div>
-<div class="bg-surface rounded h-32 w-full overflow-hidden border border-border-color flex items-center justify-center">
-<span class="text-text-muted text-xs">Map Placeholder</span>
-</div>
-</div>
-</div>
-<div class="max-w-[1400px] mx-auto px-8 border-t border-border-color pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-text-muted">
-<p>© 2024 Shesheny Motors. All rights reserved.</p>
-<p class="mt-4 md:mt-0 bg-[#2a2a2a] py-2 px-4 w-full md:w-auto text-center rounded">
-            Cookie consent to improve you website, soka and your information of our uerves. <a class="text-primary hover:underline" href="#">Cookie Policy</a>
-</p>
-</div>
-</footer>
-</body></html>
+<body class="bg-surface text-on-surface font-body antialiased relative min-h-screen flex flex-col">
+    <div class="noise-overlay"></div>
+    <div class="event-overlay"></div>
+
+    <shesheny-header></shesheny-header>
+
+    <main class="flex-grow pt-32 pb-24 px-6 md:px-12 relative z-10">
+        <!-- Hero Section -->
+        <section class="max-w-screen-xl mx-auto text-center mb-24">
+            <h1 class="font-headline text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-primary tracking-tight" data-i18n="about_title">About Shesheny Motors</h1>
+            <p class="font-body text-on-surface-variant text-lg md:text-xl max-w-3xl mx-auto leading-relaxed" data-i18n="about_subtitle">
+                A legacy of excellence, delivering unparalleled luxury and performance.
+            </p>
+        </section>
+
+        <!-- Mission & Vision -->
+        <section class="max-w-screen-xl mx-auto grid md:grid-cols-2 gap-16 mb-24">
+            <!-- Mission -->
+            <div class="bg-surface-container-low p-10 rounded border border-outline-variant/20 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                    <span class="material-symbols-outlined text-9xl text-primary">flag</span>
+                </div>
+                <h2 class="font-headline text-3xl text-primary mb-6 relative z-10" data-i18n="about_mission_title">Our Mission</h2>
+                <p class="font-body text-on-surface-variant text-base leading-relaxed relative z-10" data-i18n="about_mission_text"> 
+At Shesheny Motors, our mission is to deliver a safe, transparent, and premium car buying experience built on trust, integrity, and attention to detail. We carefully select and inspect every vehicle to ensure the highest standards of quality and performance, while providing our clients with honest guidance and personalized service. Our goal is to make every customer feel confident, secure, and valued throughout their journey, from the first interaction to long after the purchase.
+                </p>
+            </div>
+
+            <!-- Vision -->
+            <div class="bg-surface-container-low p-10 rounded border border-outline-variant/20 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+                    <span class="material-symbols-outlined text-9xl text-primary">visibility</span>
+                </div>
+                <h2 class="font-headline text-3xl text-primary mb-6 relative z-10" data-i18n="about_vision_title">Our Vision</h2>
+                <p class="font-body text-on-surface-variant text-base leading-relaxed relative z-10" data-i18n="about_vision_text">
+                    Our vision is to become Egypt’s most trusted and respected luxury car dealership, setting the benchmark for transparency, customer experience, and automotive excellence. We aim to build a strong national brand that customers rely on for quality, honesty, and consistency, while continuously raising the standard of the car buying experience across the Egyptian market.
+                </p>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="max-w-screen-xl mx-auto mb-24">
+            <div class="text-center mb-16">
+                <h2 class="font-headline text-4xl text-primary tracking-tight" data-i18n="about_why_title">Why Choose Us</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Transparency -->
+                <div class="border border-outline-variant/20 bg-surface-container p-8 flex flex-col items-center text-center rounded hover:border-primary/50 transition-colors duration-300">
+                    <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-3xl text-primary" data-icon="shield_person">shield</span>
+                    </div>
+                    <h3 class="font-headline font-bold text-xl text-on-surface mb-4 tracking-wider" data-i18n="about_why_1_title">Absolute Transparency</h3>
+                    <p class="font-body text-sm text-on-surface-variant leading-relaxed" data-i18n="about_why_1_text">Every vehicle is thoroughly inspected and fully documented. We provide clear, detailed histories so you know exactly what you’re buying—no surprises, no hidden details.</p>
+                </div>
+
+                <!-- Excellence -->
+                <div class="border border-outline-variant/20 bg-surface-container p-8 flex flex-col items-center text-center rounded hover:border-primary/50 transition-colors duration-300">
+                    <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-3xl text-primary" data-icon="diamond">diamond</span>
+                    </div>
+                    <h3 class="font-headline font-bold text-xl text-on-surface mb-4 tracking-wider" data-i18n="about_why_2_title">Uncompromising Excellence</h3>
+                    <p class="font-body text-sm text-on-surface-variant leading-relaxed" data-i18n="about_why_2_text">We offer only carefully selected vehicles prepared to the highest standards. Each car is rigorously checked to ensure top quality, reliability, and a condition you can trust.</p>
+                </div>
+
+                <!-- Trust -->
+                <div class="border border-outline-variant/20 bg-surface-container p-8 flex flex-col items-center text-center rounded hover:border-primary/50 transition-colors duration-300">
+                    <div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center mb-6">
+                        <span class="material-symbols-outlined text-3xl text-primary" data-icon="handshake">handshake</span>
+                    </div>
+                    <h3 class="font-headline font-bold text-xl text-on-surface mb-4 tracking-wider" data-i18n="about_why_3_title">Built on Trust</h3>
+                    <p class="font-body text-sm text-on-surface-variant leading-relaxed" data-i18n="about_why_3_text">Imported cars aren’t always supported locally—we take full responsibility. From day one, we handle everything, giving you a smooth, worry-free ownership experience while you enjoy the drive.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="max-w-screen-xl mx-auto text-center border-t border-outline-variant/20 pt-16">
+            <h2 class="font-headline text-3xl text-on-surface mb-6" data-i18n="about_cta_title">Experience the Difference</h2>
+            <a href="inventory.html" class="inline-block bg-primary text-on-primary px-10 py-4 rounded font-label font-bold uppercase tracking-wider hover:bg-primary-fixed transition-colors" data-i18n="about_cta_btn">
+                Explore Inventory
+            </a>
+        </section>
+
+    </main>
+
+    <shesheny-footer></shesheny-footer>
+
+    <script src="js/components.js"></script>
+    <script src="js/i18n.js"></script>
+</body>
+</html>

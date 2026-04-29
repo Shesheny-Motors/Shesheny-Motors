@@ -19,15 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // 2. Setup Filter Listeners
+    document.getElementById('filter-category').addEventListener('change', applyFilters);
     document.getElementById('filter-brand').addEventListener('change', applyFilters);
-    document.getElementById('filter-color').addEventListener('change', applyFilters);
-    document.getElementById('filter-condition').addEventListener('change', applyFilters);
-    
-    const priceSlider = document.getElementById('filter-price');
-    priceSlider.addEventListener('input', (e) => {
-        updatePriceDisplay(e.target.value);
-    });
-    priceSlider.addEventListener('change', applyFilters);
 });
 
 document.addEventListener('currencyChanged', (e) => {
@@ -39,18 +32,16 @@ document.addEventListener('currencyChanged', (e) => {
 });
 
 function populateFilters(vehicles) {
-    const brands = [...new Set(vehicles.map(v => v.category))].filter(Boolean);
-    const origins = [...new Set(vehicles.map(v => v.origin))].filter(Boolean);
+    const categories = [...new Set(vehicles.map(v => v.category))].filter(Boolean);
+    const brands = [...new Set(vehicles.map(v => v.brand))].filter(Boolean);
+
+    const categorySelect = document.getElementById('filter-category');
+    categorySelect.innerHTML = '<option value="">All Types</option>';
+    categories.forEach(c => categorySelect.add(new Option(c, c)));
 
     const brandSelect = document.getElementById('filter-brand');
-    brandSelect.innerHTML = '<option value="">All Categories</option>';
+    brandSelect.innerHTML = '<option value="">All Brands</option>';
     brands.forEach(b => brandSelect.add(new Option(b, b)));
-
-    const colorSelect = document.getElementById('filter-color');
-    colorSelect.innerHTML = '<option value="">All Origins</option>';
-    origins.forEach(c => colorSelect.add(new Option(c, c)));
-
-    updatePriceSliderLimits();
 }
 
 function updatePriceSliderLimits() {
@@ -73,20 +64,12 @@ function updatePriceDisplay(val) {
 }
 
 function applyFilters() {
+    const category = document.getElementById('filter-category').value;
     const brand = document.getElementById('filter-brand').value;
-    const color = document.getElementById('filter-color').value;
-    const condition = document.getElementById('filter-condition').value;
-    const maxPrice = parseFloat(document.getElementById('filter-price').value);
-
-    const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
 
     const filtered = allVehicles.filter(v => {
-        const exchangeRate = window.settingsData?.exchange_rate || 50;
-        const vPrice = isUsd ? (v.price_egp / exchangeRate) : v.price_egp;
-        return (brand === '' || v.category === brand) && // Using category as the primary filter instead of brand for now
-               (color === '' || v.origin === color) && // Using origin instead of color
-               (condition === '' || (v.is_imported ? 'Imported' : 'Egyptian') === condition) &&
-               (vPrice <= maxPrice);
+        return (category === '' || v.category === category) &&
+               (brand === '' || v.brand === brand);
     });
 
     renderGrid(filtered);
@@ -107,15 +90,15 @@ function renderGrid(vehicles) {
         const priceUsd = v.price_egp / exchangeRate;
         const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
         
-        // Check favorites (assuming a fav array in localStorage)
-        const favs = JSON.parse(localStorage.getItem('favs') || '[]');
-        const isFav = favs.includes(v.id);
-        const heartIcon = isFav ? 'favorite' : 'favorite_border';
+        // Check cart
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const inCart = cart.includes(v.id);
+        const cartIcon = inCart ? 'remove_shopping_cart' : 'add_shopping_cart';
 
         return `
         <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative">
-            <button class="fav-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}">
-                <span class="material-symbols-outlined">${heartIcon}</span>
+            <button class="cart-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}" title="${inCart ? 'Remove from Cart' : 'Add to Cart'}">
+                <span class="material-symbols-outlined">${cartIcon}</span>
             </button>
             <div class="w-full aspect-[16/9] overflow-hidden relative">
                 <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${v.image_url}"/>
@@ -151,28 +134,30 @@ function renderGrid(vehicles) {
         </article>
     `}).join('');
 
-    // Attach favorites listener
-    document.querySelectorAll('.fav-btn').forEach(btn => {
+    // Attach cart listener
+    document.querySelectorAll('.cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = parseInt(e.currentTarget.getAttribute('data-id'));
-            toggleFavorite(id, e.currentTarget);
+            toggleCart(id, e.currentTarget);
         });
     });
 
     if(window.I18n) window.I18n.applyLanguage();
 }
 
-function toggleFavorite(id, btn) {
-    let favs = JSON.parse(localStorage.getItem('favs') || '[]');
+function toggleCart(id, btn) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const icon = btn.querySelector('span');
 
-    if(favs.includes(id)) {
-        favs = favs.filter(fid => fid !== id);
-        icon.textContent = 'favorite_border';
+    if(cart.includes(id)) {
+        cart = cart.filter(fid => fid !== id);
+        icon.textContent = 'add_shopping_cart';
+        btn.title = 'Add to Cart';
     } else {
-        favs.push(id);
-        icon.textContent = 'favorite';
+        cart.push(id);
+        icon.textContent = 'remove_shopping_cart';
+        btn.title = 'Remove from Cart';
     }
     
-    localStorage.setItem('favs', JSON.stringify(favs));
+    localStorage.setItem('cart', JSON.stringify(cart));
 }

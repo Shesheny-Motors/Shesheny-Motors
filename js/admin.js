@@ -153,12 +153,16 @@ const tabProducts = document.getElementById("tab-products");
 const tabBrands = document.getElementById("tab-brands");
 const tabCategories = document.getElementById("tab-categories");
 const tabInquiries = document.getElementById("tab-inquiries");
+const tabDeposits = document.getElementById("tab-deposits");
+const tabRequests = document.getElementById("tab-requests");
 const tabSettings = document.getElementById("tab-settings");
 
 const viewProducts = document.getElementById("view-products");
 const viewBrands = document.getElementById("view-brands");
 const viewCategories = document.getElementById("view-categories");
 const viewInquiries = document.getElementById("view-inquiries");
+const viewDeposits = document.getElementById("view-deposits");
+const viewRequests = document.getElementById("view-requests");
 const viewSettings = document.getElementById("view-settings");
 
 const productModal = document.getElementById("product-modal");
@@ -215,6 +219,8 @@ async function initAdmin() {
   tabBrands.addEventListener("click", () => switchTab("brands"));
   tabCategories.addEventListener("click", () => switchTab("categories"));
   tabInquiries.addEventListener("click", () => switchTab("inquiries"));
+  tabDeposits.addEventListener("click", () => switchTab("deposits"));
+  tabRequests.addEventListener("click", () => switchTab("requests"));
   tabSettings.addEventListener("click", () => switchTab("settings"));
 
   document.getElementById("filter-inquiries")?.addEventListener("change", filterInquiries);
@@ -363,13 +369,15 @@ async function handleLogout() { await window.supabase.auth.signOut(); }
 
 // --- Tabs ---
 function switchTab(tab) {
-  [viewProducts, viewBrands, viewCategories, viewInquiries, viewSettings].forEach(v => v.classList.add("hidden"));
-  [tabProducts, tabBrands, tabCategories, tabInquiries, tabSettings].forEach(t => t.classList.remove("border-primary", "text-primary"));
+  [viewProducts, viewBrands, viewCategories, viewInquiries, viewDeposits, viewRequests, viewSettings].forEach(v => v.classList.add("hidden"));
+  [tabProducts, tabBrands, tabCategories, tabInquiries, tabDeposits, tabRequests, tabSettings].forEach(t => t.classList.remove("border-primary", "text-primary"));
 
   if (tab === "products") { viewProducts.classList.remove("hidden"); tabProducts.classList.add("border-primary", "text-primary"); loadProducts(); }
   else if (tab === "brands") { viewBrands.classList.remove("hidden"); tabBrands.classList.add("border-primary", "text-primary"); loadBrands(); }
   else if (tab === "categories") { viewCategories.classList.remove("hidden"); tabCategories.classList.add("border-primary", "text-primary"); loadCategories(); }
   else if (tab === "inquiries") { viewInquiries.classList.remove("hidden"); tabInquiries.classList.add("border-primary", "text-primary"); loadInquiries(); }
+  else if (tab === "deposits") { viewDeposits.classList.remove("hidden"); tabDeposits.classList.add("border-primary", "text-primary"); loadDeposits(); }
+  else if (tab === "requests") { viewRequests.classList.remove("hidden"); tabRequests.classList.add("border-primary", "text-primary"); loadRequests(); }
   else if (tab === "settings") { viewSettings.classList.remove("hidden"); tabSettings.classList.add("border-primary", "text-primary"); loadSettings(); }
 }
 
@@ -843,6 +851,119 @@ window.toggleRead = async (id, cb) => {
 window.deleteInquiry = (id) => showConfirm("Delete inquiry?", async () => {
     try { await window.messagesDb.delete(id); showToast("Deleted"); loadInquiries(); }
     catch (e) { showToast("Delete failed", "error"); }
+});
+
+// --- Deposits ---
+let currentDeposits = [];
+async function loadDeposits() {
+    try {
+        const { data, error } = await window.supabase.from('deposits').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        currentDeposits = data;
+        renderDeposits();
+    } catch (e) {
+        console.error("Error loading deposits:", e);
+        showToast("Error loading deposits", "error");
+    }
+}
+function renderDeposits() {
+    const tbody = document.getElementById("deposits-table-body");
+    if(!currentDeposits.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center">No deposits found.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = currentDeposits.map(d => `
+        <tr>
+            <td class="px-6 py-4" data-label="Status">
+                <select onchange="updateDepositStatus(${d.id}, this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
+                    <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
+                    <option value="approved" ${d.status === 'approved' ? 'selected' : ''}>Approved</option>
+                    <option value="rejected" ${d.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                </select>
+            </td>
+            <td class="px-6 py-4 text-xs" data-label="Date">${new Date(d.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(d.name)}<br><span class="text-xs text-gray-500">${escapeHtml(d.email)}</span><br><span class="text-xs text-gray-500">${escapeHtml(d.phone)}</span></td>
+            <td class="px-6 py-4 text-sm" data-label="Car ID"><a href="details.html?id=${d.car_id}" target="_blank" class="text-primary underline">Car #${d.car_id}</a></td>
+            <td class="px-6 py-4" data-label="Image">
+                ${d.image_url ? `<a href="${d.image_url}" target="_blank" class="text-blue-500 hover:underline">View Image</a>` : 'No Image'}
+            </td>
+            <td class="px-6 py-4 text-right"><button onclick="deleteDeposit(${d.id})" class="text-red-500">Delete</button></td>
+        </tr>
+    `).join('');
+}
+window.updateDepositStatus = async (id, status) => {
+    try {
+        const { error } = await window.supabase.from('deposits').update({ status }).eq('id', id);
+        if (error) throw error;
+        showToast("Status updated");
+    } catch (e) {
+        showToast("Update failed", "error");
+        loadDeposits();
+    }
+};
+window.deleteDeposit = (id) => showConfirm("Delete deposit?", async () => {
+    try {
+        const { error } = await window.supabase.from('deposits').delete().eq('id', id);
+        if (error) throw error;
+        showToast("Deleted"); 
+        loadDeposits(); 
+    } catch (e) { showToast("Delete failed", "error"); }
+});
+
+// --- Custom Requests ---
+let currentRequests = [];
+async function loadRequests() {
+    try {
+        const { data, error } = await window.supabase.from('custom_requests').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        currentRequests = data;
+        renderRequests();
+    } catch (e) {
+        console.error("Error loading custom requests:", e);
+        showToast("Error loading custom requests", "error");
+    }
+}
+function renderRequests() {
+    const tbody = document.getElementById("requests-table-body");
+    if(!currentRequests.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center">No custom requests found.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = currentRequests.map(r => `
+        <tr>
+            <td class="px-6 py-4" data-label="Status">
+                <select onchange="updateRequestStatus(${r.id}, this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
+                    <option value="pending" ${r.status === 'pending' ? 'selected' : ''}>Pending</option>
+                    <option value="in_progress" ${r.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                    <option value="completed" ${r.status === 'completed' ? 'selected' : ''}>Completed</option>
+                </select>
+            </td>
+            <td class="px-6 py-4 text-xs" data-label="Date">${new Date(r.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(r.name)}<br><span class="text-xs text-gray-500">${escapeHtml(r.email)}</span><br><span class="text-xs text-gray-500">${escapeHtml(r.phone)}</span></td>
+            <td class="px-6 py-4 text-sm font-medium" data-label="Car">${escapeHtml(r.car)}</td>
+            <td class="px-6 py-4 text-sm" data-label="Budget">${escapeHtml(r.budget || '-')}</td>
+            <td class="px-6 py-4 text-sm truncate max-w-xs cursor-pointer" data-label="Message" onclick="alert(this.dataset.fullMessage)" data-full-message="${escapeHtml(r.message || '')}">${escapeHtml(r.message || '-')}</td>
+            <td class="px-6 py-4 text-right"><button onclick="deleteRequest(${r.id})" class="text-red-500">Delete</button></td>
+        </tr>
+    `).join('');
+}
+window.updateRequestStatus = async (id, status) => {
+    try {
+        const { error } = await window.supabase.from('custom_requests').update({ status }).eq('id', id);
+        if (error) throw error;
+        showToast("Status updated");
+    } catch (e) {
+        showToast("Update failed", "error");
+        loadRequests();
+    }
+};
+window.deleteRequest = (id) => showConfirm("Delete custom request?", async () => {
+    try {
+        const { error } = await window.supabase.from('custom_requests').delete().eq('id', id);
+        if (error) throw error;
+        showToast("Deleted"); 
+        loadRequests(); 
+    } catch (e) { showToast("Delete failed", "error"); }
 });
 
 // --- Settings ---

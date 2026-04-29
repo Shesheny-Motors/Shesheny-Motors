@@ -150,15 +150,18 @@
 </div>
 </div>
 </div>
-<div class="flex flex-col md:flex-row justify-center gap-6">
-<a id="btn-inquire" href="contact.html" class="bg-transparent text-[#c5a059] font-bold px-12 py-4 rounded-sm hover:bg-[#c5a059]/10 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#c5a059] w-full md:w-auto text-center" data-i18n="btn_inquire">
+<div class="flex flex-col md:flex-row justify-center gap-4 flex-wrap">
+<button id="btn-deposit" class="bg-white text-black font-bold px-12 py-4 rounded-sm hover:bg-gray-200 transition-all duration-200 uppercase tracking-widest text-sm shadow-[0_0_15px_rgba(255,255,255,0.3)] border border-white w-full md:w-auto text-center" data-i18n="btn_deposit">
+    Place Deposit
+</button>
+<a id="btn-inquire" href="contact.html" class="bg-transparent text-[#c5a059] font-bold px-8 py-4 rounded-sm hover:bg-[#c5a059]/10 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#c5a059] w-full md:w-auto text-center" data-i18n="btn_inquire">
     Inquire Now
 </a>
-<a id="btn-whatsapp" href="#" target="_blank" class="bg-[#25D366] text-white font-bold px-12 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#1DA851] w-full md:w-auto text-center" data-i18n="btn_whatsapp">
-    Contact via WhatsApp
+<a id="btn-whatsapp" href="#" target="_blank" class="bg-[#25D366] text-white font-bold px-8 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#1DA851] w-full md:w-auto text-center" data-i18n="btn_whatsapp">
+    WhatsApp
 </a>
-<a id="btn-call" href="#" class="bg-[#c5a059] text-black font-bold px-12 py-4 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-[#a17e4a] w-full md:w-auto text-center" data-i18n="btn_call">
-    Call Now
+<a id="btn-call" href="#" class="bg-transparent text-white font-bold px-8 py-4 rounded-sm hover:bg-white/10 transition-all duration-200 uppercase tracking-widest text-sm shadow-lg border border-white/30 w-full md:w-auto text-center" data-i18n="btn_call">
+    Call
 </a>
 </div>
 </div>
@@ -200,6 +203,118 @@
 </main>
 <!-- Footer -->
 <shesheny-footer></shesheny-footer>
+
+<!-- Deposit Modal -->
+<div id="deposit-modal" class="fixed inset-0 z-[100] hidden bg-[#0a0a0a] flex flex-col items-center justify-center overflow-y-auto">
+    <div class="absolute top-6 right-6">
+        <button id="close-deposit" class="text-white hover:text-[#c5a059] transition-colors p-2">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+    </div>
+
+    <!-- Step 1: Terms -->
+    <div id="deposit-step-1" class="w-full max-w-4xl mx-auto px-6 py-12 flex flex-col animate-fade-in">
+        <div class="text-center mb-12">
+            <h2 class="font-headline text-4xl md:text-5xl font-bold text-[#c5a059] uppercase tracking-widest mb-4">Deposit Terms</h2>
+            <div class="h-[1px] w-24 bg-[#c5a059] mx-auto"></div>
+        </div>
+
+        <div class="bg-[#111] border border-[#333] rounded-sm p-8 md:p-12 shadow-2xl mb-12 space-y-6 text-stone-300 leading-relaxed h-[400px] overflow-y-auto custom-scrollbar">
+            <h3 class="text-white text-xl font-bold uppercase tracking-wider mb-6">Reservation Agreement</h3>
+            
+            <p>1. By proceeding with this deposit, you agree to reserve the specified vehicle for a period of <strong class="text-white">72 hours</strong> from the time the deposit is successfully verified by Shesheny Motors.</p>
+            
+            <p>2. The deposit amount is strictly non-refundable should you decide not to proceed with the final purchase within the stipulated reservation period, unless mutually agreed otherwise in writing by Shesheny Motors.</p>
+            
+            <p>3. If the vehicle is found to have any undisclosed defects upon your final inspection, or if Shesheny Motors is unable to fulfill the sale for any reason, the deposit will be fully refunded to the original payment method.</p>
+            
+            <p>4. The deposit amount will be fully credited towards the final purchase price of the vehicle.</p>
+            
+            <p>5. Shesheny Motors reserves the right to cancel this reservation and refund the deposit at any time prior to the signing of the final sales agreement.</p>
+            
+            <p>6. It is your responsibility to complete the full payment and transfer of ownership documentation within the 72-hour window, otherwise the vehicle will be relisted for sale.</p>
+        </div>
+
+        <div class="flex justify-center mt-auto">
+            <button id="btn-agree-terms" class="bg-[#c5a059] text-black font-bold px-16 py-5 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest shadow-[0_0_20px_rgba(197,160,89,0.3)]">
+                Agree & Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- Step 2: Payment & Upload -->
+    <div id="deposit-step-2" class="w-full max-w-5xl mx-auto px-6 py-12 hidden flex flex-col md:flex-row gap-12 items-center md:items-stretch animate-fade-in">
+        
+        <!-- Left: QR Code & Bank Details -->
+        <div class="w-full md:w-1/2 bg-[#111] border border-[#333] rounded-sm p-8 md:p-12 flex flex-col items-center shadow-2xl">
+            <h3 class="text-[#c5a059] text-2xl font-headline font-bold uppercase tracking-wider mb-8 text-center">Payment Details</h3>
+            
+            <div class="bg-white p-4 rounded-sm mb-8 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SheshenyMotorsBankInfo" alt="Bank QR" class="w-48 h-48 md:w-56 md:h-56 object-contain" />
+            </div>
+
+            <div class="w-full space-y-4 text-sm tracking-wider">
+                <div class="flex justify-between border-b border-[#333] pb-2">
+                    <span class="text-stone-400">Bank Name</span>
+                    <span class="text-white font-medium">CIB Egypt</span>
+                </div>
+                <div class="flex justify-between border-b border-[#333] pb-2">
+                    <span class="text-stone-400">Account Name</span>
+                    <span class="text-white font-medium">Shesheny Motors LLC</span>
+                </div>
+                <div class="flex justify-between border-b border-[#333] pb-2">
+                    <span class="text-stone-400">IBAN</span>
+                    <span class="text-white font-medium text-xs md:text-sm">EG123456789012345678901234567</span>
+                </div>
+                <div class="flex justify-between pb-2">
+                    <span class="text-stone-400">Swift Code</span>
+                    <span class="text-white font-medium">CIBEGX</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Upload Form -->
+        <div class="w-full md:w-1/2 flex flex-col justify-center">
+            <h2 class="font-headline text-3xl md:text-4xl font-bold text-white uppercase tracking-widest mb-6">Confirm Deposit</h2>
+            <p class="text-stone-400 mb-8 leading-relaxed">Please transfer the deposit amount using the details provided, then upload a screenshot of your transfer receipt below to secure your vehicle.</p>
+            
+            <form id="deposit-form" class="space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Full Name</label>
+                        <input type="text" id="dep-name" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="Your Name">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Phone Number</label>
+                        <input type="tel" id="dep-phone" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="+20 100 000 0000">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Email Address</label>
+                    <input type="email" id="dep-email" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="your@email.com">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Upload Receipt</label>
+                    <div class="relative group">
+                        <input type="file" id="dep-receipt" required accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="w-full border-2 border-dashed border-[#444] group-hover:border-[#c5a059] bg-[#1a1a1a] rounded-sm p-8 text-center transition-colors flex flex-col items-center gap-3">
+                            <span class="material-symbols-outlined text-4xl text-stone-500 group-hover:text-[#c5a059] transition-colors">cloud_upload</span>
+                            <span id="dep-file-name" class="text-stone-400 text-sm">Click or drag image here</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit-deposit" class="w-full bg-white text-black font-bold px-8 py-5 rounded-sm hover:bg-gray-200 transition-all duration-200 uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50 disabled:cursor-not-allowed">
+                    Submit Deposit
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
 <script src="js/dbCache.js"></script>

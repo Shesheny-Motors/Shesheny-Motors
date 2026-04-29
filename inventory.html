@@ -108,6 +108,16 @@
 <!-- Horizontal Filter Bar -->
 <div class="w-full flex flex-wrap items-center justify-between gap-6 mb-16 pb-6 border-b border-outline-variant/20">
 <div class="flex flex-wrap items-center gap-4 flex-grow">
+    <!-- Category -->
+    <div class="relative min-w-[150px]">
+        <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_category">Car Type</label>
+        <div class="relative bg-surface-container-highest border-b-2 border-outline-variant hover:border-primary transition-colors duration-200 group">
+            <select id="filter-category" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer">
+                <option value="">All Types</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
+        </div>
+    </div>
     <!-- Brand -->
     <div class="relative min-w-[150px]">
         <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_brand">Brand</label>
@@ -118,33 +128,6 @@
             <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
         </div>
     </div>
-    <!-- Color -->
-    <div class="relative min-w-[150px]">
-        <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_color">Color</label>
-        <div class="relative bg-surface-container-highest border-b-2 border-outline-variant hover:border-primary transition-colors duration-200 group">
-            <select id="filter-color" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer">
-                <option value="">All Colors</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
-        </div>
-    </div>
-    <!-- Condition -->
-    <div class="relative min-w-[150px]">
-        <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_condition">Condition</label>
-        <div class="relative bg-surface-container-highest border-b-2 border-outline-variant hover:border-primary transition-colors duration-200 group">
-            <select id="filter-condition" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer">
-                <option value="">All Conditions</option>
-                <option value="New">New</option>
-                <option value="Used">Used</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
-        </div>
-    </div>
-    <!-- Price Slider -->
-    <div class="relative min-w-[200px] flex flex-col justify-end">
-        <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider"><span data-i18n="filter_price">Max Price</span>: <span id="price-display">...</span></label>
-        <input type="range" id="filter-price" min="0" max="10000000" step="10000" class="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer">
-    </div>
 </div>
 </div>
 <!-- Inventory Grid -->
@@ -152,10 +135,20 @@
     <!-- Dynamic Results -->
 </div>
 <!-- Load More -->
-<div class="w-full flex justify-center mt-16">
+<div class="w-full flex justify-center mt-16 mb-24">
 <button class="flex items-center gap-2 text-primary hover:text-primary-container transition-colors font-body text-sm tracking-widest uppercase">
                     Load More <span class="material-symbols-outlined">expand_more</span>
 </button>
+</div>
+
+<!-- Custom Request CTA -->
+<div class="w-full bg-surface-container-low border border-outline-variant/10 rounded-xl p-12 text-center mt-12 flex flex-col items-center justify-center">
+    <span class="material-symbols-outlined text-5xl text-primary mb-6">search_hands_free</span>
+    <h2 class="font-headline text-3xl md:text-4xl font-bold mb-4 text-on-surface">Can't find what you're looking for?</h2>
+    <p class="font-body text-on-surface-variant max-w-2xl mb-8">Tell us exactly what you desire. Our global network allows us to source the rarest and most exclusive vehicles to meet your precise specifications.</p>
+    <a href="request.html" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-10 py-4 rounded hover:scale-105 transition-transform duration-200 font-label font-bold text-sm tracking-widest uppercase">
+        Make a Custom Request
+    </a>
 </div>
 </section>
 </main>

@@ -200,6 +200,8 @@
           <button id="tab-brands" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Brands</button>
           <button id="tab-categories" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Categories</button>
           <button id="tab-inquiries" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Inquiries</button>
+          <button id="tab-deposits" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Deposits</button>
+          <button id="tab-requests" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Custom Requests</button>
           <button id="tab-settings" class="px-2 py-4 text-sm font-bold uppercase tracking-widest text-neutral-500 hover:text-primary transition-colors whitespace-nowrap">Settings</button>
         </div>
 
@@ -286,6 +288,51 @@
                 </tr>
               </thead>
               <tbody id="inquiries-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Deposits View -->
+        <div id="view-deposits" class="hidden space-y-8">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Deposits</h2>
+          </div>
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[900px]">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-8 py-5">Status</th>
+                  <th class="px-8 py-5">Date</th>
+                  <th class="px-8 py-5">Customer</th>
+                  <th class="px-8 py-5">Car ID</th>
+                  <th class="px-8 py-5">Image</th>
+                  <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="deposits-table-body" class="divide-y divide-white/5"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Custom Requests View -->
+        <div id="view-requests" class="hidden space-y-8">
+          <div class="flex justify-between items-center">
+            <h2 class="font-headline text-4xl font-extrabold tracking-tight">Custom Requests</h2>
+          </div>
+          <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
+            <table class="w-full text-left text-sm min-w-[900px]">
+              <thead class="bg-white/5 text-primary uppercase font-bold text-[10px] tracking-[0.2em]">
+                <tr>
+                  <th class="px-8 py-5">Status</th>
+                  <th class="px-8 py-5">Date</th>
+                  <th class="px-8 py-5">Customer</th>
+                  <th class="px-8 py-5">Car</th>
+                  <th class="px-8 py-5">Budget</th>
+                  <th class="px-8 py-5">Message</th>
+                  <th class="px-8 py-5 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="requests-table-body" class="divide-y divide-white/5"></tbody>
             </table>
           </div>
         </div>
