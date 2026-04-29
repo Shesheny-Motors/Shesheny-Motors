@@ -296,6 +296,12 @@
         <div id="view-deposits" class="hidden space-y-8">
           <div class="flex justify-between items-center">
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Deposits</h2>
+            <select id="filter-deposits" class="bg-surface-container-highest border border-outline-variant text-on-surface rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest outline-none focus:border-primary transition-all">
+              <option value="all">All</option>
+              <option value="pending" selected>Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
           <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
             <table class="w-full text-left text-sm min-w-[900px]">
@@ -318,6 +324,12 @@
         <div id="view-requests" class="hidden space-y-8">
           <div class="flex justify-between items-center">
             <h2 class="font-headline text-4xl font-extrabold tracking-tight">Custom Requests</h2>
+            <select id="filter-requests" class="bg-surface-container-highest border border-outline-variant text-on-surface rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-widest outline-none focus:border-primary transition-all">
+              <option value="all">All</option>
+              <option value="pending" selected>Pending</option>
+              <option value="in_progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
           </div>
           <div class="admin-card rounded-2xl overflow-hidden shadow-xl overflow-x-auto">
             <table class="w-full text-left text-sm min-w-[900px]">

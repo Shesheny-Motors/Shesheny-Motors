@@ -5,7 +5,7 @@ class I18nManager {
     constructor() {
         this.lang = localStorage.getItem('site_lang') || 'en';
         this.currency = localStorage.getItem('site_currency') || 'EGP';
-        this.exchangeRate = 1;
+        this.exchangeRate = 50; // Default EGP to USD rate
         this.translations = {};
         
         this.init();
@@ -14,7 +14,7 @@ class I18nManager {
     async init() {
         // Load translations
         try {
-            const res = await fetch('/translations.json');
+            const res = await fetch('translations.json');
             this.translations = await res.json();
         } catch (e) {
             console.error("Failed to load translations.json", e);
@@ -22,9 +22,16 @@ class I18nManager {
 
         // Fetch Exchange Rate from settings
         if(window.DbCache && window.supabaseClient) {
-            const {data} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
-            if(data && data.length > 0) {
-                this.exchangeRate = data[0].exchange_rate || 50;
+            try {
+                const {data} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
+                if(data && data.length > 0) {
+                    const settings = data.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
+                    if (settings.exchange_rate) {
+                        this.exchangeRate = parseFloat(settings.exchange_rate) || 50;
+                    }
+                }
+            } catch(e) {
+                console.error("Failed to load exchange rate", e);
             }
         }
 
@@ -52,21 +59,31 @@ class I18nManager {
             }
         });
 
-        // Update toggle button text
+        // Update toggle button label
+        const langLabel = document.getElementById('lang-toggle-label');
         const langToggle = document.getElementById('lang-toggle');
-        if (langToggle) {
+        if (langLabel) {
+            langLabel.textContent = this.lang === 'en' ? 'عربي' : 'English';
+        } else if (langToggle) {
+            // Fallback for old structure
             langToggle.textContent = this.lang === 'en' ? 'عربي' : 'English';
         }
     }
 
     applyCurrency() {
-        const toggle = document.getElementById('currency-toggle');
-        if(toggle) {
-            toggle.textContent = this.currency;
+        // Update toggle button label
+        const currencyLabel = document.getElementById('currency-toggle-label');
+        const currencyToggle = document.getElementById('currency-toggle');
+        if (currencyLabel) {
+            currencyLabel.textContent = this.currency;
+        } else if (currencyToggle) {
+            currencyToggle.textContent = this.currency;
         }
         
-        // Custom event for other scripts to re-render prices
-        document.dispatchEvent(new CustomEvent('currencyChanged', { detail: { currency: this.currency, rate: this.exchangeRate } }));
+        // Dispatch event for price re-rendering
+        document.dispatchEvent(new CustomEvent('currencyChanged', { 
+            detail: { currency: this.currency, rate: this.exchangeRate } 
+        }));
     }
 
     setupListeners() {
@@ -90,11 +107,20 @@ class I18nManager {
     }
 
     formatPrice(priceEgp, priceUsd) {
+        if (!priceEgp && !priceUsd) return '';
         if(this.currency === 'USD') {
-            return '$' + priceUsd.toLocaleString();
+            const usd = priceUsd || Math.round(priceEgp / this.exchangeRate);
+            return '$' + Number(usd).toLocaleString();
         } else {
-            return priceEgp.toLocaleString() + ' EGP';
+            return Number(priceEgp).toLocaleString() + ' EGP';
         }
+    }
+
+    translate(key) {
+        if (this.translations[this.lang] && this.translations[this.lang][key]) {
+            return this.translations[this.lang][key];
+        }
+        return key;
     }
 }
 

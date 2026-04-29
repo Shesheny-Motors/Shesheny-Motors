@@ -35,9 +35,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             setupContactButtons(window.settingsData);
         }
 
-        setupDepositModal();
+        await setupDepositModal();
     }
 });
+
+function showToast(msg, type = "success") {
+    const existing = document.getElementById("toast-container");
+    if (existing) existing.remove();
+
+    const color = type === "error" ? "bg-red-500" : "bg-[#c5a059]";
+    const icon = type === "error" ? "error" : "check_circle";
+
+    const toastHtml = `
+        <div id="toast-container" class="fixed bottom-4 right-4 z-[200] flex items-center gap-3 ${color} text-white px-6 py-3 rounded-md shadow-2xl animate-fade-in">
+            <span class="material-symbols-outlined">${icon}</span>
+            <span class="font-bold tracking-wider text-sm">${msg}</span>
+        </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", toastHtml);
+    setTimeout(() => {
+        const t = document.getElementById("toast-container");
+        if (t) t.remove();
+    }, 3000);
+}
 
 document.addEventListener('currencyChanged', (e) => {
     if(currentVehicle) {
@@ -164,7 +184,7 @@ function resetSlideshow() {
     startSlideshow();
 }
 
-function setupDepositModal() {
+async function setupDepositModal() {
     const btnDeposit = document.getElementById('btn-deposit');
     const modal = document.getElementById('deposit-modal');
     const closeBtn = document.getElementById('close-deposit');
@@ -180,15 +200,45 @@ function setupDepositModal() {
 
     if(!btnDeposit || !modal) return;
 
-    // Check if car already has deposit
-    if (currentVehicle.is_sold_out) {
-        btnDeposit.textContent = "Sold Out";
-        btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
-        btnDeposit.disabled = true;
+    // Check deposit status from server
+    try {
+        const { data: depositsData } = await window.supabaseClient.from('deposits').select('status').eq('car_id', currentVehicle.id).order('created_at', { ascending: false }).limit(1);
+        
+        let depositStatus = null;
+        if (depositsData && depositsData.length > 0) {
+            depositStatus = depositsData[0].status;
+        }
+
+        if (currentVehicle.is_sold_out || depositStatus === 'approved') {
+            btnDeposit.textContent = "Deposit Accepted";
+            btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
+            btnDeposit.classList.remove("hover:bg-gray-200");
+            btnDeposit.disabled = true;
+        } else if (depositStatus === 'pending') {
+            btnDeposit.textContent = "Deposit Pending";
+            btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
+            btnDeposit.classList.remove("hover:bg-gray-200");
+            btnDeposit.disabled = true;
+        }
+    } catch (e) {
+        console.error("Error checking deposit status:", e);
     }
 
-    btnDeposit.addEventListener('click', () => {
+
+    btnDeposit.addEventListener('click', async () => {
         if (currentVehicle.is_sold_out) return;
+        
+        // Check if user is signed in
+        if (window.SheshenyAuth) {
+            const session = await window.SheshenyAuth.getSession();
+            if (!session) {
+                // Redirect to login with return URL
+                const returnUrl = encodeURIComponent(window.location.href);
+                window.location.href = `login.html?redirect=${returnUrl}`;
+                return;
+            }
+        }
+        
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
         step1.classList.remove('hidden');
@@ -203,17 +253,18 @@ function setupDepositModal() {
     btnAgree.addEventListener('click', () => {
         step1.classList.add('hidden');
         step2.classList.remove('hidden');
+        modal.scrollTop = 0;
     });
 
     receiptInput.addEventListener('change', (e) => {
         if(e.target.files.length > 0) {
             fileNameDisplay.textContent = e.target.files[0].name;
-            fileNameDisplay.classList.add('text-white');
-            fileNameDisplay.classList.remove('text-stone-400');
+            fileNameDisplay.classList.add('text-black');
+            fileNameDisplay.classList.remove('text-stone-600');
         } else {
-            fileNameDisplay.textContent = "Click or drag image here";
-            fileNameDisplay.classList.add('text-stone-400');
-            fileNameDisplay.classList.remove('text-white');
+            fileNameDisplay.textContent = "Upload Transfer Receipt";
+            fileNameDisplay.classList.add('text-stone-600');
+            fileNameDisplay.classList.remove('text-black');
         }
     });
 
@@ -226,7 +277,7 @@ function setupDepositModal() {
         const receipt = receiptInput.files[0];
         
         if(!receipt) {
-            alert("Please upload a receipt.");
+            showToast("Please upload a receipt.", "error");
             return;
         }
 
@@ -268,7 +319,7 @@ function setupDepositModal() {
             
             // Mark it temporarily locally to give user feedback
             
-            alert("Deposit submitted successfully! We will contact you shortly.");
+            showToast("Deposit submitted successfully! We will contact you shortly.");
             modal.classList.add('hidden');
             document.body.style.overflow = 'auto';
             
@@ -286,7 +337,7 @@ function setupDepositModal() {
 
         } catch (error) {
             console.error("Error submitting deposit:", error);
-            alert("Failed to submit deposit. Please try again or contact support.");
+            showToast("Failed to submit deposit. Please try again or contact support.", "error");
         } finally {
             btnSubmit.disabled = false;
             btnSubmit.textContent = "Submit Deposit";

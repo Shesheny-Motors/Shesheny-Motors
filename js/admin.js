@@ -202,10 +202,16 @@ async function initAdmin() {
     console.error("Failed to load translations", e);
   }
 
-  window.supabase.auth.onAuthStateChange((event, session) => {
+  window.supabase.auth.onAuthStateChange(async (event, session) => {
     if (session) {
       currentUser = session.user;
-      showDashboard();
+      // Check if the user is an admin
+      const isAdmin = await checkIsAdmin(currentUser.email);
+      if (isAdmin) {
+        showDashboard();
+      } else {
+        showAccessDenied();
+      }
     } else {
       currentUser = null;
       showLogin();
@@ -224,6 +230,8 @@ async function initAdmin() {
   tabSettings.addEventListener("click", () => switchTab("settings"));
 
   document.getElementById("filter-inquiries")?.addEventListener("change", filterInquiries);
+  document.getElementById("filter-deposits")?.addEventListener("change", filterDeposits);
+  document.getElementById("filter-requests")?.addEventListener("change", filterRequests);
 
   document.getElementById("add-product-btn").addEventListener("click", () => openModal());
   document.getElementById("modal-close").addEventListener("click", closeModal);
@@ -342,6 +350,46 @@ function updateSaveOrderBtnVisibility() {
 }
 
 // --- Auth ---
+async function checkIsAdmin(email) {
+  try {
+    const { data, error } = await window.supabase
+      .from('admin_users')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
+    if (error) { console.error('Admin check error:', error); return false; }
+    return !!data;
+  } catch (e) {
+    console.error('Admin check failed:', e);
+    return false;
+  }
+}
+
+function showAccessDenied() {
+  loginSection.classList.remove("hidden");
+  dashboardSection.classList.add("hidden");
+  userInfo.classList.add("hidden");
+  // Replace the login form with an access denied message
+  loginSection.innerHTML = `
+    <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
+      <div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+        <span class="material-symbols-outlined text-4xl text-red-400">shield_lock</span>
+      </div>
+      <h2 class="text-2xl font-headline font-bold text-white mb-3">Access Denied</h2>
+      <p class="text-zinc-400 max-w-md mb-6">This area is restricted to authorized administrators only. If you believe this is an error, please contact the site owner.</p>
+      <p class="text-zinc-600 text-sm mb-4">Signed in as: <span class="text-zinc-400">${currentUser?.email || ''}</span></p>
+      <div class="flex gap-4">
+        <a href="index.html" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
+          ← Back to Site
+        </a>
+        <button onclick="handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  `;
+}
+
 function showLogin() {
   loginSection.classList.remove("hidden");
   dashboardSection.classList.add("hidden");
@@ -585,7 +633,7 @@ async function handleSaveProduct(e) {
             discount_price: document.getElementById("p-discount").value ? parseFloat(document.getElementById("p-discount").value) : null,
             category: document.getElementById("p-category").value,
             origin: document.getElementById("p-origin").value,
-            brand_id: parseInt(document.getElementById("p-brand-id").value),
+            brand_id: document.getElementById("p-brand-id").value ? parseInt(document.getElementById("p-brand-id").value) : null,
             is_spotlight: document.getElementById("p-featured").checked,
             is_upon_request: document.getElementById("p-upon-request").checked,
             is_sold_out: document.getElementById("p-sold-out").checked,
@@ -623,7 +671,10 @@ async function handleSaveProduct(e) {
         showToast("Vehicle saved successfully!", "success");
         closeModal();
         loadProducts();
-    } catch (err) { showToast("Save failed", "error"); }
+    } catch (err) {
+        console.error("Save failed:", err);
+        showToast("Save failed: " + (err.message || JSON.stringify(err)), "error");
+    }
     finally { btn.disabled = false; }
 }
 
@@ -688,14 +739,18 @@ function closeModal() { productModal.classList.add("hidden"); }
 function renderBrandSelector(selectedId) {
     const container = document.getElementById("p-brand-container");
     container.innerHTML = currentBrands.map(b => `
-        <button type="button" onclick="selectBrand(${b.id})" class="brand-btn p-2 border-2 rounded ${selectedId == b.id ? 'border-primary' : 'border-transparent'}">
+        <button type="button" onclick="selectBrand(${b.id}, event)" class="brand-btn p-2 border-2 rounded ${selectedId == b.id ? 'border-primary' : 'border-transparent'}">
             <img src="${escapeHtml(optimizeImage(b.logo_url, 300))}" class="h-8 w-12 object-contain">
         </button>
     `).join('');
 }
-window.selectBrand = (id) => {
+window.selectBrand = (id, event) => {
     document.getElementById("p-brand-id").value = id;
-    document.querySelectorAll(".brand-btn").forEach(btn => btn.classList.remove("border-primary"));
+    document.querySelectorAll(".brand-btn").forEach(btn => {
+        btn.classList.remove("border-primary");
+        btn.classList.add("border-transparent");
+    });
+    event.currentTarget.classList.remove("border-transparent");
     event.currentTarget.classList.add("border-primary");
 };
 
@@ -839,11 +894,43 @@ function renderInquiries(inqs) {
             <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(i.name)}</td>
             <td class="px-6 py-4 text-sm" data-label="Contact">${escapeHtml(i.email)}<br>${escapeHtml(i.phone || '')}</td>
             <td class="px-6 py-4 text-sm" data-label="Subject">${escapeHtml(i.subject || '-')}</td>
-            <td class="px-6 py-4 text-sm truncate max-w-xs" data-label="Message" onclick="alert(this.textContent)">${escapeHtml(i.message)}</td>
+            <td class="px-6 py-4 text-sm truncate max-w-xs cursor-pointer" data-label="Message" onclick="showFullMessage(this.dataset.fullMessage)" data-full-message="${escapeHtml(i.message || '')}">${escapeHtml(i.message || '-')}</td>
             <td class="px-6 py-4 text-right"><button onclick="deleteInquiry(${i.id})" class="text-red-500">Delete</button></td>
         </tr>
     `).join('');
 }
+
+window.showFullMessage = function(message) {
+    const existing = document.getElementById("message-modal");
+    if (existing) existing.remove();
+
+    const modalHtml = `
+        <div id="message-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+            <div class="bg-surface-container-low dark:bg-surface-card w-full max-w-lg rounded-2xl shadow-2xl p-6 transform scale-95 transition-transform duration-300 relative border border-outline-variant/20">
+                <button onclick="document.getElementById('message-modal').remove()" class="absolute top-4 right-4 text-neutral-400 hover:text-white transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div class="flex items-center gap-4 mb-4 text-primary">
+                    <span class="material-symbols-outlined text-[24px]">chat</span>
+                    <h3 class="text-lg font-bold font-headline uppercase tracking-widest">Full Message</h3>
+                </div>
+                <div class="text-on-surface-variant text-sm whitespace-pre-wrap mt-4 bg-surface-container-highest p-4 rounded-xl border border-outline-variant/10 max-h-[60vh] overflow-y-auto font-body leading-relaxed">
+                    ${escapeHtml(message)}
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+    const modal = document.getElementById("message-modal");
+    const inner = modal.querySelector("div");
+
+    setTimeout(() => {
+        modal.classList.remove("opacity-0");
+        inner.classList.remove("scale-95");
+    }, 10);
+};
+
 window.toggleRead = async (id, cb) => {
     try { if (cb.checked) await window.messagesDb.markAsRead(id); loadInquiries(); }
     catch (e) { cb.checked = !cb.checked; }
@@ -857,25 +944,32 @@ window.deleteInquiry = (id) => showConfirm("Delete inquiry?", async () => {
 let currentDeposits = [];
 async function loadDeposits() {
     try {
-        const { data, error } = await window.supabase.from('deposits').select('*').order('created_at', { ascending: false });
+        const { data, error } = await window.supabase.from('deposits').select('*, products(name)').order('created_at', { ascending: false });
         if (error) throw error;
         currentDeposits = data;
-        renderDeposits();
+        filterDeposits();
     } catch (e) {
         console.error("Error loading deposits:", e);
         showToast("Error loading deposits", "error");
     }
 }
-function renderDeposits() {
+function filterDeposits() {
+    const filter = document.getElementById("filter-deposits").value;
+    const filtered = currentDeposits.filter(d => filter === 'all' || d.status === filter);
+    renderDeposits(filtered);
+}
+function renderDeposits(deposits = currentDeposits) {
     const tbody = document.getElementById("deposits-table-body");
-    if(!currentDeposits.length) {
+    if(!deposits.length) {
         tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center">No deposits found.</td></tr>';
         return;
     }
-    tbody.innerHTML = currentDeposits.map(d => `
+    tbody.innerHTML = deposits.map(d => {
+        const carName = d.products?.name || `Car #${d.car_id}`;
+        return `
         <tr>
             <td class="px-6 py-4" data-label="Status">
-                <select onchange="updateDepositStatus(${d.id}, this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
+                <select onchange="updateDepositStatus('${d.id}', this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
                     <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
                     <option value="approved" ${d.status === 'approved' ? 'selected' : ''}>Approved</option>
                     <option value="rejected" ${d.status === 'rejected' ? 'selected' : ''}>Rejected</option>
@@ -883,21 +977,25 @@ function renderDeposits() {
             </td>
             <td class="px-6 py-4 text-xs" data-label="Date">${new Date(d.created_at).toLocaleDateString()}</td>
             <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(d.name)}<br><span class="text-xs text-gray-500">${escapeHtml(d.email)}</span><br><span class="text-xs text-gray-500">${escapeHtml(d.phone)}</span></td>
-            <td class="px-6 py-4 text-sm" data-label="Car ID"><a href="details.html?id=${d.car_id}" target="_blank" class="text-primary underline">Car #${d.car_id}</a></td>
+            <td class="px-6 py-4 text-sm" data-label="Vehicle"><a href="details.html?id=${d.car_id}" target="_blank" class="text-primary underline">${escapeHtml(carName)}</a></td>
             <td class="px-6 py-4" data-label="Image">
                 ${d.image_url ? `<a href="${d.image_url}" target="_blank" class="text-blue-500 hover:underline">View Image</a>` : 'No Image'}
             </td>
-            <td class="px-6 py-4 text-right"><button onclick="deleteDeposit(${d.id})" class="text-red-500">Delete</button></td>
-        </tr>
-    `).join('');
+            <td class="px-6 py-4 text-right"><button onclick="deleteDeposit('${d.id}')" class="text-red-500">Delete</button></td>
+        </tr>`;
+    }).join('');
 }
 window.updateDepositStatus = async (id, status) => {
     try {
         const { error } = await window.supabase.from('deposits').update({ status }).eq('id', id);
         if (error) throw error;
+        // Update local data immediately so subsequent operations work
+        const dep = currentDeposits.find(d => String(d.id) === String(id));
+        if (dep) dep.status = status;
         showToast("Status updated");
     } catch (e) {
-        showToast("Update failed", "error");
+        console.error("Deposit update error:", e);
+        showToast("Update failed: " + (e.message || e), "error");
         loadDeposits();
     }
 };
@@ -917,22 +1015,27 @@ async function loadRequests() {
         const { data, error } = await window.supabase.from('custom_requests').select('*').order('created_at', { ascending: false });
         if (error) throw error;
         currentRequests = data;
-        renderRequests();
+        filterRequests();
     } catch (e) {
         console.error("Error loading custom requests:", e);
         showToast("Error loading custom requests", "error");
     }
 }
-function renderRequests() {
+function filterRequests() {
+    const filter = document.getElementById("filter-requests").value;
+    const filtered = currentRequests.filter(r => filter === 'all' || r.status === filter);
+    renderRequests(filtered);
+}
+function renderRequests(requests = currentRequests) {
     const tbody = document.getElementById("requests-table-body");
-    if(!currentRequests.length) {
+    if(!requests.length) {
         tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-4 text-center">No custom requests found.</td></tr>';
         return;
     }
-    tbody.innerHTML = currentRequests.map(r => `
+    tbody.innerHTML = requests.map(r => `
         <tr>
             <td class="px-6 py-4" data-label="Status">
-                <select onchange="updateRequestStatus(${r.id}, this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
+                <select onchange="updateRequestStatus('${r.id}', this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
                     <option value="pending" ${r.status === 'pending' ? 'selected' : ''}>Pending</option>
                     <option value="in_progress" ${r.status === 'in_progress' ? 'selected' : ''}>In Progress</option>
                     <option value="completed" ${r.status === 'completed' ? 'selected' : ''}>Completed</option>
@@ -942,8 +1045,8 @@ function renderRequests() {
             <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(r.name)}<br><span class="text-xs text-gray-500">${escapeHtml(r.email)}</span><br><span class="text-xs text-gray-500">${escapeHtml(r.phone)}</span></td>
             <td class="px-6 py-4 text-sm font-medium" data-label="Car">${escapeHtml(r.car)}</td>
             <td class="px-6 py-4 text-sm" data-label="Budget">${escapeHtml(r.budget || '-')}</td>
-            <td class="px-6 py-4 text-sm truncate max-w-xs cursor-pointer" data-label="Message" onclick="alert(this.dataset.fullMessage)" data-full-message="${escapeHtml(r.message || '')}">${escapeHtml(r.message || '-')}</td>
-            <td class="px-6 py-4 text-right"><button onclick="deleteRequest(${r.id})" class="text-red-500">Delete</button></td>
+            <td class="px-6 py-4 text-sm truncate max-w-xs cursor-pointer" data-label="Message" onclick="showFullMessage(this.dataset.fullMessage)" data-full-message="${escapeHtml(r.message || '')}">${escapeHtml(r.message || '-')}</td>
+            <td class="px-6 py-4 text-right"><button onclick="deleteRequest('${r.id}')" class="text-red-500">Delete</button></td>
         </tr>
     `).join('');
 }

@@ -1,6 +1,24 @@
 // js/contact.js
 
 document.addEventListener('DOMContentLoaded', async () => {
+    function showToast(msg, type = "success") {
+        const existing = document.getElementById("toast-container");
+        if (existing) existing.remove();
+        const color = type === "error" ? "bg-red-500" : "bg-[#c5a059]";
+        const icon = type === "error" ? "error" : "check_circle";
+        const toastHtml = `
+            <div id="toast-container" class="fixed bottom-4 right-4 z-[200] flex items-center gap-3 ${color} text-white px-6 py-3 rounded-md shadow-2xl animate-fade-in">
+                <span class="material-symbols-outlined">${icon}</span>
+                <span class="font-bold tracking-wider text-sm">${msg}</span>
+            </div>
+        `;
+        document.body.insertAdjacentHTML("beforeend", toastHtml);
+        setTimeout(() => {
+            const t = document.getElementById("toast-container");
+            if (t) t.remove();
+        }, 3000);
+    }
+
     // Fetch Map settings
     if(window.DbCache && window.supabaseClient) {
         const {data: settingsData} = await window.DbCache.fetch('settings', () => window.supabaseClient.from('settings').select('*'));
@@ -68,14 +86,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const { error } = await window.supabaseClient.from('messages').insert([formData]);
                 if(error) {
                     console.error('Supabase error:', error);
-                    alert('Error submitting inquiry. Please try again.');
+                    showToast('Error submitting inquiry. Please try again.', 'error');
                 } else {
-                    alert('Message sent successfully!');
+                    showToast('Message sent successfully!');
                     form.reset();
                 }
             } else {
                 // Fallback if supabase isn't injected yet
-                alert('Message simulated successfully!');
+                showToast('Message simulated successfully!');
                 form.reset();
             }
 

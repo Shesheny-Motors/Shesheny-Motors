@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         const {data} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*').eq('is_sold_out', false));
+        const {data: brandsData} = await window.DbCache.fetch('brands', () => window.supabaseClient.from('brands').select('*'));
+        const {data: categoriesData} = await window.DbCache.fetch('categories', () => window.supabaseClient.from('categories').select('*'));
+        if(brandsData) window.allBrands = brandsData;
+        if(categoriesData) window.allCategories = categoriesData;
+
         if(data) {
             allVehicles = data;
             populateFilters(allVehicles);
@@ -32,16 +37,68 @@ document.addEventListener('currencyChanged', (e) => {
 });
 
 function populateFilters(vehicles) {
-    const categories = [...new Set(vehicles.map(v => v.category))].filter(Boolean);
-    const brands = [...new Set(vehicles.map(v => v.brand))].filter(Boolean);
+    const brands = window.allBrands || [];
+    const categories = window.allCategories || [...new Set(vehicles.map(v => v.category))].filter(Boolean);
 
     const categorySelect = document.getElementById('filter-category');
-    categorySelect.innerHTML = '<option value="">All Types</option>';
-    categories.forEach(c => categorySelect.add(new Option(c, c)));
+    categorySelect.innerHTML = '<option value="" style="background:#353534;color:#e5e2e1;">All Types</option>';
+    if (Array.isArray(categories) && categories.length > 0 && typeof categories[0] === 'object') {
+        categories.forEach(c => {
+            const opt = new Option(c.name, c.name);
+            opt.style.background = '#353534';
+            opt.style.color = '#e5e2e1';
+            categorySelect.add(opt);
+        });
+    } else {
+        categories.forEach(c => {
+            const opt = new Option(c, c);
+            opt.style.background = '#353534';
+            opt.style.color = '#e5e2e1';
+            categorySelect.add(opt);
+        });
+    }
 
-    const brandSelect = document.getElementById('filter-brand');
-    brandSelect.innerHTML = '<option value="">All Brands</option>';
-    brands.forEach(b => brandSelect.add(new Option(b, b)));
+    const brandContainer = document.getElementById('filter-brand-container');
+    if (brandContainer) {
+        brandContainer.innerHTML = `
+            <button class="brand-filter-btn active flex items-center justify-center w-12 h-12 text-xs font-bold border-2 border-outline-variant rounded-lg hover:border-primary transition-all duration-200 data-[active=true]:bg-primary data-[active=true]:text-on-primary data-[active=true]:border-primary text-on-surface-variant uppercase" data-brand="" title="All Brands">All</button>
+            ${brands.map(b => `<button class="brand-filter-btn flex items-center justify-center w-12 h-12 border-2 border-outline-variant rounded-lg hover:border-primary transition-all duration-200 data-[active=true]:border-primary data-[active=true]:bg-primary/10 text-on-surface-variant overflow-hidden p-1.5" data-brand="${b.id}" title="${b.name}">${b.logo_url ? `<img src="${b.logo_url}" alt="${b.name}" class="w-full h-full object-contain" />` : `<span class="text-xs font-bold uppercase">${b.name.slice(0,2)}</span>`}</button>`).join('')}
+        `;
+        
+        document.querySelectorAll('.brand-filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.brand-filter-btn').forEach(b => {
+                    b.removeAttribute('data-active');
+                    b.classList.remove('bg-primary', 'text-on-primary', 'border-primary', 'active', 'bg-primary/10', 'shadow-[0_0_12px_rgba(233,193,118,0.2)]');
+                    b.classList.add('text-on-surface-variant', 'border-outline-variant');
+                });
+                const clicked = e.currentTarget;
+                clicked.setAttribute('data-active', 'true');
+                clicked.classList.add('border-primary', 'active', 'shadow-[0_0_12px_rgba(233,193,118,0.2)]');
+                clicked.classList.remove('text-on-surface-variant', 'border-outline-variant');
+                // 'All' button gets solid fill, brand cubes get tinted background
+                if (clicked.getAttribute('data-brand') === '') {
+                    clicked.classList.add('bg-primary', 'text-on-primary');
+                } else {
+                    clicked.classList.add('bg-primary/10');
+                }
+                
+                const hiddenInput = document.getElementById('filter-brand');
+                if (hiddenInput) {
+                    hiddenInput.value = clicked.getAttribute('data-brand');
+                    hiddenInput.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+        
+        // initialize first active state
+        const firstBtn = document.querySelector('.brand-filter-btn.active');
+        if(firstBtn) {
+            firstBtn.setAttribute('data-active', 'true');
+            firstBtn.classList.add('bg-primary', 'text-on-primary', 'border-primary');
+            firstBtn.classList.remove('text-on-surface-variant', 'border-outline-variant');
+        }
+    }
 }
 
 function updatePriceSliderLimits() {
@@ -69,7 +126,7 @@ function applyFilters() {
 
     const filtered = allVehicles.filter(v => {
         return (category === '' || v.category === category) &&
-               (brand === '' || v.brand === brand);
+               (brand === '' || v.brand_id == brand);
     });
 
     renderGrid(filtered);

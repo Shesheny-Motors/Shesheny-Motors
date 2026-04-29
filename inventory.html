@@ -98,9 +98,9 @@
 <div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/50 to-transparent"></div>
 </div>
 <div class="relative z-10 w-full max-w-screen-2xl mx-auto px-12 py-24 flex flex-col items-start justify-center">
-<span class="text-primary font-body text-sm tracking-widest uppercase mb-4">The Collection</span>
-<h1 class="text-5xl md:text-7xl font-serif text-on-surface mb-6 max-w-3xl leading-tight">CHOOSE YOUR NEXT ICONIC JOURNEY</h1>
-<p class="text-on-surface-variant text-lg font-body max-w-xl">Curated masterpieces of automotive engineering, available for immediate commission or private viewing.</p>
+<span class="text-primary font-body text-sm tracking-widest uppercase mb-4" data-i18n="inventory_label">The Collection</span>
+<h1 class="text-5xl md:text-7xl font-serif text-on-surface mb-6 max-w-3xl leading-tight" data-i18n="inventory_heading">CHOOSE YOUR NEXT ICONIC JOURNEY</h1>
+<p class="text-on-surface-variant text-lg font-body max-w-xl" data-i18n="inventory_subtitle">Curated masterpieces of automotive engineering, available for immediate commission or private viewing.</p>
 </div>
 </section>
 <!-- Filters & Inventory List Container -->
@@ -112,21 +112,19 @@
     <div class="relative min-w-[150px]">
         <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_category">Car Type</label>
         <div class="relative bg-surface-container-highest border-b-2 border-outline-variant hover:border-primary transition-colors duration-200 group">
-            <select id="filter-category" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer">
-                <option value="">All Types</option>
+            <select id="filter-category" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer" style="color:#e5e2e1;">
+                <option value="" style="background:#353534;color:#e5e2e1;">All Types</option>
             </select>
             <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
         </div>
     </div>
-    <!-- Brand -->
-    <div class="relative min-w-[150px]">
-        <label class="block text-xs font-body text-on-surface-variant mb-1 uppercase tracking-wider" data-i18n="filter_brand">Brand</label>
-        <div class="relative bg-surface-container-highest border-b-2 border-outline-variant hover:border-primary transition-colors duration-200 group">
-            <select id="filter-brand" class="w-full bg-transparent text-on-surface font-body py-2 pl-2 pr-8 appearance-none focus:outline-none focus:ring-0 border-none cursor-pointer">
-                <option value="">All Brands</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none group-hover:text-primary transition-colors">expand_more</span>
+    <!-- Brand Toggles -->
+    <div class="relative flex-grow min-w-[250px]">
+        <label class="block text-xs font-body text-on-surface-variant mb-2 uppercase tracking-wider" data-i18n="filter_brand">Brand</label>
+        <div id="filter-brand-container" class="flex flex-wrap gap-2 items-center">
+            <!-- Brand toggles injected via JS -->
         </div>
+        <input type="hidden" id="filter-brand" value="">
     </div>
 </div>
 </div>
@@ -157,6 +155,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/dbCache.js"></script>
 <script src="js/components.js"></script>
 <script src="js/i18n.js"></script>

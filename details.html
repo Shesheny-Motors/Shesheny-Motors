@@ -205,118 +205,175 @@
 <shesheny-footer></shesheny-footer>
 
 <!-- Deposit Modal -->
-<div id="deposit-modal" class="fixed inset-0 z-[100] hidden bg-[#0a0a0a] flex flex-col items-center justify-center overflow-y-auto">
-    <div class="absolute top-6 right-6">
-        <button id="close-deposit" class="text-white hover:text-[#c5a059] transition-colors p-2">
-            <span class="material-symbols-outlined text-3xl">close</span>
-        </button>
-    </div>
-
-    <!-- Step 1: Terms -->
-    <div id="deposit-step-1" class="w-full max-w-4xl mx-auto px-6 py-12 flex flex-col animate-fade-in">
-        <div class="text-center mb-12">
-            <h2 class="font-headline text-4xl md:text-5xl font-bold text-[#c5a059] uppercase tracking-widest mb-4">Deposit Terms</h2>
-            <div class="h-[1px] w-24 bg-[#c5a059] mx-auto"></div>
+<div id="deposit-modal" class="fixed inset-0 z-[100] hidden bg-black/80 flex items-start justify-center overflow-y-auto backdrop-blur-sm p-4 md:py-8">
+    <div id="deposit-container" class="w-full max-w-md bg-[#f8f9fa] rounded-[32px] overflow-hidden shadow-2xl relative my-auto">
+        <div class="absolute top-4 left-4 z-20 bg-black/40 rounded-full w-10 h-10 flex items-center justify-center cursor-pointer hover:bg-black/60 transition-colors" id="close-deposit">
+            <span class="material-symbols-outlined text-white text-xl">close</span>
         </div>
-
-        <div class="bg-[#111] border border-[#333] rounded-sm p-8 md:p-12 shadow-2xl mb-12 space-y-6 text-stone-300 leading-relaxed h-[400px] overflow-y-auto custom-scrollbar">
-            <h3 class="text-white text-xl font-bold uppercase tracking-wider mb-6">Reservation Agreement</h3>
-            
-            <p>1. By proceeding with this deposit, you agree to reserve the specified vehicle for a period of <strong class="text-white">72 hours</strong> from the time the deposit is successfully verified by Shesheny Motors.</p>
-            
-            <p>2. The deposit amount is strictly non-refundable should you decide not to proceed with the final purchase within the stipulated reservation period, unless mutually agreed otherwise in writing by Shesheny Motors.</p>
-            
-            <p>3. If the vehicle is found to have any undisclosed defects upon your final inspection, or if Shesheny Motors is unable to fulfill the sale for any reason, the deposit will be fully refunded to the original payment method.</p>
-            
-            <p>4. The deposit amount will be fully credited towards the final purchase price of the vehicle.</p>
-            
-            <p>5. Shesheny Motors reserves the right to cancel this reservation and refund the deposit at any time prior to the signing of the final sales agreement.</p>
-            
-            <p>6. It is your responsibility to complete the full payment and transfer of ownership documentation within the 72-hour window, otherwise the vehicle will be relisted for sale.</p>
-        </div>
-
-        <div class="flex justify-center mt-auto">
-            <button id="btn-agree-terms" class="bg-[#c5a059] text-black font-bold px-16 py-5 rounded-sm hover:brightness-110 transition-all duration-200 uppercase tracking-widest shadow-[0_0_20px_rgba(197,160,89,0.3)]">
-                Agree & Continue
-            </button>
-        </div>
-    </div>
-
-    <!-- Step 2: Payment & Upload -->
-    <div id="deposit-step-2" class="w-full max-w-5xl mx-auto px-6 py-12 hidden flex flex-col md:flex-row gap-12 items-center md:items-stretch animate-fade-in">
         
-        <!-- Left: QR Code & Bank Details -->
-        <div class="w-full md:w-1/2 bg-[#111] border border-[#333] rounded-sm p-8 md:p-12 flex flex-col items-center shadow-2xl">
-            <h3 class="text-[#c5a059] text-2xl font-headline font-bold uppercase tracking-wider mb-8 text-center">Payment Details</h3>
+        <!-- Step 1: Terms -->
+        <div id="deposit-step-1" class="w-full flex flex-col animate-fade-in relative bg-[#f8f9fa] pb-10">
+            <!-- Background car watermark -->
+            <div class="absolute top-0 left-0 w-full h-64 bg-cover bg-center opacity-10" style="background-image: url('images/hero-bg.jpg');"></div>
+            <!-- Fade overlay -->
+            <div class="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-white/30 to-[#f8f9fa]"></div>
             
-            <div class="bg-white p-4 rounded-sm mb-8 shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SheshenyMotorsBankInfo" alt="Bank QR" class="w-48 h-48 md:w-56 md:h-56 object-contain" />
+            <div class="pt-12 pb-6 px-6 text-center relative z-10">
+                <div class="flex flex-col items-center justify-center mb-6">
+                    <img src="images/logo.png" alt="Shesheny Motors" class="h-10 object-contain mb-1 filter brightness-0" />
+                    <p class="text-[8px] tracking-[0.2em] uppercase font-bold text-black">You are safe with us</p>
+                </div>
+                
+                <h2 class="font-headline text-3xl font-extrabold uppercase tracking-widest mt-8 leading-tight">
+                    <span class="text-black">Reserve Your</span><br/>
+                    <span class="text-[#c5a059]">Vehicle</span>
+                </h2>
+                
+                <p class="text-xs text-stone-600 mt-6 leading-relaxed px-4 font-medium">
+                    You're not just reserving a car—you're securing a complete ownership experience. We handle the details, so you can enjoy the drive with total peace of mind.
+                </p>
             </div>
-
-            <div class="w-full space-y-4 text-sm tracking-wider">
-                <div class="flex justify-between border-b border-[#333] pb-2">
-                    <span class="text-stone-400">Bank Name</span>
-                    <span class="text-white font-medium">CIB Egypt</span>
-                </div>
-                <div class="flex justify-between border-b border-[#333] pb-2">
-                    <span class="text-stone-400">Account Name</span>
-                    <span class="text-white font-medium">Shesheny Motors LLC</span>
-                </div>
-                <div class="flex justify-between border-b border-[#333] pb-2">
-                    <span class="text-stone-400">IBAN</span>
-                    <span class="text-white font-medium text-xs md:text-sm">EG123456789012345678901234567</span>
-                </div>
-                <div class="flex justify-between pb-2">
-                    <span class="text-stone-400">Swift Code</span>
-                    <span class="text-white font-medium">CIBEGX</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right: Upload Form -->
-        <div class="w-full md:w-1/2 flex flex-col justify-center">
-            <h2 class="font-headline text-3xl md:text-4xl font-bold text-white uppercase tracking-widest mb-6">Confirm Deposit</h2>
-            <p class="text-stone-400 mb-8 leading-relaxed">Please transfer the deposit amount using the details provided, then upload a screenshot of your transfer receipt below to secure your vehicle.</p>
             
-            <form id="deposit-form" class="space-y-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Full Name</label>
-                        <input type="text" id="dep-name" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="Your Name">
+            <div class="px-6 relative z-10">
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 shadow-[0_4px_20px_rgb(0,0,0,0.03)] mb-8">
+                    <div class="flex items-center gap-2 mb-6 border-b border-stone-100 pb-4">
+                        <span class="material-symbols-outlined text-[#c5a059] text-[20px]">assignment</span>
+                        <h3 class="text-black text-[11px] font-bold tracking-widest uppercase">DEPOSIT TERMS & AGREEMENT</h3>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Phone Number</label>
-                        <input type="tel" id="dep-phone" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="+20 100 000 0000">
-                    </div>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Email Address</label>
-                    <input type="email" id="dep-email" required class="w-full bg-[#1a1a1a] border border-[#333] text-white px-4 py-3 rounded-sm focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="your@email.com">
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[#c5a059] text-xs font-bold uppercase tracking-widest">Upload Receipt</label>
-                    <div class="relative group">
-                        <input type="file" id="dep-receipt" required accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
-                        <div class="w-full border-2 border-dashed border-[#444] group-hover:border-[#c5a059] bg-[#1a1a1a] rounded-sm p-8 text-center transition-colors flex flex-col items-center gap-3">
-                            <span class="material-symbols-outlined text-4xl text-stone-500 group-hover:text-[#c5a059] transition-colors">cloud_upload</span>
-                            <span id="dep-file-name" class="text-stone-400 text-sm">Click or drag image here</span>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="min-w-[28px] h-7 bg-[#111] rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-[#c5a059] text-[14px]">shield_person</span>
+                            </div>
+                            <p class="text-[11px] text-stone-600 leading-relaxed font-medium">By proceeding, you confirm that you are placing a deposit to reserve a vehicle with Shesheny Motors. This deposit will be deducted from the total vehicle price and is subject to availability and final agreement.</p>
+                        </div>
+                        <div class="flex gap-4 border-t border-stone-50 pt-4">
+                            <div class="min-w-[28px] h-7 bg-[#111] rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-[#c5a059] text-[14px]">schedule</span>
+                            </div>
+                            <p class="text-[11px] text-stone-600 leading-relaxed font-medium">The reservation is valid for <span class="text-[#c5a059] font-bold">48 hours</span> unless otherwise agreed.</p>
+                        </div>
+                        <div class="flex gap-4 border-t border-stone-50 pt-4">
+                            <div class="min-w-[28px] h-7 bg-[#111] rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-[#c5a059] text-[14px]">currency_exchange</span>
+                            </div>
+                            <p class="text-[11px] text-stone-600 leading-relaxed font-medium">The deposit is refundable only if the customer chooses not to proceed before final agreement and contract confirmation.</p>
+                        </div>
+                        <div class="flex gap-4 border-t border-stone-50 pt-4">
+                            <div class="min-w-[28px] h-7 bg-[#111] rounded-full flex items-center justify-center shadow-md">
+                                <span class="material-symbols-outlined text-[#c5a059] text-[14px]">check_circle</span>
+                            </div>
+                            <p class="text-[11px] text-stone-600 leading-relaxed font-medium">All vehicle details, specifications, and condition have been clearly communicated prior to payment.</p>
                         </div>
                     </div>
                 </div>
-
-                <button type="submit" id="btn-submit-deposit" class="w-full bg-white text-black font-bold px-8 py-5 rounded-sm hover:bg-gray-200 transition-all duration-200 uppercase tracking-widest shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50 disabled:cursor-not-allowed">
-                    Submit Deposit
+                
+                <button id="btn-agree-terms" class="w-full bg-[#0a0a0a] text-white font-bold py-[18px] rounded-xl hover:bg-black transition-colors flex justify-between items-center px-8 shadow-xl">
+                    <span class="tracking-widest text-[13px] uppercase">AGREE & CONTINUE</span>
+                    <span class="material-symbols-outlined text-white text-[18px]">chevron_right</span>
                 </button>
-            </form>
+                
+                <div class="flex items-center justify-center gap-[6px] mt-6 text-[10px] text-stone-500 text-center">
+                    <span class="material-symbols-outlined text-[12px]">lock</span>
+                    <p class="font-medium">By clicking "Agree & Continue", you acknowledge<br>and accept <span class="text-[#c5a059]">these terms</span>.</p>
+                </div>
+            </div>
         </div>
 
+        <!-- Step 2: Payment & Upload -->
+        <div id="deposit-step-2" class="w-full flex flex-col hidden animate-fade-in bg-[#f8f9fa]">
+            <!-- Top Header -->
+            <div class="bg-[#0a0a0a] pt-12 pb-16 px-6 text-center relative" style="clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);">
+                <!-- Gold Accent Line behind clip path using an absolute pseudo element effect -->
+                <div class="absolute bottom-0 left-0 w-full h-full pointer-events-none" style="background: linear-gradient(to bottom, transparent 80%, #c5a059 80%, #c5a059 100%); clip-path: polygon(0 83%, 100% 83%, 100% 86%, 50% 100%, 0 86%);"></div>
+                
+                <div class="flex flex-col items-center justify-center mb-6 relative z-10">
+                    <img src="images/logo.png" alt="Shesheny Motors" class="h-10 object-contain mb-1 filter brightness-0 invert" />
+                    <p class="text-[8px] tracking-[0.2em] uppercase font-bold text-stone-400">You are safe with us</p>
+                </div>
+            </div>
+            
+            <div class="pt-6 pb-6 px-6 text-center">
+                <h2 class="font-headline text-2xl font-extrabold uppercase tracking-widest leading-tight">
+                    <span class="text-black">Complete Your</span><br/>
+                    <span class="text-[#c5a059]">Deposit</span>
+                </h2>
+                
+                <div class="w-6 h-[2px] bg-[#c5a059] mx-auto my-4"></div>
+                
+                <p class="text-[12px] text-stone-600 font-medium">
+                    Scan using InstaPay to<br>complete your reservation
+                </p>
+            </div>
+            
+            <div class="px-6 flex flex-col items-center pb-6">
+                <!-- QR Card -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] mb-6 flex flex-col items-center w-[260px] border border-stone-100">
+                    <div class="py-4">
+                        <div class="text-[22px] italic font-black tracking-tight"><span class="text-[#4b207f]">insta</span><span class="text-[#ea6c21]">»pay</span></div>
+                    </div>
+                    <img src="images/qr-code.jpg" alt="InstaPay QR" class="w-full px-6 pb-4 object-contain" />
+                    <div class="w-full bg-[#0a0a0a] text-white font-bold tracking-widest text-[11px] py-[14px] text-center uppercase">
+                        INSTAPAY
+                    </div>
+                </div>
+                
+                <!-- Shield Card -->
+                <div class="bg-[#f0f1f3] border border-stone-200 rounded-2xl py-5 px-6 w-full max-w-[280px] text-center relative mb-8">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-[#0a0a0a] rounded-full flex items-center justify-center shadow-md">
+                        <span class="material-symbols-outlined text-[#c5a059] text-[18px]">verified_user</span>
+                    </div>
+                    <p class="text-[11px] text-stone-600 mt-2 font-medium leading-relaxed">
+                        Your reservation is secured for<br><span class="text-[#c5a059] font-bold">48 hours</span> after payment<br>confirmation.
+                    </p>
+                </div>
+                
+                <!-- Upload form for details.js requirements -->
+                <div class="w-full max-w-[300px] mb-8">
+                    <form id="deposit-form" class="flex flex-col gap-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" id="dep-name" required class="w-full bg-white border border-stone-200 text-black text-xs px-3 py-3 rounded-xl focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="Full Name">
+                            <input type="tel" id="dep-phone" required class="w-full bg-white border border-stone-200 text-black text-xs px-3 py-3 rounded-xl focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="Phone">
+                        </div>
+                        <input type="email" id="dep-email" required class="w-full bg-white border border-stone-200 text-black text-xs px-3 py-3 rounded-xl focus:outline-none focus:border-[#c5a059] transition-colors" placeholder="Email Address">
+                        
+                        <div>
+                            <div class="relative group mt-2">
+                                <input type="file" id="dep-receipt" required accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                <div class="w-full border border-dashed border-[#c5a059] bg-[#c5a059]/5 hover:bg-[#c5a059]/10 rounded-xl p-4 text-center transition-colors flex flex-col items-center gap-1">
+                                    <span class="material-symbols-outlined text-2xl text-[#c5a059]">cloud_upload</span>
+                                    <span id="dep-file-name" class="text-stone-600 text-[10px] font-bold uppercase tracking-wider">Upload Transfer Receipt</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btn-submit-deposit" class="w-full bg-[#0a0a0a] text-white font-bold py-4 rounded-xl hover:bg-black transition-colors text-xs tracking-widest shadow-xl flex items-center justify-center gap-2 mt-2 uppercase">
+                            <span>Confirm Deposit</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Bottom Footer -->
+            <div class="bg-[#0a0a0a] relative mt-auto pt-14 pb-8 text-center" style="clip-path: polygon(50% 0%, 100% 15%, 100% 100%, 0 100%, 0 15%);">
+                <!-- Gold Accent Line -->
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: linear-gradient(to top, transparent 80%, #c5a059 80%, #c5a059 100%); clip-path: polygon(50% 0%, 100% 15%, 100% 17%, 50% 2%, 0 17%, 0 15%);"></div>
+                
+                <div class="flex items-center justify-center gap-3 mb-2 relative z-10">
+                    <div class="h-[1px] w-6 bg-[#c5a059]"></div>
+                    <span class="text-[#c5a059] font-bold tracking-widest text-[11px] uppercase">Thank You</span>
+                    <div class="h-[1px] w-6 bg-[#c5a059]"></div>
+                </div>
+                <p class="text-stone-400 text-[8px] tracking-[0.25em] uppercase font-bold relative z-10">We Appreciate Your Trust</p>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/dbCache.js"></script>
 <script src="js/components.js"></script>
 <script src="js/i18n.js"></script>

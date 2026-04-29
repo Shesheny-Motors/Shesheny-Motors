@@ -20,31 +20,47 @@ class HeaderComponent extends HTMLElement {
                         <a class="text-amber-200/80 hover:text-amber-200 transition-colors duration-200 font-body text-sm tracking-wide font-medium" href="request.html" data-i18n="nav_custom_request">Custom Request</a>
                     </div>
                     <div class="flex items-center space-x-3 md:space-x-4">
-                        <button id="lang-toggle" class="text-zinc-400 hover:text-amber-200 font-body text-sm font-medium transition-colors">عربي</button>
-                        <button id="currency-toggle" class="text-zinc-400 hover:text-amber-200 font-body text-sm font-medium transition-colors border border-zinc-700 px-2 py-1 rounded">EGP</button>
+                        <button id="lang-toggle" class="flex items-center gap-1.5 text-zinc-400 hover:text-amber-200 font-body text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-zinc-800/60 hover:bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700/50 hover:border-amber-200/30">
+                            <span class="material-symbols-outlined text-sm" style="font-size:14px">language</span>
+                            <span id="lang-toggle-label">عربي</span>
+                        </button>
+                        <button id="currency-toggle" class="flex items-center gap-1 text-zinc-400 hover:text-amber-200 font-body text-xs font-bold uppercase tracking-wider transition-all duration-200 bg-zinc-800/60 hover:bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700/50 hover:border-amber-200/30">
+                            <span id="currency-toggle-label">EGP</span>
+                        </button>
                         <button class="md:hidden text-zinc-400 hover:text-zinc-100" id="mobile-menu-btn">
                             <span class="material-symbols-outlined">menu</span>
                         </button>
-                        <a class="hidden md:inline-block bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="contact.html" data-i18n="nav_cta">Contact Us</a>
+                        <div id="desktop-auth-area" class="hidden md:block">
+                            <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="login.html">Sign In</a>
+                        </div>
                     </div>
                 </div>
             </nav>
             <!-- Mobile Drawer -->
-            <div id="mobile-drawer" class="fixed inset-0 bg-zinc-950/95 z-[60] flex-col items-center justify-center space-y-8 hidden opacity-0 transition-opacity duration-300">
-                <button id="close-mobile-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
-                    <span class="material-symbols-outlined text-3xl">close</span>
-                </button>
-                <a href="index.html" class="text-2xl font-headline text-amber-200" data-i18n="nav_home">Home</a>
-                <a href="inventory.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_inventory">Inventory</a>
-                <a href="cart.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_cart">Cart</a>
-                <a href="about.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_about">About</a>
-                <a href="contact.html" class="text-2xl font-headline text-zinc-300" data-i18n="nav_contact">Contact</a>
-                <a href="request.html" class="text-2xl font-headline text-amber-200/80" data-i18n="nav_custom_request">Custom Request</a>
+            <div id="mobile-drawer" class="fixed inset-0 bg-zinc-950/98 backdrop-blur-xl z-[60] hidden opacity-0 transition-opacity duration-300" style="display:none;">
+                <div class="flex flex-col items-center justify-center h-full space-y-6 px-8">
+                    <button id="close-mobile-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
+                        <span class="material-symbols-outlined text-3xl">close</span>
+                    </button>
+                    <a href="index.html" class="text-2xl font-headline text-amber-200 hover:text-amber-100 transition-colors" data-i18n="nav_home">Home</a>
+                    <a href="inventory.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_inventory">Inventory</a>
+                    <a href="cart.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_cart">Cart</a>
+                    <a href="about.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_about">About</a>
+                    <a href="contact.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_contact">Contact</a>
+                    <a href="request.html" class="text-2xl font-headline text-amber-200/80 hover:text-amber-200 transition-colors" data-i18n="nav_custom_request">Custom Request</a>
+                    <div class="border-t border-zinc-800 pt-6 mt-4 w-56 text-center" id="mobile-auth-area">
+                        <a href="login.html" class="text-xl font-body font-medium text-amber-200 border border-amber-200/30 px-6 py-2.5 rounded-lg hover:bg-amber-200/10 transition-colors inline-flex items-center gap-2">
+                            <span class="material-symbols-outlined text-base">login</span>
+                            Sign In
+                        </a>
+                    </div>
+                </div>
             </div>
         `;
 
         this._highlightActiveLink();
         this._setupMobileMenu();
+        this._initAuth();
     }
 
     _highlightActiveLink() {
@@ -67,6 +83,7 @@ class HeaderComponent extends HTMLElement {
 
         if(btn && drawer && closeBtn) {
             btn.addEventListener('click', () => {
+                drawer.style.display = 'block';
                 drawer.classList.remove('hidden');
                 setTimeout(() => drawer.classList.remove('opacity-0'), 10);
                 document.body.style.overflow = 'hidden';
@@ -76,10 +93,22 @@ class HeaderComponent extends HTMLElement {
                 drawer.classList.add('opacity-0');
                 setTimeout(() => {
                     drawer.classList.add('hidden');
+                    drawer.style.display = 'none';
                     document.body.style.overflow = '';
                 }, 300);
             });
         }
+    }
+
+    _initAuth() {
+        const checkAuth = () => {
+            if (window.SheshenyAuth) {
+                window.SheshenyAuth.initHeaderAuth();
+            } else {
+                setTimeout(checkAuth, 100);
+            }
+        };
+        checkAuth();
     }
 }
 
