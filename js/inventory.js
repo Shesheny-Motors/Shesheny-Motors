@@ -1,4 +1,12 @@
 // js/inventory.js
+const optimizeImage = (url, width) => {
+    if (!url) return '';
+    if (url.includes('wsrv.nl')) return url;
+    if (url.startsWith('https://')) {
+        return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=${width}&output=webp&q=80`;
+    }
+    return url;
+};
 
 let allVehicles = [];
 
@@ -158,7 +166,7 @@ function renderGrid(vehicles) {
                 <span class="material-symbols-outlined">${cartIcon}</span>
             </button>
             <div class="w-full aspect-[16/9] overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${v.image_url}"/>
+                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" loading="lazy" />
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>

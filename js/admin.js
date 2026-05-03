@@ -256,6 +256,29 @@ async function initAdmin() {
 
   document.getElementById("p-gallery").addEventListener("change", handleGalleryUpload);
   document.getElementById("add-color-variant-btn").addEventListener("click", () => addColorVariant());
+
+  // Image previews
+  setupImagePreview("p-image", "p-main-img", "p-main-preview");
+  setupImagePreview("b-logo", "b-logo-img", "b-logo-preview");
+}
+
+function setupImagePreview(inputId, imgId, containerId) {
+    const input = document.getElementById(inputId);
+    const img = document.getElementById(imgId);
+    const container = document.getElementById(containerId);
+    if (!input || !img) return;
+
+    input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (prev) => {
+                img.src = prev.target.result;
+                if (container) container.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 }
 
 async function handleGalleryUpload(e) {
@@ -383,13 +406,14 @@ function showAccessDenied() {
         <a href="index.html" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
           ← Back to Site
         </a>
-        <button onclick="handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
+        <button onclick="window.handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
           Sign Out
         </button>
       </div>
     </div>
   `;
 }
+
 
 function showLogin() {
   loginSection.classList.remove("hidden");
@@ -416,8 +440,9 @@ async function handleLogin(e) {
 }
 async function handleLogout() { 
   await window.supabase.auth.signOut(); 
-  window.location.reload();
+  window.location.href = 'index.html';
 }
+window.handleLogout = handleLogout;
 
 // --- Tabs ---
 function switchTab(tab) {

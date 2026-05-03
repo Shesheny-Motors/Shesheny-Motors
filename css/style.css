@@ -1,4 +1,7 @@
 /* Custom CSS supplementing Tailwind */
+html {
+  scroll-behavior: smooth;
+}
 
 :root {
   /* Default Colors (matches Tailwind config in index.html) */

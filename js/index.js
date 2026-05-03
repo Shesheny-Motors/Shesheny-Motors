@@ -1,4 +1,12 @@
 // js/index.js
+const optimizeImage = (url, width) => {
+    if (!url) return '';
+    if (url.includes('wsrv.nl')) return url;
+    if (url.startsWith('https://')) {
+        return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=${width}&output=webp&q=80`;
+    }
+    return url;
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Load Settings (Hero image & Event theme)
@@ -9,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const heroImg = document.getElementById('hero-img');
             if(heroImg && window.settingsData.hero_image) {
-                heroImg.src = window.settingsData.hero_image;
+                heroImg.src = optimizeImage(window.settingsData.hero_image, 1600);
             }
             
             // Apply event theme
@@ -39,7 +47,7 @@ function renderFeatured(vehicles) {
     grid.innerHTML = vehicles.map(v => `
         <div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
             <div class="h-64 overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" src="${v.image_url}"/>
+                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" loading="lazy" />
             </div>
             <div class="p-8">
                 <h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">${v.name}</h3>
