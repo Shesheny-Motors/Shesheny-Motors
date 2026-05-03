@@ -500,7 +500,13 @@ document.getElementById("products-table-body")?.addEventListener("drop", e => {
 });
 
 window.toggleSoldOut = async (id, cb) => {
-    try { await window.productsDb.update(id, { is_sold_out: cb.checked }); showToast("Status updated"); }
+    try { 
+        await window.productsDb.update(id, { is_sold_out: cb.checked }); 
+        // Update local data
+        const p = currentProducts.find(x => x.id === id);
+        if (p) p.is_sold_out = cb.checked;
+        showToast("Status updated"); 
+    }
     catch (e) { cb.checked = !cb.checked; showToast("Update failed", "error"); }
 };
 
@@ -1078,7 +1084,11 @@ window.updateRequestStatus = async (id, status) => {
     try {
         const { error } = await window.supabase.from('custom_requests').update({ status }).eq('id', id);
         if (error) throw error;
+        // Update local data
+        const req = currentRequests.find(r => String(r.id) === String(id));
+        if (req) req.status = status;
         showToast("Status updated");
+        filterRequests(); // Refresh UI
     } catch (e) {
         showToast("Update failed", "error");
         loadRequests();
