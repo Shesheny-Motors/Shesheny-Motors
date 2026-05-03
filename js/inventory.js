@@ -9,6 +9,8 @@ const optimizeImage = (url, width) => {
 };
 
 let allVehicles = [];
+let currentVehicles = []; // Track currently filtered vehicles
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Fetch data
@@ -26,8 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if(data) {
             allVehicles = data;
+            currentVehicles = data;
             populateFilters(allVehicles);
             renderGrid(allVehicles);
+            updatePriceSliderLimits();
         }
     }
 
@@ -40,7 +44,8 @@ document.addEventListener('currencyChanged', (e) => {
     // Re-evaluate slider min/max based on currency
     if(allVehicles.length > 0) {
         updatePriceSliderLimits();
-        renderGrid(allVehicles); // Re-render to show new currency
+        // Use currentVehicles to maintain active filters when switching currency
+        renderGrid(currentVehicles); 
     }
 });
 
@@ -132,12 +137,12 @@ function applyFilters() {
     const category = document.getElementById('filter-category').value;
     const brand = document.getElementById('filter-brand').value;
 
-    const filtered = allVehicles.filter(v => {
+    currentVehicles = allVehicles.filter(v => {
         return (category === '' || v.category === category) &&
                (brand === '' || v.brand_id == brand);
     });
 
-    renderGrid(filtered);
+    renderGrid(currentVehicles);
 }
 
 function renderGrid(vehicles) {
@@ -150,10 +155,10 @@ function renderGrid(vehicles) {
     }
 
     grid.innerHTML = vehicles.map(v => {
-        const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-        const exchangeRate = window.settingsData?.exchange_rate || 50;
+        const isUsd = window.I18n ? window.I18n.currency === 'USD' : (localStorage.getItem('site_currency') === 'USD');
+        const exchangeRate = window.I18n?.exchangeRate || window.settingsData?.exchange_rate || 50;
         const priceUsd = v.price_egp / exchangeRate;
-        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
+        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${Math.round(priceUsd).toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
         
         // Check cart
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');

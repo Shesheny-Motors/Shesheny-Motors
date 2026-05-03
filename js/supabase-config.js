@@ -54,6 +54,13 @@ window.dbCache = {
         localStorage.setItem(key, JSON.stringify({ timestamp: Date.now(), data }));
     },
     clear: (...keys) => {
-        keys.forEach(k => localStorage.removeItem(k));
+        keys.forEach(k => {
+            localStorage.removeItem(k);
+            // Invalidate front-end DbCache keys as well
+            if (k === 'products_all') localStorage.removeItem('db_cache_products');
+            if (k === 'brands_all') localStorage.removeItem('db_cache_brands');
+            if (k === 'categories_all') localStorage.removeItem('db_cache_categories');
+            if (k === 'settings_all') localStorage.removeItem('db_cache_settings');
+        });
     }
 };

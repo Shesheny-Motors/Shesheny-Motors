@@ -39,8 +39,8 @@ class I18nManager {
         this.applyLanguage();
         this.applyCurrency();
 
-        // Setup listeners (wait for components to be injected)
-        setTimeout(() => this.setupListeners(), 100);
+        // Setup listeners
+        this.setupListeners();
     }
 
     applyLanguage() {
@@ -128,8 +128,5 @@ class I18nManager {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // We wait slightly so components.js injects headers
-    setTimeout(() => {
-        window.I18n = new I18nManager();
-    }, 50);
+    window.I18n = new I18nManager();
 });

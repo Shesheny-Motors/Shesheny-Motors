@@ -786,7 +786,16 @@ function openModal(p = null) {
     renderBrandSelector(p ? p.brand_id : null);
     productModal.classList.remove("hidden");
 }
-function closeModal() { productModal.classList.add("hidden"); }
+function closeModal() { 
+    productModal.classList.add("hidden"); 
+    editingId = null;
+    currentGallery = [];
+    currentColorVariants = [];
+    productForm.reset();
+    // Hide previews
+    document.getElementById("p-main-preview")?.classList.add("hidden");
+    document.getElementById("b-logo-preview")?.classList.add("hidden");
+}
 
 function renderBrandSelector(selectedId) {
     const container = document.getElementById("p-brand-container");
@@ -836,7 +845,10 @@ window.deleteCategory = (id) => showConfirm("Delete category?", async () => {
         renderCategories(currentCategories);
         showToast("Deleted"); 
     }
-    catch (e) { showToast("Delete failed", "error"); }
+    catch (e) { 
+        console.error("Delete failed:", e);
+        showToast("Delete failed: " + (e.message || "Conflict"), "error"); 
+    }
 });
 async function handleSaveCategory(e) {
     e.preventDefault();
