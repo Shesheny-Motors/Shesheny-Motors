@@ -14,8 +14,10 @@ window.SheshenyAuth = (() => {
         });
         return { data, error };
     }
-    
-    // c:\Web projects\Shesheini\Shesheny-Motors\js\auth.js
+    async function signInWithEmail(email, password) {
+        const { data, error } = await sb().auth.signInWithPassword({ email, password });
+        return { data, error };
+    }
 
     async function signInWithGoogle() {
         const params = new URLSearchParams(window.location.search);
