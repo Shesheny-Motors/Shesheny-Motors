@@ -23,10 +23,16 @@ window.SheshenyAuth = (() => {
     async function signInWithGoogle() {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get('redirect') || 'index.html';
+        
+        // Fix for subdirectory hosting (like GitHub Pages)
+        const currentUrl = window.location.href.split('?')[0].split('#')[0];
+        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+        const finalRedirect = baseUrl + redirect;
+
         const { data, error } = await sb().auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + (redirect.startsWith('/') ? '' : '/') + redirect
+                redirectTo: finalRedirect
             }
         });
         return { data, error };
