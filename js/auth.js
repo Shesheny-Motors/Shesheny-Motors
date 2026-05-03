@@ -24,7 +24,7 @@ window.SheshenyAuth = (() => {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get('redirect') || 'index.html';
         
-        // More robust fix for subdirectory hosting
+        // Finalized fix for subdirectory hosting (like GitHub Pages)
         const directory = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         const finalRedirect = window.location.origin + directory + redirect;
 
