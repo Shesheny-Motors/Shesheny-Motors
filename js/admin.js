@@ -537,7 +537,13 @@ window.toggleSoldOut = async (id, cb) => {
 
 window.editProduct = (id) => { const p = currentProducts.find(x => x.id === id); if (p) openModal(p); };
 window.deleteProduct = (id) => showConfirm("Delete this vehicle?", async () => {
-    try { await window.productsDb.delete(id); showToast("Deleted"); loadProducts(); }
+    try { 
+        await window.productsDb.delete(id); 
+        // Update local state
+        currentProducts = currentProducts.filter(p => p.id !== id);
+        renderProducts(currentProducts);
+        showToast("Deleted"); 
+    }
     catch (e) { showToast("Delete failed", "error"); }
 });
 
@@ -701,12 +707,21 @@ async function handleSaveProduct(e) {
 
         payload.gallery = currentGallery;
 
-        if (editingId) await window.productsDb.update(editingId, payload);
-        else await window.productsDb.create(payload);
-
+        if (editingId) {
+            const { data, error } = await window.productsDb.update(editingId, payload);
+            if (error) throw error;
+            // Update local state
+            const idx = currentProducts.findIndex(p => p.id === editingId);
+            if (idx !== -1) currentProducts[idx] = { ...currentProducts[idx], ...payload };
+            renderProducts(currentProducts);
+        } else {
+            const { data, error } = await window.productsDb.create(payload);
+            if (error) throw error;
+            // Refresh to get the new ID and structure
+            await loadProducts();
+        }
         showToast("Vehicle saved successfully!", "success");
         closeModal();
-        loadProducts();
     } catch (err) {
         console.error("Save failed:", err);
         const errMsg = err.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
@@ -814,7 +829,13 @@ function renderCategories(categories) {
 }
 window.editCategory = (id) => { const c = currentCategories.find(x => x.id === id); if (c) openCategoryModal(c); };
 window.deleteCategory = (id) => showConfirm("Delete category?", async () => {
-    try { await window.categoriesDb.delete(id); showToast("Deleted"); loadCategories(); }
+    try { 
+        await window.categoriesDb.delete(id); 
+        // Update local state
+        currentCategories = currentCategories.filter(c => c.id !== id);
+        renderCategories(currentCategories);
+        showToast("Deleted"); 
+    }
     catch (e) { showToast("Delete failed", "error"); }
 });
 async function handleSaveCategory(e) {
@@ -828,9 +849,10 @@ async function handleSaveCategory(e) {
         };
         if (editingCategoryId) await window.categoriesDb.update(editingCategoryId, payload);
         else await window.categoriesDb.create(payload);
-        showToast("Category saved");
+        
+        showToast("Category saved successfully!");
         closeCategoryModal();
-        loadCategories();
+        await loadCategories(); // Re-fetch to sync
     } catch (e) { 
         console.error("Category save failed:", e);
         showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
@@ -871,9 +893,30 @@ function renderBrands(brands) {
     `).join('');
 }
 window.editBrand = (id) => { const b = currentBrands.find(x => x.id === id); if (b) openBrandModal(b); };
-window.deleteBrand = (id) => showConfirm("Delete brand?", async () => {
-    try { await window.brandsDb.delete(id); showToast("Deleted"); loadBrands(); }
-    catch (e) { showToast("Delete failed", "error"); }
+window.deleteBrand = (id) => showConfirm("Delete brand? This will fail if there are vehicles associated with this brand.", async () => {
+    try { 
+        // 1. Check if any products use this brand
+        const { count, error: countErr } = await window.supabase
+            .from('products')
+            .select('*', { count: 'exact', head: true })
+            .eq('brand_id', id);
+        
+        if (countErr) throw countErr;
+        if (count > 0) {
+            showToast(`Cannot delete brand: ${count} vehicle(s) still use it.`, "error");
+            return;
+        }
+
+        await window.brandsDb.delete(id); 
+        // Update local state
+        currentBrands = currentBrands.filter(b => b.id !== id);
+        renderBrands(currentBrands);
+        showToast("Deleted"); 
+    }
+    catch (e) { 
+        console.error("Delete failed:", e);
+        showToast("Delete failed: " + (e.message || "Conflict"), "error"); 
+    }
 });
 async function handleSaveBrand(e) {
     e.preventDefault();
@@ -891,9 +934,10 @@ async function handleSaveBrand(e) {
         }
         if (editingBrandId) await window.brandsDb.update(editingBrandId, payload);
         else await window.brandsDb.create(payload);
-        showToast("Brand saved");
+        
+        showToast("Brand saved successfully!");
         closeBrandModal();
-        loadBrands();
+        await loadBrands(); // Re-fetch to sync
     } catch (e) { 
         console.error("Brand save failed:", e);
         showToast("Save failed: " + (e.message || "Unknown error"), "error"); 

@@ -47,7 +47,7 @@ function renderFeatured(vehicles) {
     grid.innerHTML = vehicles.map(v => `
         <div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
             <div class="h-64 overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" loading="lazy" />
+                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" />
             </div>
             <div class="p-8">
                 <h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">${v.name}</h3>

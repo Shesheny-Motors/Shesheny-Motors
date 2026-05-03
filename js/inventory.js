@@ -166,7 +166,7 @@ function renderGrid(vehicles) {
                 <span class="material-symbols-outlined">${cartIcon}</span>
             </button>
             <div class="w-full aspect-[16/9] overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" loading="lazy" />
+                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out" src="${optimizeImage(v.image_url, 800)}" />
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>
