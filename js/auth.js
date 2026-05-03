@@ -14,19 +14,19 @@ window.SheshenyAuth = (() => {
         });
         return { data, error };
     }
-
-    async function signInWithEmail(email, password) {
-        const { data, error } = await sb().auth.signInWithPassword({ email, password });
-        return { data, error };
-    }
+    
+    // c:\Web projects\Shesheini\Shesheny-Motors\js\auth.js
 
     async function signInWithGoogle() {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get('redirect') || 'index.html';
         
-        // Finalized fix for subdirectory hosting (like GitHub Pages)
+        // Construct the full redirect path
         const directory = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         const finalRedirect = window.location.origin + directory + redirect;
+
+        // DEBUG: Uncomment the line below if you want to see the URL before it redirects
+        // alert("Redirecting to: " + finalRedirect);
 
         const { data, error } = await sb().auth.signInWithOAuth({
             provider: 'google',
