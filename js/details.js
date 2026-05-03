@@ -125,7 +125,6 @@ function setupGallery() {
         thumb.addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
             setMainImage(idx);
-            resetSlideshow();
         });
     });
 
@@ -133,17 +132,15 @@ function setupGallery() {
         let newIdx = currentGalleryIndex - 1;
         if(newIdx < 0) newIdx = galleryImages.length - 1;
         setMainImage(newIdx);
-        resetSlideshow();
     });
 
     document.getElementById('gallery-next').addEventListener('click', () => {
         let newIdx = currentGalleryIndex + 1;
         if(newIdx >= galleryImages.length) newIdx = 0;
         setMainImage(newIdx);
-        resetSlideshow();
     });
 
-    startSlideshow();
+
 }
 
 function setMainImage(index) {
@@ -170,19 +167,7 @@ function setMainImage(index) {
     });
 }
 
-function startSlideshow() {
-    if(galleryImages.length <= 1) return;
-    slidesInterval = setInterval(() => {
-        let newIdx = currentGalleryIndex + 1;
-        if(newIdx >= galleryImages.length) newIdx = 0;
-        setMainImage(newIdx);
-    }, 4000);
-}
 
-function resetSlideshow() {
-    clearInterval(slidesInterval);
-    startSlideshow();
-}
 
 async function setupDepositModal() {
     const btnDeposit = document.getElementById('btn-deposit');

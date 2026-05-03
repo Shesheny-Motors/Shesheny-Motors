@@ -59,26 +59,19 @@ class I18nManager {
             }
         });
 
-        // Update toggle button label
-        const langLabel = document.getElementById('lang-toggle-label');
-        const langToggle = document.getElementById('lang-toggle');
-        if (langLabel) {
-            langLabel.textContent = this.lang === 'en' ? 'عربي' : 'English';
-        } else if (langToggle) {
-            // Fallback for old structure
-            langToggle.textContent = this.lang === 'en' ? 'عربي' : 'English';
-        }
+        // Update toggle labels
+        ['lang-toggle-label', 'mobile-lang-label'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.textContent = this.lang === 'en' ? 'عربي' : 'English';
+        });
     }
 
     applyCurrency() {
-        // Update toggle button label
-        const currencyLabel = document.getElementById('currency-toggle-label');
-        const currencyToggle = document.getElementById('currency-toggle');
-        if (currencyLabel) {
-            currencyLabel.textContent = this.currency;
-        } else if (currencyToggle) {
-            currencyToggle.textContent = this.currency;
-        }
+        // Update toggle labels
+        ['currency-toggle-label', 'mobile-currency-label'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.textContent = this.currency;
+        });
         
         // Dispatch event for price re-rendering
         document.dispatchEvent(new CustomEvent('currencyChanged', { 
@@ -86,24 +79,34 @@ class I18nManager {
         }));
     }
 
-    setupListeners() {
-        const langToggle = document.getElementById('lang-toggle');
-        if (langToggle) {
-            langToggle.addEventListener('click', () => {
-                this.lang = this.lang === 'en' ? 'ar' : 'en';
-                localStorage.setItem('site_lang', this.lang);
-                this.applyLanguage();
-            });
-        }
 
-        const currencyToggle = document.getElementById('currency-toggle');
-        if (currencyToggle) {
-            currencyToggle.addEventListener('click', () => {
-                this.currency = this.currency === 'EGP' ? 'USD' : 'EGP';
-                localStorage.setItem('site_currency', this.currency);
-                this.applyCurrency();
-            });
-        }
+    setupListeners() {
+        const handleLang = () => {
+            this.lang = this.lang === 'en' ? 'ar' : 'en';
+            localStorage.setItem('site_lang', this.lang);
+            this.applyLanguage();
+        };
+
+        const handleCurrency = () => {
+            this.currency = this.currency === 'EGP' ? 'USD' : 'EGP';
+            localStorage.setItem('site_currency', this.currency);
+            this.applyCurrency();
+        };
+
+        // Delegate to document to handle dynamic/header elements
+        document.addEventListener('click', (e) => {
+            const langBtn = e.target.closest('#lang-toggle, #mobile-lang-toggle');
+            const currBtn = e.target.closest('#currency-toggle, #mobile-currency-toggle');
+            
+            if (langBtn) {
+                e.preventDefault();
+                handleLang();
+            }
+            if (currBtn) {
+                e.preventDefault();
+                handleCurrency();
+            }
+        });
     }
 
     formatPrice(priceEgp, priceUsd) {

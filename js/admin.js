@@ -265,14 +265,15 @@ async function handleGalleryUpload(e) {
     showToast(`Uploading ${files.length} images...`);
 
     try {
-        const urls = [];
-        for (const rawFile of files) {
+        const uploadPromises = files.map(async (rawFile) => {
             const file = await compressImageClient(rawFile);
             const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
-            urls.push(window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl);
-        }
+            return window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
+        });
+
+        const urls = await Promise.all(uploadPromises);
 
         currentGallery = [...currentGallery, ...urls];
         renderGalleryPreview();
@@ -413,7 +414,10 @@ async function handleLogin(e) {
     errDiv.classList.remove("hidden");
   }
 }
-async function handleLogout() { await window.supabase.auth.signOut(); }
+async function handleLogout() { 
+  await window.supabase.auth.signOut(); 
+  window.location.reload();
+}
 
 // --- Tabs ---
 function switchTab(tab) {
@@ -605,14 +609,15 @@ window.handleVariantGalleryUpload = async (variantIdx, input) => {
     if (!files.length) return;
     showToast(`Uploading ${files.length} image(s)...`);
     try {
-        const urls = [];
-        for (const rawFile of files) {
+        const uploadPromises = files.map(async (rawFile) => {
             const file = await compressImageClient(rawFile);
             const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from('vehicle-images').upload(path, file, { upsert: true });
             if (error) throw error;
-            urls.push(window.supabase.storage.from('vehicle-images').getPublicUrl(path).data.publicUrl);
-        }
+            return window.supabase.storage.from('vehicle-images').getPublicUrl(path).data.publicUrl;
+        });
+
+        const urls = await Promise.all(uploadPromises);
         currentColorVariants[variantIdx].gallery = [...currentColorVariants[variantIdx].gallery, ...urls];
         renderColorVariants();
         showToast('Gallery updated');
@@ -673,7 +678,8 @@ async function handleSaveProduct(e) {
         loadProducts();
     } catch (err) {
         console.error("Save failed:", err);
-        showToast("Save failed: " + (err.message || JSON.stringify(err)), "error");
+        const errMsg = err.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
+        showToast("Save failed: " + errMsg, "error");
     }
     finally { btn.disabled = false; }
 }
@@ -794,7 +800,10 @@ async function handleSaveCategory(e) {
         showToast("Category saved");
         closeCategoryModal();
         loadCategories();
-    } catch (e) { showToast("Save failed", "error"); }
+    } catch (e) { 
+        console.error("Category save failed:", e);
+        showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
+    }
     finally { btn.disabled = false; }
 }
 function openCategoryModal(c = null) {
@@ -854,7 +863,10 @@ async function handleSaveBrand(e) {
         showToast("Brand saved");
         closeBrandModal();
         loadBrands();
-    } catch (e) { showToast("Save failed", "error"); }
+    } catch (e) { 
+        console.error("Brand save failed:", e);
+        showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
+    }
     finally { btn.disabled = false; }
 }
 function openBrandModal(b = null) {
@@ -964,26 +976,37 @@ function renderDeposits(deposits = currentDeposits) {
         tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center">No deposits found.</td></tr>';
         return;
     }
-    tbody.innerHTML = deposits.map(d => {
-        const carName = d.products?.name || `Car #${d.car_id}`;
-        return `
-        <tr>
+    tbody.innerHTML = deposits.map(d => `
+        <tr class="hover:bg-white/5 transition-colors">
             <td class="px-6 py-4" data-label="Status">
-                <select onchange="updateDepositStatus('${d.id}', this.value)" class="bg-transparent border border-outline-variant rounded px-2 py-1 text-sm outline-none focus:border-primary">
+                <select onchange="updateDepositStatus('${d.id}', this.value)" class="bg-zinc-900 border border-zinc-800 rounded px-3 py-1.5 text-sm text-zinc-200 outline-none focus:border-amber-200/50">
                     <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
                     <option value="approved" ${d.status === 'approved' ? 'selected' : ''}>Approved</option>
                     <option value="rejected" ${d.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+                    <option value="completed" ${d.status === 'completed' ? 'selected' : ''}>Completed</option>
                 </select>
             </td>
-            <td class="px-6 py-4 text-xs" data-label="Date">${new Date(d.created_at).toLocaleDateString()}</td>
-            <td class="px-6 py-4 font-medium" data-label="Customer">${escapeHtml(d.name)}<br><span class="text-xs text-gray-500">${escapeHtml(d.email)}</span><br><span class="text-xs text-gray-500">${escapeHtml(d.phone)}</span></td>
-            <td class="px-6 py-4 text-sm" data-label="Vehicle"><a href="details.html?id=${d.car_id}" target="_blank" class="text-primary underline">${escapeHtml(carName)}</a></td>
-            <td class="px-6 py-4" data-label="Image">
-                ${d.image_url ? `<a href="${d.image_url}" target="_blank" class="text-blue-500 hover:underline">View Image</a>` : 'No Image'}
+            <td class="px-6 py-4 text-xs text-zinc-400" data-label="Date">${new Date(d.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-4" data-label="Customer">
+                <div class="font-medium text-zinc-200">${escapeHtml(d.name)}</div>
+                <div class="text-xs text-zinc-500">${escapeHtml(d.email)}</div>
+                <div class="text-xs text-zinc-500">${escapeHtml(d.phone)}</div>
             </td>
-            <td class="px-6 py-4 text-right"><button onclick="deleteDeposit('${d.id}')" class="text-red-500">Delete</button></td>
-        </tr>`;
-    }).join('');
+            <td class="px-6 py-4 text-sm font-bold text-amber-200/80" data-label="Car">
+                ${escapeHtml(d.products?.name || d.car_id || 'Unknown Vehicle')}
+            </td>
+            <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end gap-3">
+                    <a href="${d.image_url}" target="_blank" class="text-zinc-400 hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-xl">image</span>
+                    </a>
+                    <button onclick="deleteDeposit('${d.id}')" class="text-red-400/70 hover:text-red-400 transition-colors">
+                        <span class="material-symbols-outlined text-xl">delete</span>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
 }
 window.updateDepositStatus = async (id, status) => {
     try {
@@ -993,6 +1016,7 @@ window.updateDepositStatus = async (id, status) => {
         const dep = currentDeposits.find(d => String(d.id) === String(id));
         if (dep) dep.status = status;
         showToast("Status updated");
+        filterDeposits(); // Re-render table to reflect local change
     } catch (e) {
         console.error("Deposit update error:", e);
         showToast("Update failed: " + (e.message || e), "error");
@@ -1122,7 +1146,10 @@ async function handleSaveSettings(e) {
         await window.settingsDb.updateMultiple(updates);
         showToast("Settings saved");
         loadSettings();
-    } catch (e) { showToast("Save failed", "error"); }
+    } catch (e) { 
+        console.error("Settings save failed:", e);
+        showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
+    }
     finally { btn.disabled = false; }
 }
 
@@ -1137,6 +1164,30 @@ window.addSocialLink = function(type, val = "") {
     container.appendChild(div);
 };
 
+
+function showAccessDenied() {
+  loginSection.classList.remove("hidden");
+  dashboardSection.classList.add("hidden");
+  userInfo.classList.add("hidden");
+  loginSection.innerHTML = `
+    <div class="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
+      <div class="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+        <span class="material-symbols-outlined text-4xl text-red-400">shield_lock</span>
+      </div>
+      <h2 class="text-2xl font-headline font-bold text-white mb-3">Access Denied</h2>
+      <p class="text-zinc-400 max-w-md mb-6">This area is restricted to authorized administrators only. If you believe this is an error, please contact the site owner.</p>
+      <p class="text-zinc-600 text-sm mb-4">Signed in as: <span class="text-zinc-400 font-bold">${currentUser?.email || ''}</span></p>
+      <div class="flex gap-4">
+        <a href="index.html" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
+          ← Back to Site
+        </a>
+        <button onclick="handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  `;
+}
 
 // Exports for testing
 if (typeof module !== 'undefined' && module.exports) {

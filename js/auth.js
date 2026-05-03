@@ -21,10 +21,12 @@ window.SheshenyAuth = (() => {
     }
 
     async function signInWithGoogle() {
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect') || 'index.html';
         const { data, error } = await sb().auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: window.location.origin + '/index.html'
+                redirectTo: window.location.origin + (redirect.startsWith('/') ? '' : '/') + redirect
             }
         });
         return { data, error };
@@ -88,6 +90,10 @@ window.SheshenyAuth = (() => {
 
         if (!desktopAuthArea) return;
 
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const currentSearch = window.location.search;
+        const redirectParam = encodeURIComponent(currentPath + currentSearch);
+
         if (user) {
             const name = getUserDisplayName(user);
             const avatar = getUserAvatar(user);
@@ -143,7 +149,7 @@ window.SheshenyAuth = (() => {
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', async () => {
                     await signOut();
-                    window.location.href = 'index.html';
+                    window.location.reload();
                 });
             }
 
@@ -166,19 +172,19 @@ window.SheshenyAuth = (() => {
                 if (logoutMobile) {
                     logoutMobile.addEventListener('click', async () => {
                         await signOut();
-                        window.location.href = 'index.html';
+                        window.location.reload();
                     });
                 }
             }
         } else {
             desktopAuthArea.innerHTML = `
-                <a href="login.html" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm">
+                <a href="login.html?redirect=${redirectParam}" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm">
                     Sign In
                 </a>
             `;
             if (mobileAuthArea) {
                 mobileAuthArea.innerHTML = `
-                    <a href="login.html" class="text-2xl font-headline text-amber-200">Sign In</a>
+                    <a href="login.html?redirect=${redirectParam}" class="text-2xl font-headline text-amber-200">Sign In</a>
                 `;
             }
         }

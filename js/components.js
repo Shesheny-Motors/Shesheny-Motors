@@ -8,18 +8,20 @@ class HeaderComponent extends HTMLElement {
                     <a href="index.html" class="text-xl font-headline font-bold tracking-tight text-amber-200">
                         Shesheny Motors
                     </a>
-                    <div class="hidden md:flex items-center space-x-8" id="desktop-nav-links">
+                    <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse" id="desktop-nav-links">
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="index.html" data-i18n="nav_home">Home</a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="inventory.html" data-i18n="nav_inventory">Inventory</a>
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide flex items-center gap-1" href="cart.html" data-i18n="nav_cart">
-                            <span class="material-symbols-outlined text-base">shopping_cart</span>
-                            Cart
-                        </a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="about.html" data-i18n="nav_about">About</a>
                         <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="contact.html" data-i18n="nav_contact">Contact</a>
                         <a class="text-amber-200/80 hover:text-amber-200 transition-colors duration-200 font-body text-sm tracking-wide font-medium" href="request.html" data-i18n="nav_custom_request">Custom Request</a>
                     </div>
-                    <div class="flex items-center space-x-3 md:space-x-4">
+                    <div class="flex items-center space-x-3 md:space-x-4 rtl:space-x-reverse">
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-all duration-200 font-body text-sm tracking-wide flex items-center gap-2 group" href="cart.html">
+                            <div class="relative bg-zinc-800/60 p-2 rounded-full border border-zinc-700/50 group-hover:border-amber-200/30 group-hover:bg-zinc-800">
+                                <span class="material-symbols-outlined text-lg">shopping_bag</span>
+                                <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-amber-200 text-zinc-950 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
+                            </div>
+                        </a>
                         <button id="lang-toggle" class="flex items-center gap-1.5 text-zinc-400 hover:text-amber-200 font-body text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-zinc-800/60 hover:bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700/50 hover:border-amber-200/30">
                             <span class="material-symbols-outlined text-sm" style="font-size:14px">language</span>
                             <span id="lang-toggle-label">عربي</span>
@@ -36,23 +38,39 @@ class HeaderComponent extends HTMLElement {
                     </div>
                 </div>
             </nav>
-            <!-- Mobile Drawer -->
-            <div id="mobile-drawer" class="fixed inset-0 bg-zinc-950/98 backdrop-blur-xl z-[60] hidden opacity-0 transition-opacity duration-300" style="display:none;">
-                <div class="flex flex-col items-center justify-center h-full space-y-6 px-8">
-                    <button id="close-mobile-btn" class="absolute top-6 right-6 text-zinc-400 hover:text-white">
-                        <span class="material-symbols-outlined text-3xl">close</span>
-                    </button>
-                    <a href="index.html" class="text-2xl font-headline text-amber-200 hover:text-amber-100 transition-colors" data-i18n="nav_home">Home</a>
-                    <a href="inventory.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_inventory">Inventory</a>
-                    <a href="cart.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_cart">Cart</a>
-                    <a href="about.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_about">About</a>
-                    <a href="contact.html" class="text-2xl font-headline text-zinc-300 hover:text-white transition-colors" data-i18n="nav_contact">Contact</a>
-                    <a href="request.html" class="text-2xl font-headline text-amber-200/80 hover:text-amber-200 transition-colors" data-i18n="nav_custom_request">Custom Request</a>
-                    <div class="border-t border-zinc-800 pt-6 mt-4 w-56 text-center" id="mobile-auth-area">
-                        <a href="login.html" class="text-xl font-body font-medium text-amber-200 border border-amber-200/30 px-6 py-2.5 rounded-lg hover:bg-amber-200/10 transition-colors inline-flex items-center gap-2">
-                            <span class="material-symbols-outlined text-base">login</span>
-                            Sign In
-                        </a>
+                <!-- Mobile Drawer -->
+                <div id="mobile-drawer" class="fixed inset-0 z-[110] invisible transition-all duration-500 pointer-events-none">
+                    <!-- Backdrop -->
+                    <div id="drawer-backdrop" class="absolute inset-0 bg-zinc-950/40 backdrop-blur-sm opacity-0 transition-opacity duration-500"></div>
+                    
+                    <!-- Content -->
+                    <div id="drawer-content" class="absolute top-0 right-0 w-[280px] h-full bg-zinc-900 shadow-2xl translate-x-full transition-transform duration-500 ease-out flex flex-col pointer-events-auto">
+                        <div class="p-6 flex justify-between items-center border-b border-white/5">
+                            <span class="text-xs font-bold tracking-[0.2em] text-white/40 uppercase">Shesheny</span>
+                            <button id="close-menu" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-white/10 transition-colors">
+                                <span class="material-symbols-outlined text-xl">close</span>
+                            </button>
+                        </div>                 <div class="flex flex-col items-center space-y-6 flex-grow justify-center">
+                        <a href="index.html" class="text-3xl font-headline font-bold text-amber-200 tracking-tight" data-i18n="nav_home">Home</a>
+                        <a href="inventory.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_inventory">Inventory</a>
+                        <a href="about.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_about">About</a>
+                        <a href="contact.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_contact">Contact</a>
+                        <a href="request.html" class="text-2xl font-body font-semibold text-amber-200/80 tracking-widest uppercase py-4 border-y border-zinc-800/50 w-full text-center" data-i18n="nav_custom_request">Custom Request</a>
+                    </div>
+                    
+                    <div class="flex flex-col items-center gap-6 pt-8 border-t border-zinc-800/50 p-6">
+                        <div class="flex items-center gap-6 rtl:gap-6">
+                            <button id="mobile-lang-toggle" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">language</span>
+                                <span id="mobile-lang-label">عربي</span>
+                            </button>
+                            <button id="mobile-currency-toggle" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest">
+                                <span id="mobile-currency-label">EGP</span>
+                            </button>
+                        </div>
+                        <div id="mobile-auth-area">
+                            <!-- Auth content injected here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,27 +95,40 @@ class HeaderComponent extends HTMLElement {
     }
 
     _setupMobileMenu() {
-        const btn = this.querySelector('#mobile-menu-btn');
-        const closeBtn = this.querySelector('#close-mobile-btn');
         const drawer = this.querySelector('#mobile-drawer');
+        const content = this.querySelector('#drawer-content');
+        const backdrop = this.querySelector('#drawer-backdrop');
+        const openBtn = this.querySelector('#mobile-menu-btn');
+        const closeBtn = this.querySelector('#close-menu');
 
-        if(btn && drawer && closeBtn) {
-            btn.addEventListener('click', () => {
-                drawer.style.display = 'block';
-                drawer.classList.remove('hidden');
-                setTimeout(() => drawer.classList.remove('opacity-0'), 10);
-                document.body.style.overflow = 'hidden';
-            });
+        const openDrawer = () => {
+            drawer.classList.remove('invisible');
+            drawer.classList.add('pointer-events-auto');
+            setTimeout(() => {
+                backdrop.classList.replace('opacity-0', 'opacity-100');
+                content.classList.replace('translate-x-full', 'translate-x-0');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        };
 
-            closeBtn.addEventListener('click', () => {
-                drawer.classList.add('opacity-0');
-                setTimeout(() => {
-                    drawer.classList.add('hidden');
-                    drawer.style.display = 'none';
-                    document.body.style.overflow = '';
-                }, 300);
-            });
-        }
+        const closeDrawer = () => {
+            backdrop.classList.replace('opacity-100', 'opacity-0');
+            content.classList.replace('translate-x-0', 'translate-x-full');
+            drawer.classList.remove('pointer-events-auto');
+            setTimeout(() => {
+                drawer.classList.add('invisible');
+            }, 500);
+            document.body.style.overflow = '';
+        };
+
+        openBtn?.addEventListener('click', openDrawer);
+        closeBtn?.addEventListener('click', closeDrawer);
+        backdrop?.addEventListener('click', closeDrawer);
+        
+        // Close drawer when clicking on links
+        this.querySelectorAll('#drawer-content a').forEach(link => {
+            link.addEventListener('click', closeDrawer);
+        });
     }
 
     _initAuth() {

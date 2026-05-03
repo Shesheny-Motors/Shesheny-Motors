@@ -48,33 +48,33 @@
             <form id="request-form" class="space-y-6 bg-surface-container-low p-8 md:p-12 rounded border border-outline-variant/10">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium mb-2">Name</label>
-                        <input type="text" id="req-name" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <label class="block text-sm font-medium mb-2" data-i18n="request_name">Name</label>
+                        <input type="text" id="req-name" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_name">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Phone</label>
-                        <input type="tel" id="req-phone" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <label class="block text-sm font-medium mb-2" data-i18n="request_phone">Phone</label>
+                        <input type="tel" id="req-phone" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_phone">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-2">Email</label>
-                    <input type="email" id="req-email" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                    <label class="block text-sm font-medium mb-2" data-i18n="request_email">Email</label>
+                    <input type="email" id="req-email" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_email">
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-medium mb-2">Desired Car (Make & Model)</label>
-                        <input type="text" id="req-car" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <label class="block text-sm font-medium mb-2" data-i18n="request_car_label">Desired Car (Make & Model)</label>
+                        <input type="text" id="req-car" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_car">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Estimated Budget (Optional)</label>
-                        <input type="text" id="req-budget" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <label class="block text-sm font-medium mb-2" data-i18n="request_budget_label">Estimated Budget (Optional)</label>
+                        <input type="text" id="req-budget" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_budget">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-2">Additional Details / Message</label>
-                    <textarea id="req-message" rows="4" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none"></textarea>
+                    <label class="block text-sm font-medium mb-2" data-i18n="request_details_label">Additional Details / Message</label>
+                    <textarea id="req-message" rows="4" class="w-full bg-surface-container-highest border border-outline-variant/30 rounded px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" data-i18n="placeholder_message"></textarea>
                 </div>
-                <button type="submit" class="w-full bg-primary text-on-primary font-bold py-4 rounded hover:bg-primary-container transition-colors uppercase tracking-widest text-sm" id="req-submit-btn">
+                <button type="submit" class="w-full bg-primary text-on-primary font-bold py-4 rounded hover:bg-primary-container transition-colors uppercase tracking-widest text-sm" id="req-submit-btn" data-i18n="request_submit">
                     Submit Request
                 </button>
                 <div id="req-success" class="hidden text-green-400 text-center font-medium mt-4">
@@ -92,6 +92,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase.js"></script>
     <script src="js/auth.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/components.js"></script>
     <script src="js/request.js"></script>
 </body>
