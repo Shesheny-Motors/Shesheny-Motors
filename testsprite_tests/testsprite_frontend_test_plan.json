@@ -1,0 +1,550 @@
+[
+  {
+    "id": "TC001",
+    "title": "Submit a deposit request from the cart",
+    "description": "This test verifies that a customer can complete the deposit request form in the cart and receive submission confirmation.",
+    "category": "Deposit Cart and Request Submission",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /details.html"
+      },
+      {
+        "type": "action",
+        "description": "Add the car for deposit"
+      },
+      {
+        "type": "action",
+        "description": "Click the cart link"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the required deposit request details"
+      },
+      {
+        "type": "action",
+        "description": "Submit the deposit request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a submission confirmation is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart submission is completed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC002",
+    "title": "Add a car for deposit from details",
+    "description": "This test verifies that a guest can add the selected car for deposit from the details page and see it reflected in the cart.",
+    "category": "View Car Details",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /details.html"
+      },
+      {
+        "type": "action",
+        "description": "Add the car for deposit"
+      },
+      {
+        "type": "action",
+        "description": "Click the cart link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected car is displayed in the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the deposit selection is present"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC003",
+    "title": "Log in and reach the admin dashboard",
+    "description": "An admin user can sign in with valid credentials and access the administrative dashboard.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} in the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} in the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Browse and filter inventory results",
+    "description": "This test verifies that a guest can open the inventory, narrow the car list with search or filters, and see matching vehicles remain displayed.",
+    "category": "Browse Inventory",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /inventory.html"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the inventory controls"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a search term that matches a vehicle into the search field"
+      },
+      {
+        "type": "action",
+        "description": "Select a filter value that narrows the inventory"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify matching vehicles are displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the inventory results are narrowed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC005",
+    "title": "Block access to the admin dashboard without login",
+    "description": "A guest who tries to open the admin area directly is shown an access control state instead of the dashboard.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access to the admin area is restricted"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC006",
+    "title": "Open a vehicle from inventory",
+    "description": "This test verifies that a guest can select a car from the inventory list and reach the car details page for that vehicle.",
+    "category": "Browse Inventory",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /inventory.html"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the car list"
+      },
+      {
+        "type": "action",
+        "description": "Click a vehicle in the inventory list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the car details page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected vehicle details are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC007",
+    "title": "View car details and image gallery",
+    "description": "This test verifies that a guest can inspect a car's price, specifications, description, and gallery, and change the main image by selecting a gallery item.",
+    "category": "View Car Details",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /details.html"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the car price, specifications, and description are displayed"
+      },
+      {
+        "type": "action",
+        "description": "Click a different image in the gallery"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the main vehicle image updates"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC008",
+    "title": "Submit a custom car request successfully",
+    "description": "A guest can submit a custom car request with budget and requirements and see completion feedback.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid budget in the budget field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in vehicle requirements in the requirements field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a request submission confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Complete a detailed custom request submission",
+    "description": "A guest can provide a fuller vehicle brief on the request form and still receive successful completion feedback.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid budget in the budget field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in detailed vehicle requirements in the requirements field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the custom request is submitted successfully"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Review deposit selections in cart",
+    "description": "This test verifies that a customer can open the cart and review the cars added for deposit before submitting a request.",
+    "category": "Deposit Cart and Request Submission",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart.html"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the added cars are displayed in the cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the deposit request form is displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC011",
+    "title": "Keep request submission usable with a minimum budget and short requirements",
+    "description": "A guest can submit a concise request using a low but valid budget and brief requirements and still complete the flow.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid minimum budget in the budget field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in brief vehicle requirements in the requirements field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a request submission confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC012",
+    "title": "Preserve a liked car on revisit",
+    "description": "This test verifies that a guest can like a car on the details page and see that liked car preserved when returning later.",
+    "category": "View Car Details",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /details.html"
+      },
+      {
+        "type": "action",
+        "description": "Add the car to favorites"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /inventory.html"
+      },
+      {
+        "type": "action",
+        "description": "Click the same vehicle to open its details page again"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the car remains marked as liked"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the favorite state is preserved"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC013",
+    "title": "Preserve a custom request after returning to the form",
+    "description": "A guest can enter a request, submit it, and see that the completion state remains visible when revisiting the request area in the same session.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid budget in the budget field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in vehicle requirements in the requirements field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a request submission confirmation is visible"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC014",
+    "title": "Show admin login feedback for invalid credentials",
+    "description": "A user entering incorrect admin credentials remains on the login flow and sees an invalid login message.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in fake credentials in the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in fake credentials in the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify invalid login feedback is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC015",
+    "title": "Block unauthorized access to the admin dashboard",
+    "description": "This test verifies that a guest cannot open the admin dashboard without signing in and is shown an access control response.",
+    "category": "Admin Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify access is restricted"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a sign-in prompt or denial message is displayed"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC016",
+    "title": "Reject empty admin login credentials",
+    "description": "A user cannot submit the admin login form without entering credentials and sees validation feedback.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC017",
+    "title": "Reject admin login with incomplete credentials",
+    "description": "A user cannot reach the admin dashboard when only one login field is filled and sees validation feedback.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} in the email field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a login validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC018",
+    "title": "Prevent request submission with missing budget",
+    "description": "A guest cannot complete the custom request flow when the budget is left empty and a validation error is shown.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in vehicle requirements in the requirements field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a budget validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC019",
+    "title": "Stay on the login page after a failed sign in attempt",
+    "description": "A user who submits invalid admin credentials is not taken to the dashboard and sees login error feedback.",
+    "category": "Admin Login and Dashboard Access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in fake credentials in the email field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in fake credentials in the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the admin dashboard is not displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify invalid login feedback is visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC020",
+    "title": "Prevent request submission with missing requirements",
+    "description": "A guest cannot complete the custom request flow when requirements are omitted and a validation error is shown.",
+    "category": "Custom Car Request",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in a valid budget in the budget field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the custom request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a requirements validation error is visible"
+      }
+    ],
+    "priority": "Low"
+  }
+]

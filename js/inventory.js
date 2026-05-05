@@ -80,26 +80,44 @@ function populateFilters(vehicles) {
         
         document.querySelectorAll('.brand-filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                const clicked = e.currentTarget;
+                const wasActive = clicked.getAttribute('data-active') === 'true';
+
                 document.querySelectorAll('.brand-filter-btn').forEach(b => {
                     b.removeAttribute('data-active');
                     b.classList.remove('bg-primary', 'text-on-primary', 'border-primary', 'active', 'bg-primary/10', 'shadow-[0_0_12px_rgba(233,193,118,0.2)]');
                     b.classList.add('text-on-surface-variant', 'border-outline-variant');
                 });
-                const clicked = e.currentTarget;
-                clicked.setAttribute('data-active', 'true');
-                clicked.classList.add('border-primary', 'active', 'shadow-[0_0_12px_rgba(233,193,118,0.2)]');
-                clicked.classList.remove('text-on-surface-variant', 'border-outline-variant');
-                // 'All' button gets solid fill, brand cubes get tinted background
-                if (clicked.getAttribute('data-brand') === '') {
-                    clicked.classList.add('bg-primary', 'text-on-primary');
+                
+                let targetBrand = '';
+                let targetBtn = clicked;
+
+                // Toggle off if it was active and it's not the "All" button
+                if (wasActive && clicked.getAttribute('data-brand') !== '') {
+                    targetBtn = document.querySelector('.brand-filter-btn[data-brand=""]');
+                    if (targetBtn) {
+                        targetBrand = '';
+                    } else {
+                        targetBtn = clicked; // Fallback
+                    }
                 } else {
-                    clicked.classList.add('bg-primary/10');
+                    targetBrand = clicked.getAttribute('data-brand');
+                }
+
+                targetBtn.setAttribute('data-active', 'true');
+                targetBtn.classList.add('border-primary', 'active', 'shadow-[0_0_12px_rgba(233,193,118,0.2)]');
+                targetBtn.classList.remove('text-on-surface-variant', 'border-outline-variant');
+                
+                if (targetBrand === '') {
+                    targetBtn.classList.add('bg-primary', 'text-on-primary');
+                } else {
+                    targetBtn.classList.add('bg-primary/10');
                 }
                 
                 const hiddenInput = document.getElementById('filter-brand');
                 if (hiddenInput) {
-                    hiddenInput.value = clicked.getAttribute('data-brand');
-                    hiddenInput.dispatchEvent(new Event('change'));
+                    hiddenInput.value = targetBrand;
+                    applyFilters();
                 }
             });
         });
@@ -122,26 +140,36 @@ function updatePriceSliderLimits() {
     const maxPrice = Math.max(...allVehicles.map(v => isUsd ? (v.price_egp / exchangeRate) : v.price_egp));
     
     const slider = document.getElementById('filter-price');
-    slider.max = maxPrice;
-    slider.value = maxPrice;
-    updatePriceDisplay(maxPrice);
+    if (slider) {
+        slider.max = maxPrice;
+        slider.value = maxPrice;
+        updatePriceDisplay(maxPrice);
+    }
 }
 
 function updatePriceDisplay(val) {
     const display = document.getElementById('price-display');
-    const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-    display.textContent = window.I18n ? window.I18n.formatPrice(val, val) : (isUsd ? `$${val}` : `${val} EGP`);
+    if (display) {
+        const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
+        display.textContent = window.I18n ? window.I18n.formatPrice(val, val) : (isUsd ? `$${val}` : `${val} EGP`);
+    }
 }
 
 function applyFilters() {
-    const category = document.getElementById('filter-category').value;
-    const brand = document.getElementById('filter-brand').value;
+    const category = document.getElementById('filter-category').value.trim().toLowerCase();
+    const brand = String(document.getElementById('filter-brand').value).trim();
+
+    console.log("Applying filters -> Category:", category, "Brand:", brand);
 
     currentVehicles = allVehicles.filter(v => {
-        return (category === '' || v.category === category) &&
-               (brand === '' || v.brand_id == brand);
+        const vCat = v.category ? v.category.trim().toLowerCase() : '';
+        const vBrand = v.brand_id ? String(v.brand_id).trim() : '';
+        
+        return (category === '' || vCat === category) &&
+               (brand === '' || vBrand === brand);
     });
 
+    console.log("Filtered vehicles count:", currentVehicles.length);
     renderGrid(currentVehicles);
 }
 

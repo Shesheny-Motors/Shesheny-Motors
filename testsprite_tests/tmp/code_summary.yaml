@@ -1,0 +1,65 @@
+version: "2"
+type: frontend
+tech_stack:
+  - HTML/CSS/JavaScript
+  - TailwindCSS
+  - Supabase
+routes:
+  - path: /
+    file: index.html
+    auth_required: false
+    description: Home page
+  - path: /inventory.html
+    file: inventory.html
+    auth_required: false
+    description: Car inventory listing
+  - path: /details.html
+    file: details.html
+    auth_required: false
+    description: Car details page
+  - path: /login.html
+    file: login.html
+    auth_required: false
+    description: Login page
+  - path: /admin.html
+    file: admin.html
+    auth_required: true
+    description: Admin dashboard
+  - path: /cart.html
+    file: cart.html
+    auth_required: false
+    description: Shopping cart
+  - path: /request.html
+    file: request.html
+    auth_required: false
+    description: Custom car requests
+features:
+  - name: User Login
+    description: Admin login with credentials
+    files:
+      - login.html
+      - js/auth.js
+    entry_route: /login.html
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click Login button to submit
+    api_calls:
+      - method: POST
+        endpoint: /auth/v1/token
+    auth_required: false
+  - name: View Inventory
+    description: Browse cars in inventory
+    files:
+      - inventory.html
+      - js/index.js
+      - js/dbCache.js
+    entry_route: /inventory.html
+    user_interactions:
+      - Browse list of cars
+      - Filter cars
+    api_calls:
+      - method: GET
+        endpoint: /rest/v1/Products
+    auth_required: false
+known_limitations: []

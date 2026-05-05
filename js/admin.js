@@ -285,25 +285,34 @@ async function handleGalleryUpload(e) {
     const files = Array.from(e.target.files);
     if (!files.length) return;
 
-    showToast(`Uploading ${files.length} images...`);
+    showToast(`Uploading ${files.length} image(s) sequentially...`);
+    const btn = document.getElementById("save-btn");
+    if(btn) btn.disabled = true;
 
     try {
-        const uploadPromises = files.map(async (rawFile) => {
+        for (let i = 0; i < files.length; i++) {
+            const rawFile = files[i];
             const file = await compressImageClient(rawFile);
             const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
-            return window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
-        });
-
-        const urls = await Promise.all(uploadPromises);
-
-        currentGallery = [...currentGallery, ...urls];
-        renderGalleryPreview();
-        showToast("Gallery updated");
+            
+            const url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
+            currentGallery.push(url);
+            renderGalleryPreview(); // Provide progressive visual feedback
+            
+            if (i < files.length - 1) {
+                showToast(`Uploaded ${i + 1} of ${files.length}...`);
+            }
+        }
+        showToast("Gallery upload complete!");
     } catch (err) {
         console.error('Gallery upload error:', err);
         showToast("Upload failed: " + (err.message || err), "error");
+    } finally {
+        if(btn) btn.disabled = false;
+        // Reset file input so they can select the same file(s) again if needed
+        e.target.value = "";
     }
 }
 
@@ -644,22 +653,33 @@ window.removeVariantGalleryImage = (variantIdx, imgIdx) => {
 window.handleVariantGalleryUpload = async (variantIdx, input) => {
     const files = Array.from(input.files);
     if (!files.length) return;
-    showToast(`Uploading ${files.length} image(s)...`);
+    
+    showToast(`Uploading ${files.length} image(s) sequentially...`);
+    const btn = document.getElementById("save-btn");
+    if(btn) btn.disabled = true;
+
     try {
-        const uploadPromises = files.map(async (rawFile) => {
+        for (let i = 0; i < files.length; i++) {
+            const rawFile = files[i];
             const file = await compressImageClient(rawFile);
             const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from('vehicle-images').upload(path, file, { upsert: true });
             if (error) throw error;
-            return window.supabase.storage.from('vehicle-images').getPublicUrl(path).data.publicUrl;
-        });
-
-        const urls = await Promise.all(uploadPromises);
-        currentColorVariants[variantIdx].gallery = [...currentColorVariants[variantIdx].gallery, ...urls];
-        renderColorVariants();
-        showToast('Gallery updated');
+            
+            const url = window.supabase.storage.from('vehicle-images').getPublicUrl(path).data.publicUrl;
+            currentColorVariants[variantIdx].gallery.push(url);
+            renderColorVariants(); // Progressive feedback
+            
+            if (i < files.length - 1) {
+                showToast(`Uploaded ${i + 1} of ${files.length}...`);
+            }
+        }
+        showToast('Variant gallery upload complete!');
     } catch (err) {
         showToast('Upload failed', 'error');
+    } finally {
+        if(btn) btn.disabled = false;
+        input.value = "";
     }
 };
 
