@@ -39,6 +39,17 @@ async function compressImageClient(file, maxDimension = 1920) {
     if (file.type === 'image/gif' || file.type === 'image/svg+xml') return file;
 
     return new Promise((resolve) => {
+        // Fallback timeout to prevent hanging on unsupported/corrupt images
+        const timeout = setTimeout(() => {
+            console.warn("compressImageClient timed out, returning original file");
+            resolve(file);
+        }, 5000);
+
+        const resolveSafe = (result) => {
+            clearTimeout(timeout);
+            resolve(result);
+        };
+
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new Image();
@@ -49,21 +60,21 @@ async function compressImageClient(file, maxDimension = 1920) {
                     if (w > h) { h = Math.round((h * maxDimension) / w); w = maxDimension; }
                     else { w = Math.round((w * maxDimension) / h); h = maxDimension; }
                 } else {
-                    return resolve(file);
+                    return resolveSafe(file);
                 }
                 const canvas = document.createElement('canvas');
                 canvas.width = w; canvas.height = h;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, w, h);
                 canvas.toBlob((blob) => {
-                    if (!blob) return resolve(file);
-                    resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                    if (!blob) return resolveSafe(file);
+                    resolveSafe(new File([blob], file.name, { type: 'image/jpeg' }));
                 }, 'image/jpeg', 0.8);
             };
-            img.onerror = () => resolve(file);
+            img.onerror = () => resolveSafe(file);
             img.src = e.target.result;
         };
-        reader.onerror = () => resolve(file);
+        reader.onerror = () => resolveSafe(file);
         reader.readAsDataURL(file);
     });
 }
@@ -293,7 +304,7 @@ async function handleGalleryUpload(e) {
         for (let i = 0; i < files.length; i++) {
             const rawFile = files[i];
             const file = await compressImageClient(rawFile);
-            const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
+            const path = `gallery/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
             
@@ -662,7 +673,7 @@ window.handleVariantGalleryUpload = async (variantIdx, input) => {
         for (let i = 0; i < files.length; i++) {
             const rawFile = files[i];
             const file = await compressImageClient(rawFile);
-            const path = `gallery/${Date.now()}-${sanitizeFilename(file.name)}`;
+            const path = `gallery/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from('vehicle-images').upload(path, file, { upsert: true });
             if (error) throw error;
             
@@ -686,7 +697,8 @@ window.handleVariantGalleryUpload = async (variantIdx, input) => {
 async function handleSaveProduct(e) {
     e.preventDefault();
     const btn = document.getElementById("save-btn");
-    const originalText = btn.textContent;
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
     btn.disabled = true;
     btn.textContent = "Saving...";
     try {
@@ -713,7 +725,7 @@ async function handleSaveProduct(e) {
         let file = document.getElementById("p-image").files[0];
         if (file) {
             file = await compressImageClient(file);
-            const path = `public/${Date.now()}-${sanitizeFilename(file.name)}`;
+            const path = `public/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
             payload.image_url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
@@ -721,7 +733,7 @@ async function handleSaveProduct(e) {
 
         const diag = document.getElementById("p-diagnostics").files[0];
         if (diag) {
-            const path = `diagnostics/${Date.now()}-${sanitizeFilename(diag.name)}`;
+            const path = `diagnostics/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(diag.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, diag, { upsert: true });
             if (error) throw error;
             payload.diagnostics_url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
@@ -878,7 +890,10 @@ window.deleteCategory = (id) => showConfirm("Delete category?", async () => {
 async function handleSaveCategory(e) {
     e.preventDefault();
     const btn = document.getElementById("save-category-btn");
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
     btn.disabled = true;
+    btn.textContent = "Saving...";
     try {
         const payload = {
             name: document.getElementById("cat-name").value,
@@ -894,7 +909,10 @@ async function handleSaveCategory(e) {
         console.error("Category save failed:", e);
         showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
     }
-    finally { btn.disabled = false; }
+    finally { 
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
 }
 function openCategoryModal(c = null) {
     editingCategoryId = c ? c.id : null;
@@ -958,7 +976,8 @@ window.deleteBrand = (id) => showConfirm("Delete brand? This will fail if there 
 async function handleSaveBrand(e) {
     e.preventDefault();
     const btn = document.getElementById("save-brand-btn");
-    const originalText = btn.textContent;
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
     btn.disabled = true;
     btn.textContent = "Saving...";
     try {
@@ -966,7 +985,7 @@ async function handleSaveBrand(e) {
         let file = document.getElementById("b-logo").files[0];
         if (file) {
             file = await compressImageClient(file);
-            const path = `brands/${Date.now()}-${sanitizeFilename(file.name)}`;
+            const path = `brands/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(file.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
             payload.logo_url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
@@ -1243,7 +1262,10 @@ async function loadSettings() {
 async function handleSaveSettings(e) {
     e.preventDefault();
     const btn = document.getElementById("save-settings-btn");
+    const originalText = btn.dataset.originalText || btn.textContent;
+    btn.dataset.originalText = originalText;
     btn.disabled = true;
+    btn.textContent = "Saving...";
     try {
         const updates = [
             { key: "exchange_rate", value: document.getElementById("setting-egp-usd").value },
@@ -1260,7 +1282,7 @@ async function handleSaveSettings(e) {
 
         const hero = document.getElementById("setting-hero-image").files[0];
         if (hero) {
-            const path = `settings/hero-${Date.now()}-${sanitizeFilename(hero.name)}`;
+            const path = `settings/hero-${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(hero.name)}`;
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, hero, { upsert: true });
             if (error) throw error;
             updates.push({ key: "hero_image", value: window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl });
@@ -1273,7 +1295,10 @@ async function handleSaveSettings(e) {
         console.error("Settings save failed:", e);
         showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
     }
-    finally { btn.disabled = false; }
+    finally { 
+        btn.disabled = false;
+        btn.textContent = originalText;
+    }
 }
 
 window.addSocialLink = function(type, val = "") {
