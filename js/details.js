@@ -65,6 +65,12 @@ document.addEventListener('currencyChanged', (e) => {
     }
 });
 
+document.addEventListener('languageChanged', (e) => {
+    if(currentVehicle) {
+        renderVehicleDetails();
+    }
+});
+
 function renderVehicleDetails() {
     const isAr = window.I18n ? window.I18n.language === 'ar' : false;
     document.getElementById('detail-title').textContent = (isAr && currentVehicle.name_ar) ? currentVehicle.name_ar : currentVehicle.name;

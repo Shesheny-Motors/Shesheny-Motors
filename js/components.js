@@ -207,6 +207,21 @@ class FooterComponent extends HTMLElement {
                     li.innerHTML = `<a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="${ttLinks[0]}" id="footer-tiktok" target="_blank">TikTok</a>`;
                     socialsList.appendChild(li);
                 }
+
+                const waLinks = parseLinks(settings.whatsapp_number);
+                if(waLinks.length > 0 && socialsList && !this.querySelector('#footer-whatsapp')) {
+                    let waHref = waLinks[0];
+                    if (!waHref.startsWith('http')) {
+                        // Strip non-numeric characters and format as wa.me link
+                        const cleanNum = waHref.replace(/\D/g, '');
+                        // Assuming Egypt (+20) if it starts with 0
+                        const formattedNum = cleanNum.startsWith('0') ? '2' + cleanNum : cleanNum;
+                        waHref = `https://wa.me/${formattedNum}`;
+                    }
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="${waHref}" id="footer-whatsapp" target="_blank">WhatsApp</a>`;
+                    socialsList.appendChild(li);
+                }
             }
         }
     }

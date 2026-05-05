@@ -46,8 +46,9 @@ function renderFeatured(vehicles) {
     
     grid.innerHTML = vehicles.map(v => `
         <div class="bg-surface-container-high rounded overflow-hidden group border border-outline-variant/10">
-            <div class="h-64 overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal" src="${optimizeImage(v.image_url, 800)}" />
+            <div class="h-64 overflow-hidden relative ${v.is_sold_out ? 'group-hover:[&>img]:grayscale-0 group-hover:[&>img]:mix-blend-normal' : ''}">
+                <img alt="${v.name}" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700 ease-in-out mix-blend-luminosity hover:mix-blend-normal ${v.is_sold_out ? 'grayscale mix-blend-normal' : ''}" src="${optimizeImage(v.image_url, 800)}" />
+                ${v.is_sold_out ? '<div class="absolute inset-0 flex items-center justify-center z-10 bg-black/40"><span class="text-red-600 font-bold border-4 border-red-600 rounded px-6 py-2 transform -rotate-12 text-3xl uppercase tracking-widest bg-black/50 shadow-2xl backdrop-blur-sm">Sold Out</span></div>' : ''}
             </div>
             <div class="p-8">
                 <h3 class="font-headline text-2xl font-semibold mb-2 text-on-surface">${v.name}</h3>

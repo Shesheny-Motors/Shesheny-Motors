@@ -198,8 +198,9 @@ function renderGrid(vehicles) {
             <button class="cart-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}" title="${inCart ? 'Remove from Cart' : 'Add to Cart'}">
                 <span class="material-symbols-outlined">${cartIcon}</span>
             </button>
-            <div class="w-full aspect-[16/9] overflow-hidden relative">
-                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-transform duration-700 ease-out" src="${optimizeImage(v.image_url, 800)}" />
+            <div class="w-full aspect-[16/9] overflow-hidden relative ${v.is_sold_out ? 'group-hover:[&>img]:grayscale-0' : ''}">
+                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ease-out ${v.is_sold_out ? 'grayscale' : ''}" src="${optimizeImage(v.image_url, 800)}" />
+                ${v.is_sold_out ? '<div class="absolute inset-0 flex items-center justify-center z-10 bg-black/40"><span class="text-red-600 font-bold border-4 border-red-600 rounded px-6 py-2 transform -rotate-12 text-3xl uppercase tracking-widest bg-black/50 shadow-2xl backdrop-blur-sm">Sold Out</span></div>' : ''}
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>

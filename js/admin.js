@@ -378,11 +378,16 @@ async function handleSaveOrder() {
   btn.disabled = true;
   try {
     const type = currentOrderMode === "home" ? "spotlight" : "explore";
-    await Promise.all(currentProducts.map((p, index) => window.productsDb.updateOrder(p.id, type, index)));
+    // Process sequentially to avoid Supabase rate limits / connection drops
+    for (let index = 0; index < currentProducts.length; index++) {
+        const p = currentProducts[index];
+        await window.productsDb.updateOrder(p.id, type, index);
+    }
     showToast("Order saved successfully!");
     isOrderChanged = false;
     updateSaveOrderBtnVisibility();
   } catch (err) {
+    console.error("Save order error:", err);
     showToast("Failed to save order", "error");
   } finally { btn.disabled = false; }
 }
@@ -408,6 +413,13 @@ async function checkIsAdmin(email) {
     return false;
   }
 }
+
+// Add a visibility listener to refresh session when tabbing back to prevent 401s after being suspended
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && window.supabase) {
+        window.supabase.auth.refreshSession().catch(err => console.error("Session refresh failed", err));
+    }
+});
 
 function showAccessDenied() {
   loginSection.classList.remove("hidden");
