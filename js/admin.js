@@ -686,7 +686,9 @@ window.handleVariantGalleryUpload = async (variantIdx, input) => {
 async function handleSaveProduct(e) {
     e.preventDefault();
     const btn = document.getElementById("save-btn");
+    const originalText = btn.textContent;
     btn.disabled = true;
+    btn.textContent = "Saving...";
     try {
         const payload = {
             name: document.getElementById("p-name").value,
@@ -747,7 +749,10 @@ async function handleSaveProduct(e) {
         const errMsg = err.message || (typeof err === 'object' ? JSON.stringify(err) : String(err));
         showToast("Save failed: " + errMsg, "error");
     }
-    finally { btn.disabled = false; }
+    finally { 
+        btn.disabled = false; 
+        btn.textContent = originalText;
+    }
 }
 
 function openModal(p = null) {
@@ -953,7 +958,9 @@ window.deleteBrand = (id) => showConfirm("Delete brand? This will fail if there 
 async function handleSaveBrand(e) {
     e.preventDefault();
     const btn = document.getElementById("save-brand-btn");
+    const originalText = btn.textContent;
     btn.disabled = true;
+    btn.textContent = "Saving...";
     try {
         const payload = { name: document.getElementById("b-name").value };
         let file = document.getElementById("b-logo").files[0];
@@ -963,6 +970,8 @@ async function handleSaveBrand(e) {
             const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
             if (error) throw error;
             payload.logo_url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
+        } else if (!editingBrandId) {
+            payload.logo_url = '';
         }
         if (editingBrandId) await window.brandsDb.update(editingBrandId, payload);
         else await window.brandsDb.create(payload);
@@ -974,7 +983,10 @@ async function handleSaveBrand(e) {
         console.error("Brand save failed:", e);
         showToast("Save failed: " + (e.message || "Unknown error"), "error"); 
     }
-    finally { btn.disabled = false; }
+    finally { 
+        btn.disabled = false; 
+        btn.textContent = originalText;
+    }
 }
 function openBrandModal(b = null) {
     editingBrandId = b ? b.id : null;

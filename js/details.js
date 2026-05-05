@@ -66,13 +66,27 @@ document.addEventListener('currencyChanged', (e) => {
 });
 
 function renderVehicleDetails() {
-    document.getElementById('detail-title').textContent = currentVehicle.name;
+    const isAr = window.I18n ? window.I18n.language === 'ar' : false;
+    document.getElementById('detail-title').textContent = (isAr && currentVehicle.name_ar) ? currentVehicle.name_ar : currentVehicle.name;
     document.getElementById('detail-year').textContent = currentVehicle.version || '-';
     
     document.getElementById('spec-miles').textContent = currentVehicle.mileage || '-';
     document.getElementById('spec-trans').textContent = currentVehicle.transmission || '-';
     document.getElementById('spec-fuel').textContent = currentVehicle.fuel_type || '-';
     document.getElementById('spec-version').textContent = currentVehicle.version || '-';
+
+    const descText = (isAr && currentVehicle.description_ar) ? currentVehicle.description_ar : currentVehicle.description;
+    const descContainer = document.getElementById('desc-container');
+    const descEl = document.getElementById('spec-desc');
+    
+    if (descContainer && descEl) {
+        if (descText && descText.trim() !== '') {
+            descEl.textContent = descText;
+            descContainer.classList.remove('hidden');
+        } else {
+            descContainer.classList.add('hidden');
+        }
+    }
 
     updatePriceDisplay();
 
