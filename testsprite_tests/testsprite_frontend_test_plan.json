@@ -2,24 +2,28 @@
   {
     "id": "TC001",
     "title": "Submit a deposit request from the cart",
-    "description": "This test verifies that a customer can complete the deposit request form in the cart and receive submission confirmation.",
-    "category": "Deposit Cart and Request Submission",
+    "description": "This test verifies that a guest can submit the deposit request form from the cart and see a confirmation afterward.",
+    "category": "Deposit cart flow",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /details.html"
+        "description": "Navigate to /inventory.html"
       },
       {
         "type": "action",
-        "description": "Add the car for deposit"
+        "description": "Select a vehicle"
       },
       {
         "type": "action",
-        "description": "Click the cart link"
+        "description": "Add the vehicle to the deposit cart"
       },
       {
         "type": "action",
-        "description": "Fill in the required deposit request details"
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the deposit request form with valid customer details"
       },
       {
         "type": "action",
@@ -27,49 +31,82 @@
       },
       {
         "type": "assertion",
-        "description": "Verify a submission confirmation is visible"
+        "description": "Verify a deposit submission confirmation is visible"
       },
       {
         "type": "assertion",
-        "description": "Verify the cart submission is completed"
+        "description": "Verify the cart submission result is shown"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC002",
-    "title": "Add a car for deposit from details",
-    "description": "This test verifies that a guest can add the selected car for deposit from the details page and see it reflected in the cart.",
-    "category": "View Car Details",
+    "title": "Add a vehicle to the deposit cart and review it",
+    "description": "This test verifies that a guest can add a vehicle to the deposit cart from details and see it appear in the cart for review.",
+    "category": "Deposit cart flow",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /details.html"
+        "description": "Navigate to /inventory.html"
       },
       {
         "type": "action",
-        "description": "Add the car for deposit"
+        "description": "Select a vehicle"
       },
       {
         "type": "action",
-        "description": "Click the cart link"
+        "description": "Add the vehicle to the deposit cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
       },
       {
         "type": "assertion",
-        "description": "Verify the selected car is displayed in the cart"
+        "description": "Verify the selected vehicle is listed in the cart"
       },
       {
         "type": "assertion",
-        "description": "Verify the deposit selection is present"
+        "description": "Verify the cart shows a deposit request form"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC003",
-    "title": "Log in and reach the admin dashboard",
-    "description": "An admin user can sign in with valid credentials and access the administrative dashboard.",
-    "category": "Admin Login and Dashboard Access",
+    "title": "Browse featured vehicles from the homepage",
+    "description": "This test verifies that a guest can land on the homepage, open the inventory, and reach a vehicle details page from browsing featured vehicles.",
+    "category": "Public site navigation and vehicle discovery",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /index.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the inventory page"
+      },
+      {
+        "type": "action",
+        "description": "Select a featured vehicle"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a vehicle details page is displayed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify vehicle specifications are displayed"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC004",
+    "title": "Access the admin dashboard after signing in",
+    "description": "An administrator can sign in successfully and reach the protected dashboard.",
+    "category": "Admin authentication and dashboard access",
     "steps": [
       {
         "type": "action",
@@ -77,11 +114,11 @@
       },
       {
         "type": "action",
-        "description": "Fill in {{LOGIN_USER}} in the email field"
+        "description": "Fill in the email field with {{LOGIN_USER}}"
       },
       {
         "type": "action",
-        "description": "Fill in {{LOGIN_PASSWORD}} in the password field"
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
       },
       {
         "type": "action",
@@ -95,10 +132,10 @@
     "priority": "High"
   },
   {
-    "id": "TC004",
-    "title": "Browse and filter inventory results",
-    "description": "This test verifies that a guest can open the inventory, narrow the car list with search or filters, and see matching vehicles remain displayed.",
-    "category": "Browse Inventory",
+    "id": "TC005",
+    "title": "Open vehicle details from inventory",
+    "description": "This test verifies that a guest can browse the inventory listing and open a vehicle details page successfully.",
+    "category": "Public site navigation and vehicle discovery",
     "steps": [
       {
         "type": "action",
@@ -106,49 +143,28 @@
       },
       {
         "type": "action",
-        "description": "Scroll to the inventory controls"
+        "description": "Browse the vehicle listings"
       },
       {
         "type": "action",
-        "description": "Fill in a search term that matches a vehicle into the search field"
-      },
-      {
-        "type": "action",
-        "description": "Select a filter value that narrows the inventory"
+        "description": "Select a vehicle"
       },
       {
         "type": "assertion",
-        "description": "Verify matching vehicles are displayed"
+        "description": "Verify a vehicle details page is displayed"
       },
       {
         "type": "assertion",
-        "description": "Verify the inventory results are narrowed"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC005",
-    "title": "Block access to the admin dashboard without login",
-    "description": "A guest who tries to open the admin area directly is shown an access control state instead of the dashboard.",
-    "category": "Admin Login and Dashboard Access",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /admin.html"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify access to the admin area is restricted"
+        "description": "Verify vehicle specifications are displayed"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC006",
-    "title": "Open a vehicle from inventory",
-    "description": "This test verifies that a guest can select a car from the inventory list and reach the car details page for that vehicle.",
-    "category": "Browse Inventory",
+    "title": "Filter inventory and open a matching vehicle",
+    "description": "This test verifies that a guest can narrow inventory by make or model and open a matching vehicle details page from the filtered results.",
+    "category": "Public site navigation and vehicle discovery",
     "steps": [
       {
         "type": "action",
@@ -156,223 +172,287 @@
       },
       {
         "type": "action",
-        "description": "Scroll to the car list"
+        "description": "Filter inventory by make or model"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the inventory results are updated"
       },
       {
         "type": "action",
-        "description": "Click a vehicle in the inventory list"
+        "description": "Select a vehicle from the filtered results"
       },
       {
         "type": "assertion",
-        "description": "Verify the car details page is displayed"
+        "description": "Verify a vehicle details page is displayed"
       },
       {
         "type": "assertion",
-        "description": "Verify the selected vehicle details are displayed"
+        "description": "Verify vehicle specifications are displayed"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC007",
-    "title": "View car details and image gallery",
-    "description": "This test verifies that a guest can inspect a car's price, specifications, description, and gallery, and change the main image by selecting a gallery item.",
-    "category": "View Car Details",
+    "title": "Submit a contact inquiry",
+    "description": "A visitor can submit the contact form and see a confirmation that the inquiry was received.",
+    "category": "Contact and custom request forms",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /details.html"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the car price, specifications, and description are displayed"
+        "description": "Navigate to /contact.html"
       },
       {
         "type": "action",
-        "description": "Click a different image in the gallery"
+        "description": "Fill in the contact name field with a valid name"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the contact email field with a valid email address"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the contact message field with a short inquiry"
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form"
       },
       {
         "type": "assertion",
-        "description": "Verify the main vehicle image updates"
+        "description": "Verify an inquiry confirmation is visible"
       }
     ],
     "priority": "High"
   },
   {
     "id": "TC008",
-    "title": "Submit a custom car request successfully",
-    "description": "A guest can submit a custom car request with budget and requirements and see completion feedback.",
-    "category": "Custom Car Request",
+    "title": "Save a vehicle to favorites from details",
+    "description": "This test verifies that a guest can add a vehicle to favorites from the details page and see it listed on the favorites page.",
+    "category": "Favorites management",
     "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /request.html"
-      },
-      {
-        "type": "action",
-        "description": "Fill in a valid budget in the budget field"
-      },
-      {
-        "type": "action",
-        "description": "Fill in vehicle requirements in the requirements field"
-      },
-      {
-        "type": "action",
-        "description": "Submit the custom request form"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a request submission confirmation is visible"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC009",
-    "title": "Complete a detailed custom request submission",
-    "description": "A guest can provide a fuller vehicle brief on the request form and still receive successful completion feedback.",
-    "category": "Custom Car Request",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /request.html"
-      },
-      {
-        "type": "action",
-        "description": "Fill in a valid budget in the budget field"
-      },
-      {
-        "type": "action",
-        "description": "Fill in detailed vehicle requirements in the requirements field"
-      },
-      {
-        "type": "action",
-        "description": "Submit the custom request form"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the custom request is submitted successfully"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC010",
-    "title": "Review deposit selections in cart",
-    "description": "This test verifies that a customer can open the cart and review the cars added for deposit before submitting a request.",
-    "category": "Deposit Cart and Request Submission",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /cart.html"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the added cars are displayed in the cart"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify the deposit request form is displayed"
-      }
-    ],
-    "priority": "High"
-  },
-  {
-    "id": "TC011",
-    "title": "Keep request submission usable with a minimum budget and short requirements",
-    "description": "A guest can submit a concise request using a low but valid budget and brief requirements and still complete the flow.",
-    "category": "Custom Car Request",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /request.html"
-      },
-      {
-        "type": "action",
-        "description": "Fill in a valid minimum budget in the budget field"
-      },
-      {
-        "type": "action",
-        "description": "Fill in brief vehicle requirements in the requirements field"
-      },
-      {
-        "type": "action",
-        "description": "Submit the custom request form"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a request submission confirmation is visible"
-      }
-    ],
-    "priority": "Medium"
-  },
-  {
-    "id": "TC012",
-    "title": "Preserve a liked car on revisit",
-    "description": "This test verifies that a guest can like a car on the details page and see that liked car preserved when returning later.",
-    "category": "View Car Details",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /details.html"
-      },
-      {
-        "type": "action",
-        "description": "Add the car to favorites"
-      },
       {
         "type": "action",
         "description": "Navigate to /inventory.html"
       },
       {
         "type": "action",
-        "description": "Click the same vehicle to open its details page again"
+        "description": "Select a vehicle"
+      },
+      {
+        "type": "action",
+        "description": "Add the vehicle to favorites"
+      },
+      {
+        "type": "action",
+        "description": "Open the favorites page"
       },
       {
         "type": "assertion",
-        "description": "Verify the car remains marked as liked"
+        "description": "Verify the saved vehicle is listed in favorites"
       },
       {
         "type": "assertion",
-        "description": "Verify the favorite state is preserved"
+        "description": "Verify the favorites collection is not empty"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC009",
+    "title": "Submit a custom vehicle request",
+    "description": "A visitor can submit a custom vehicle request with budget and requirements and see a confirmation that the request was received.",
+    "category": "Contact and custom request forms",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /request.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the budget field with a valid budget amount"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the requirements field with a detailed vehicle request"
+      },
+      {
+        "type": "action",
+        "description": "Submit the request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a request confirmation is visible"
+      }
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "TC010",
+    "title": "Create a new vehicle record",
+    "description": "An authenticated administrator can add a new vehicle and see it appear in the dashboard list.",
+    "category": "Vehicle management in admin dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open the vehicle creation form in the admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the vehicle details with valid information"
+      },
+      {
+        "type": "action",
+        "description": "Save the new vehicle"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new vehicle appears in the vehicle list"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC011",
+    "title": "Edit an existing vehicle record",
+    "description": "An authenticated administrator can update an existing vehicle and see the revised information reflected in the dashboard.",
+    "category": "Vehicle management in admin dashboard",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with {{LOGIN_USER}}"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing vehicle record in the admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Update the vehicle details with new valid information"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the updated vehicle information is displayed"
+      }
+    ],
+    "priority": "Medium"
+  },
+  {
+    "id": "TC012",
+    "title": "Remove a saved vehicle from favorites",
+    "description": "This test verifies that a guest can remove a previously saved vehicle from favorites and see it disappear from the list.",
+    "category": "Favorites management",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /inventory.html"
+      },
+      {
+        "type": "action",
+        "description": "Select a vehicle"
+      },
+      {
+        "type": "action",
+        "description": "Add the vehicle to favorites"
+      },
+      {
+        "type": "action",
+        "description": "Open the favorites page"
+      },
+      {
+        "type": "action",
+        "description": "Remove the vehicle from favorites"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the vehicle is no longer listed in favorites"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the favorites collection is empty"
       }
     ],
     "priority": "Medium"
   },
   {
     "id": "TC013",
-    "title": "Preserve a custom request after returning to the form",
-    "description": "A guest can enter a request, submit it, and see that the completion state remains visible when revisiting the request area in the same session.",
-    "category": "Custom Car Request",
+    "title": "Delete a vehicle record",
+    "description": "An authenticated administrator can delete an existing vehicle and see it removed from the dashboard list.",
+    "category": "Vehicle management in admin dashboard",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /request.html"
+        "description": "Navigate to /login.html"
       },
       {
         "type": "action",
-        "description": "Fill in a valid budget in the budget field"
+        "description": "Fill in the email field with {{LOGIN_USER}}"
       },
       {
         "type": "action",
-        "description": "Fill in vehicle requirements in the requirements field"
+        "description": "Fill in the password field with {{LOGIN_PASSWORD}}"
       },
       {
         "type": "action",
-        "description": "Submit the custom request form"
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Open an existing vehicle record in the admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Delete the vehicle record"
+      },
+      {
+        "type": "action",
+        "description": "Confirm the removal"
       },
       {
         "type": "assertion",
-        "description": "Verify a request submission confirmation is visible"
+        "description": "Verify the vehicle no longer appears in the vehicle list"
       }
     ],
     "priority": "Medium"
   },
   {
     "id": "TC014",
-    "title": "Show admin login feedback for invalid credentials",
-    "description": "A user entering incorrect admin credentials remains on the login flow and sees an invalid login message.",
-    "category": "Admin Login and Dashboard Access",
+    "title": "Admin updates site translation content",
+    "description": "An admin can change translation content in the dashboard and see the updated settings reflected after saving.",
+    "category": "Admin site management settings",
     "steps": [
       {
         "type": "action",
@@ -380,49 +460,89 @@
       },
       {
         "type": "action",
-        "description": "Fill in fake credentials in the email field"
+        "description": "Fill in {{LOGIN_USER}} into the username field"
       },
       {
         "type": "action",
-        "description": "Fill in fake credentials in the password field"
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
       },
       {
         "type": "action",
         "description": "Submit the login form"
       },
-      {
-        "type": "assertion",
-        "description": "Verify invalid login feedback is visible"
-      }
-    ],
-    "priority": "Low"
-  },
-  {
-    "id": "TC015",
-    "title": "Block unauthorized access to the admin dashboard",
-    "description": "This test verifies that a guest cannot open the admin dashboard without signing in and is shown an access control response.",
-    "category": "Admin Access",
-    "steps": [
       {
         "type": "action",
         "description": "Navigate to /admin.html"
       },
       {
-        "type": "assertion",
-        "description": "Verify access is restricted"
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Update a translation content field with a new value"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
       },
       {
         "type": "assertion",
-        "description": "Verify a sign-in prompt or denial message is displayed"
+        "description": "Verify the updated translation settings are displayed"
       }
     ],
-    "priority": "Low"
+    "priority": "Medium"
+  },
+  {
+    "id": "TC015",
+    "title": "Admin keeps edited translation content after saving",
+    "description": "An admin can edit an existing translation entry and confirm the saved value remains visible in the dashboard.",
+    "category": "Admin site management settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the username field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Modify an existing translation content field"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the saved translation content is still visible"
+      }
+    ],
+    "priority": "Medium"
   },
   {
     "id": "TC016",
-    "title": "Reject empty admin login credentials",
-    "description": "A user cannot submit the admin login form without entering credentials and sees validation feedback.",
-    "category": "Admin Login and Dashboard Access",
+    "title": "Admin sees updated translation settings after a second save",
+    "description": "An admin can make another translation change in the dashboard and see the latest saved content displayed.",
+    "category": "Admin site management settings",
     "steps": [
       {
         "type": "action",
@@ -430,20 +550,44 @@
       },
       {
         "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the username field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
         "description": "Submit the login form"
       },
       {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Change a translation content value to a different value"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
         "type": "assertion",
-        "description": "Verify a login validation error is visible"
+        "description": "Verify the latest translation update is displayed"
       }
     ],
-    "priority": "Low"
+    "priority": "Medium"
   },
   {
     "id": "TC017",
-    "title": "Reject admin login with incomplete credentials",
-    "description": "A user cannot reach the admin dashboard when only one login field is filled and sees validation feedback.",
-    "category": "Admin Login and Dashboard Access",
+    "title": "Admin preserves translation edits across dashboard navigation",
+    "description": "An admin can save translation content and still see the updated settings after returning to the translation section.",
+    "category": "Admin site management settings",
     "steps": [
       {
         "type": "action",
@@ -451,49 +595,93 @@
       },
       {
         "type": "action",
-        "description": "Fill in {{LOGIN_USER}} in the email field"
+        "description": "Fill in {{LOGIN_USER}} into the username field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
       },
       {
         "type": "action",
         "description": "Submit the login form"
       },
       {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Update a translation content field"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings again"
+      },
+      {
         "type": "assertion",
-        "description": "Verify a login validation error is visible"
+        "description": "Verify the saved translation content remains visible"
       }
     ],
-    "priority": "Low"
+    "priority": "Medium"
   },
   {
     "id": "TC018",
-    "title": "Prevent request submission with missing budget",
-    "description": "A guest cannot complete the custom request flow when the budget is left empty and a validation error is shown.",
-    "category": "Custom Car Request",
+    "title": "Admin updates a translation field with a different value",
+    "description": "An admin can replace translation content with a new value and confirm the dashboard reflects the change.",
+    "category": "Admin site management settings",
     "steps": [
       {
         "type": "action",
-        "description": "Navigate to /request.html"
+        "description": "Navigate to /login.html"
       },
       {
         "type": "action",
-        "description": "Fill in vehicle requirements in the requirements field"
+        "description": "Fill in {{LOGIN_USER}} into the username field"
       },
       {
         "type": "action",
-        "description": "Submit the custom request form"
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Replace one translation content value"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
       },
       {
         "type": "assertion",
-        "description": "Verify a budget validation error is visible"
+        "description": "Verify the revised translation setting is displayed"
       }
     ],
     "priority": "Low"
   },
   {
     "id": "TC019",
-    "title": "Stay on the login page after a failed sign in attempt",
-    "description": "A user who submits invalid admin credentials is not taken to the dashboard and sees login error feedback.",
-    "category": "Admin Login and Dashboard Access",
+    "title": "Admin can open the translation settings section after login",
+    "description": "An authenticated admin can reach the translation settings area from the dashboard and see the editable content controls.",
+    "category": "Admin site management settings",
     "steps": [
       {
         "type": "action",
@@ -501,11 +689,155 @@
       },
       {
         "type": "action",
-        "description": "Fill in fake credentials in the email field"
+        "description": "Fill in {{LOGIN_USER}} into the username field"
       },
       {
         "type": "action",
-        "description": "Fill in fake credentials in the password field"
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify editable translation content controls are visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC020",
+    "title": "Keep a deposit submission from proceeding with missing required details",
+    "description": "This test verifies that the deposit request form on the cart prevents submission when required details are missing and shows validation feedback.",
+    "category": "Deposit cart flow",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /inventory.html"
+      },
+      {
+        "type": "action",
+        "description": "Select a vehicle"
+      },
+      {
+        "type": "action",
+        "description": "Add the vehicle to the deposit cart"
+      },
+      {
+        "type": "action",
+        "description": "Open the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Submit the deposit request form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a deposit form validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart still shows the selected vehicle"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC021",
+    "title": "Admin sees saved translation changes in the settings list",
+    "description": "An admin can save translation updates and see them reflected in the translation settings list on the dashboard.",
+    "category": "Admin site management settings",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_USER}} into the username field"
+      },
+      {
+        "type": "action",
+        "description": "Fill in {{LOGIN_PASSWORD}} into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Submit the login form"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin.html"
+      },
+      {
+        "type": "action",
+        "description": "Open the site translation settings"
+      },
+      {
+        "type": "action",
+        "description": "Edit a translation content value"
+      },
+      {
+        "type": "action",
+        "description": "Save the changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the translation settings list shows the updated content"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC022",
+    "title": "Show validation when required form fields are left empty",
+    "description": "A visitor submitting the contact form or request form without required details sees validation feedback and no confirmation.",
+    "category": "Contact and custom request forms",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact.html"
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form without entering required details"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a validation error is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify an inquiry confirmation is not visible"
+      }
+    ],
+    "priority": "Low"
+  },
+  {
+    "id": "TC023",
+    "title": "Reject invalid login credentials",
+    "description": "A visitor entering invalid credentials is kept out of the protected dashboard and sees a sign-in failure state.",
+    "category": "Admin authentication and dashboard access",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login.html"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the email field with an invalid email value"
+      },
+      {
+        "type": "action",
+        "description": "Fill in the password field with an invalid password value"
       },
       {
         "type": "action",
@@ -517,32 +849,7 @@
       },
       {
         "type": "assertion",
-        "description": "Verify invalid login feedback is visible"
-      }
-    ],
-    "priority": "Low"
-  },
-  {
-    "id": "TC020",
-    "title": "Prevent request submission with missing requirements",
-    "description": "A guest cannot complete the custom request flow when requirements are omitted and a validation error is shown.",
-    "category": "Custom Car Request",
-    "steps": [
-      {
-        "type": "action",
-        "description": "Navigate to /request.html"
-      },
-      {
-        "type": "action",
-        "description": "Fill in a valid budget in the budget field"
-      },
-      {
-        "type": "action",
-        "description": "Submit the custom request form"
-      },
-      {
-        "type": "assertion",
-        "description": "Verify a requirements validation error is visible"
+        "description": "Verify a sign-in failure message is visible"
       }
     ],
     "priority": "Low"

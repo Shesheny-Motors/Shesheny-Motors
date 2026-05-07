@@ -1,26 +1,36 @@
 version: "2"
 type: frontend
 tech_stack:
-  - HTML/CSS/JavaScript
+  - HTML
+  - CSS
+  - JavaScript
   - TailwindCSS
   - Supabase
 routes:
-  - path: /
+  - path: /index.html
     file: index.html
     auth_required: false
     description: Home page
   - path: /inventory.html
     file: inventory.html
     auth_required: false
-    description: Car inventory listing
+    description: Vehicle inventory listing
   - path: /details.html
     file: details.html
     auth_required: false
-    description: Car details page
+    description: Vehicle details page
+  - path: /about.html
+    file: about.html
+    auth_required: false
+    description: About page
+  - path: /contact.html
+    file: contact.html
+    auth_required: false
+    description: Contact page
   - path: /login.html
     file: login.html
     auth_required: false
-    description: Login page
+    description: User login page
   - path: /admin.html
     file: admin.html
     auth_required: true
@@ -28,14 +38,18 @@ routes:
   - path: /cart.html
     file: cart.html
     auth_required: false
-    description: Shopping cart
+    description: Shopping cart page
+  - path: /favorites.html
+    file: favorites.html
+    auth_required: false
+    description: Favorites page
   - path: /request.html
     file: request.html
     auth_required: false
-    description: Custom car requests
+    description: Custom vehicle request form
 features:
-  - name: User Login
-    description: Admin login with credentials
+  - name: Authentication
+    description: Admin login with Supabase
     files:
       - login.html
       - js/auth.js
@@ -44,22 +58,38 @@ features:
       - Fill email input field
       - Fill password input field
       - Click Login button to submit
-    api_calls:
-      - method: POST
-        endpoint: /auth/v1/token
     auth_required: false
-  - name: View Inventory
-    description: Browse cars in inventory
+  - name: Admin Features
+    description: Manage vehicles, users, and site settings
+    files:
+      - admin.html
+    entry_route: /admin.html
+    user_interactions:
+      - View list of vehicles
+      - Add new vehicle
+      - Edit existing vehicle
+      - Delete vehicle
+      - Manage site translations
+    auth_required: true
+  - name: Client UI - Inventory Browsing
+    description: Browse and view vehicle details
     files:
       - inventory.html
-      - js/index.js
-      - js/dbCache.js
+      - details.html
     entry_route: /inventory.html
     user_interactions:
-      - Browse list of cars
-      - Filter cars
-    api_calls:
-      - method: GET
-        endpoint: /rest/v1/Products
+      - Filter inventory by make/model
+      - Click on a vehicle to view details
+      - View vehicle specifications
+    auth_required: false
+  - name: Client UI - Forms
+    description: Submit contact and custom request forms
+    files:
+      - contact.html
+      - request.html
+    entry_route: /contact.html
+    user_interactions:
+      - Fill form fields
+      - Submit form
     auth_required: false
 known_limitations: []

@@ -7,14 +7,13 @@
   "loginPassword": "Abdo//231204",
   "executionArgs": {
     "projectName": "Shesheny-Motors",
-    "projectPath": "c:\\Web projects\\Shesheini\\Shesheny-Motors",
+    "projectPath": "n:\\Web Devlopment\\Shesheny-Motors",
     "testIds": [],
     "additionalInstruction": "",
-    "serverMode": "development",
+    "serverMode": "production",
     "envs": {
-      "API_KEY": "sk-user--FRoBjfFj8q4zr60CD4Ua0xv6oz_0sPXh0nEmeYLQrhxk47dKYr7_SfyeqEbE8C_9AohplQCBWejRdoKCMXmxKXudLIpjV8xpdICOApI_oW8tAzN2JAFCBeuAJya1uPv9Uc"
+      "API_KEY": "sk-user-vJNiSVybmJ83SnEIZQ7a08tOalDGTFCT7C91Jf50_6PWiwnqfoxsep_E8oLb8WhRB8VQpW_kN9kyCgECvsI2hh7VxshYjV8TvqWQ4OYS6NOSylX72mnuPfzEfvVpHMafhZE"
     }
   },
-  "serverPort": 49486,
-  "proxy": "http://55f5c384-8460-48a1-a83f-9723fa255560:Vd0ifRlwJZZPWW5VJJzEgJiaa2r6HEMZ@tun.testsprite.com:8080"
+  "serverPort": 54782
 }
