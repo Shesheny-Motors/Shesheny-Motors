@@ -87,7 +87,19 @@
         "sign_in": "Sign In",
         "sign_out": "Sign Out",
         "price_upon_request": "Price Upon Request",
-        "sold_out": "SOLD"
+        "sold_out": "SOLD OUT",
+        "verified_subtitle": "The standard of uncompromised quality.",
+        "verified_card1_title": "Accident-Free Guarantee",
+        "verified_card1_text": "Every vehicle undergoes rigorous background checks to ensure pristine history.",
+        "verified_card2_title": "Full Inspection Report",
+        "verified_card2_text": "A comprehensive 150-point technical assessment detailing every mechanical aspect.",
+        "verified_card3_title": "Verified Condition Certified",
+        "verified_card3_text": "Interior and exterior aesthetics verified to meet our demanding atelier standards.",
+        "featured_title": "Featured Inventory",
+        "featured_view_all": "View All",
+        "cta_custom_title": "Can't find what you're looking for?",
+        "cta_custom_text": "Tell us exactly what you desire. Our global network allows us to source the rarest and most exclusive vehicles to meet your precise specifications.",
+        "cta_custom_btn": "Make a Custom Request"
     },
     "ar": {
         "nav_home": "الرئيسية",
@@ -177,6 +189,18 @@
         "sign_in": "تسجيل الدخول",
         "sign_out": "تسجيل الخروج",
         "price_upon_request": "السعر عند الطلب",
-        "sold_out": "تم البيع"
+        "sold_out": "نفذت الكمية",
+        "verified_subtitle": "المعيار الذي لا يقبل التنازل.",
+        "verified_card1_title": "ضمان خلو السيارة من الحوادث",
+        "verified_card1_text": "تخضع كل سيارة لفحوصات خلفية صارمة لضمان تاريخ نظيف.",
+        "verified_card2_title": "تقرير فحص شامل",
+        "verified_card2_text": "تقييم تقني شامل من 150 نقطة يوضح كل جانب ميكانيكي.",
+        "verified_card3_title": "حالة موثقة ومعتمدة",
+        "verified_card3_text": "يتم التحقق من الجماليات الداخلية والخارجية لتلبية معاييرنا الصارمة.",
+        "featured_title": "السيارات المميزة",
+        "featured_view_all": "عرض الكل",
+        "cta_custom_title": "لم تجد ما تبحث عنه؟",
+        "cta_custom_text": "أخبرنا بما تريده بالضبط. تتيح لنا شبكتنا العالمية الحصول على أندر السيارات وأحدثها لتلبية مواصفاتك الدقيقة.",
+        "cta_custom_btn": "قدّم طلبًا خاصًا"
     }
 }

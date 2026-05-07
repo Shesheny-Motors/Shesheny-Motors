@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.settingsData = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
         }
 
-        const {data} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
+        const {data} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*').order('order_explore', { ascending: true }));
         const {data: brandsData} = await window.DbCache.fetch('brands', () => window.supabaseClient.from('brands').select('*'));
         const {data: categoriesData} = await window.DbCache.fetch('categories', () => window.supabaseClient.from('categories').select('*'));
         if(brandsData) window.allBrands = brandsData;

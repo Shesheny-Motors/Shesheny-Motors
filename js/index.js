@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // 2. Load Featured Inventory
-        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
+        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*').order('order_spotlight', { ascending: true }));
         if(vehicles) {
             const featured = vehicles.filter(v => v.is_spotlight).slice(0, 3);
             renderFeatured(featured);
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 document.addEventListener('languageChanged', async (e) => {
     if(window.DbCache && window.supabaseClient) {
-        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
+        const {data: vehicles} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*').order('order_spotlight', { ascending: true }));
         if(vehicles) {
             const featured = vehicles.filter(v => v.is_spotlight).slice(0, 3);
             renderFeatured(featured);

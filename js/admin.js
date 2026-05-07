@@ -383,6 +383,8 @@ async function handleSaveOrder() {
         const p = currentProducts[index];
         await window.productsDb.updateOrder(p.id, type, index);
     }
+    // Also bust the frontend localStorage cache so order is reflected immediately
+    localStorage.removeItem('db_cache_products');
     showToast("Order saved successfully!");
     isOrderChanged = false;
     updateSaveOrderBtnVisibility();
