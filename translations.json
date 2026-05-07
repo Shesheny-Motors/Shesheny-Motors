@@ -116,7 +116,22 @@
         "contact_placeholder_last": "Last Name",
         "contact_placeholder_email": "Email Address",
         "contact_placeholder_phone": "Phone Number",
-        "contact_placeholder_message": "Your Message"
+        "contact_placeholder_message": "Your Message",
+        "request_name": "Name",
+        "request_phone": "Phone",
+        "request_email": "Email Address",
+        "request_car_label": "Desired Car (Make & Model)",
+        "request_budget_label": "Estimated Budget (Optional)",
+        "request_details_label": "Additional Details / Message",
+        "request_submit": "Submit Request",
+        "request_success": "Your request has been successfully submitted! Our team will contact you soon.",
+        "request_error": "There was an error submitting your request. Please try again.",
+        "placeholder_name": "Enter your full name",
+        "placeholder_phone": "Enter your phone number",
+        "placeholder_email": "Enter your email address",
+        "placeholder_car": "e.g. 2024 Mercedes G63 AMG",
+        "placeholder_budget": "e.g. 15,000,000 EGP",
+        "placeholder_message": "Tell us more about what you're looking for..."
     },
     "ar": {
         "nav_home": "الرئيسية",
@@ -235,6 +250,21 @@
         "contact_placeholder_last": "اسم العائلة",
         "contact_placeholder_email": "البريد الإلكتروني",
         "contact_placeholder_phone": "رقم الهاتف",
-        "contact_placeholder_message": "رسالتك"
+        "contact_placeholder_message": "رسالتك",
+        "request_name": "الاسم",
+        "request_phone": "رقم الهاتف",
+        "request_email": "البريد الإلكتروني",
+        "request_car_label": "السيارة المطلوبة (النوع والموديل)",
+        "request_budget_label": "الميزانية المتوقعة (اختياري)",
+        "request_details_label": "تفاصيل إضافية / الرسالة",
+        "request_submit": "إرسال الطلب",
+        "request_success": "تم تقديم طلبك بنجاح! سيتواصل معك فريقنا قريبًا.",
+        "request_error": "حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى.",
+        "placeholder_name": "أدخل اسمك الكامل",
+        "placeholder_phone": "أدخل رقم هاتفك",
+        "placeholder_email": "أدخل بريدك الإلكتروني",
+        "placeholder_car": "مثال: مرسيدس G63 AMG موديل 2024",
+        "placeholder_budget": "مثال: 15,000,000 جنيه مصري",
+        "placeholder_message": "أخبرنا المزيد عما تبحث عنه..."
     }
 }
