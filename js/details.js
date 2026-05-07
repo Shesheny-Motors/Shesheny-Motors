@@ -96,6 +96,30 @@ function renderVehicleDetails() {
 
     updatePriceDisplay();
 
+    // Apply sold-out visual treatment
+    if (currentVehicle.is_sold_out) {
+        // Grayscale main hero image
+        const heroImg = document.getElementById('detail-hero-img');
+        if (heroImg) heroImg.classList.add('grayscale');
+
+        // Add sold-out banner if not already present
+        if (!document.getElementById('sold-out-banner')) {
+            const soldOutLabel = isAr ? 'نفذت الكمية' : 'SOLD OUT';
+            const banner = document.createElement('div');
+            banner.id = 'sold-out-banner';
+            banner.className = 'w-full py-3 px-6 bg-red-950/60 border border-red-800/50 text-red-400 font-bold text-center uppercase tracking-widest text-sm backdrop-blur-sm';
+            banner.textContent = `⛔ ${soldOutLabel} — This vehicle is no longer available for purchase`;
+            const titleEl = document.getElementById('detail-title');
+            if (titleEl && titleEl.parentElement) {
+                titleEl.parentElement.insertBefore(banner, titleEl);
+            }
+        }
+
+        // Strike-through price
+        const priceEl = document.getElementById('detail-price');
+        if (priceEl) priceEl.classList.add('line-through', 'text-zinc-500');
+    }
+
     if(currentVehicle.diagnostics_url) {
         const videoContainer = document.getElementById('video-container');
         videoContainer.classList.remove('hidden');
@@ -215,7 +239,10 @@ async function setupDepositModal() {
         }
 
         if (currentVehicle.is_sold_out || depositStatus === 'approved') {
-            btnDeposit.textContent = "Deposit Accepted";
+            const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
+            btnDeposit.textContent = currentVehicle.is_sold_out
+                ? (isAr ? 'نفذت الكمية' : 'Sold Out')
+                : (isAr ? 'تم قبول العربون' : 'Deposit Accepted');
             btnDeposit.classList.add("opacity-50", "cursor-not-allowed");
             btnDeposit.classList.remove("hover:bg-gray-200");
             btnDeposit.disabled = true;

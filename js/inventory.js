@@ -191,34 +191,46 @@ function renderGrid(vehicles) {
         return;
     }
 
+    const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
+
     grid.innerHTML = vehicles.map(v => {
+        const isSoldOut = !!v.is_sold_out;
         const isUsd = window.I18n ? window.I18n.currency === 'USD' : (localStorage.getItem('site_currency') === 'USD');
         const exchangeRate = window.I18n?.exchangeRate || window.settingsData?.exchange_rate || 50;
         const priceUsd = v.price_egp / exchangeRate;
-        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${Math.round(priceUsd).toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
-        
-        // Check cart
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        const inCart = cart.includes(v.id);
-        const cartIcon = inCart ? 'remove_shopping_cart' : 'add_shopping_cart';
+        const priceStr = v.is_upon_request
+            ? (isAr ? 'عند الطلب' : 'Upon Request')
+            : (window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${Math.round(priceUsd).toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`));
 
-        const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
+        // Check cart (only relevant for non-sold-out)
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const inCart = !isSoldOut && cart.includes(v.id);
+        const cartIcon = inCart ? 'remove_shopping_cart' : 'add_shopping_cart';
         const vName = (isAr && v.name_ar) ? v.name_ar : v.name;
+        const soldOutLabel = isAr ? 'نفذت الكمية' : 'SOLD OUT';
 
         return `
-        <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative">
-            <button class="cart-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}" title="${inCart ? 'Remove from Cart' : 'Add to Cart'}">
-                <span class="material-symbols-outlined">${cartIcon}</span>
-            </button>
-            <div class="w-full aspect-[16/9] overflow-hidden relative ${v.is_sold_out ? 'group-hover:[&>img]:grayscale-0' : ''}">
-                <img alt="${vName}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ease-out ${v.is_sold_out ? 'grayscale' : ''}" src="${optimizeImage(v.image_url, 800)}" />
-                ${v.is_sold_out ? '<div class="absolute inset-0 flex items-center justify-center z-10 bg-black/40"><span class="text-red-600 font-bold border-4 border-red-600 rounded px-6 py-2 transform -rotate-12 text-3xl uppercase tracking-widest bg-black/50 shadow-2xl backdrop-blur-sm">Sold Out</span></div>' : ''}
+        <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative${isSoldOut ? ' opacity-75' : ''}">
+            ${isSoldOut
+                ? `<div class="absolute top-4 right-4 z-10 w-10 h-10 bg-surface/30 backdrop-blur-md rounded-full flex items-center justify-center text-zinc-500 cursor-not-allowed">
+                    <span class="material-symbols-outlined">remove_shopping_cart</span>
+                   </div>`
+                : `<button class="cart-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}" title="${inCart ? 'Remove from Cart' : 'Add to Cart'}">
+                    <span class="material-symbols-outlined">${cartIcon}</span>
+                   </button>`
+            }
+            <div class="w-full aspect-[16/9] overflow-hidden relative">
+                <img alt="${vName}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ease-out${isSoldOut ? ' grayscale' : ''}" src="${optimizeImage(v.image_url, 800)}" />
+                ${isSoldOut ? `
+                <div class="absolute inset-0 flex items-center justify-center z-10 bg-black/40 pointer-events-none">
+                    <span class="text-red-500 font-extrabold border-4 border-red-500 rounded px-6 py-2 transform -rotate-12 text-3xl uppercase tracking-widest bg-black/60 shadow-2xl backdrop-blur-sm select-none" style="text-shadow:0 0 12px rgba(0,0,0,0.8)">${soldOutLabel}</span>
+                </div>` : ''}
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-2xl font-serif text-on-surface">${vName}</h3>
-                        <span class="text-xl font-serif text-primary">${priceStr}</span>
+                        <span class="text-xl font-serif${isSoldOut ? ' text-zinc-500 line-through' : ' text-primary'}">${priceStr}</span>
                     </div>
                 </div>
                 <!-- Specs Blade Mini -->
@@ -238,14 +250,19 @@ function renderGrid(vehicles) {
                         <span class="text-on-surface font-medium">${v.transmission || '-'}</span>
                     </div>
                 </div>
-                <a href="details.html?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
-                    View Details
-                </a>
+                ${isSoldOut
+                    ? `<div class="w-full py-3 border border-red-900/40 text-red-500/70 font-body text-sm font-semibold rounded tracking-wider text-center cursor-not-allowed select-none bg-red-950/20 uppercase">
+                        ${soldOutLabel}
+                       </div>`
+                    : `<a href="details.html?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
+                        View Details
+                       </a>`
+                }
             </div>
         </article>
     `}).join('');
 
-    // Attach cart listener
+    // Attach cart listener (only for non-sold-out buttons)
     document.querySelectorAll('.cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const id = parseInt(e.currentTarget.getAttribute('data-id'));
