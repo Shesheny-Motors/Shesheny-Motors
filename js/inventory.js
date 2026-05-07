@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.settingsData = settingsData.reduce((acc, row) => ({...acc, [row.key]: row.value}), {});
         }
 
-        const {data} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*').eq('is_sold_out', false));
+        const {data} = await window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*'));
         const {data: brandsData} = await window.DbCache.fetch('brands', () => window.supabaseClient.from('brands').select('*'));
         const {data: categoriesData} = await window.DbCache.fetch('categories', () => window.supabaseClient.from('categories').select('*'));
         if(brandsData) window.allBrands = brandsData;
@@ -38,6 +38,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 2. Setup Filter Listeners
     document.getElementById('filter-category').addEventListener('change', applyFilters);
     document.getElementById('filter-brand').addEventListener('change', applyFilters);
+});
+
+document.addEventListener('languageChanged', (e) => {
+    if(allVehicles.length > 0) {
+        populateFilters(allVehicles);
+        renderGrid(currentVehicles);
+    }
 });
 
 document.addEventListener('currencyChanged', (e) => {

@@ -146,17 +146,10 @@ class HeaderComponent extends HTMLElement {
 class FooterComponent extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-            <footer class="w-full border-t border-zinc-800/20 bg-zinc-950 grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 relative z-10">
+            <footer class="w-full border-t border-zinc-800/20 bg-zinc-950 grid grid-cols-1 md:grid-cols-3 gap-12 px-12 py-20 relative z-10">
                 <div>
                     <div class="text-lg font-headline italic text-amber-200/50 mb-6">Shesheny Motors</div>
                     <p class="font-body text-zinc-500 text-sm" data-i18n="footer_copyright">© 2024 Shesheny Motors. Private Gallery.</p>
-                </div>
-                <div>
-                    <h4 class="font-headline text-amber-200 mb-6" data-i18n="footer_legal">Legal</h4>
-                    <ul class="space-y-3 font-body text-sm">
-                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="#" data-i18n="footer_privacy">Privacy Policy</a></li>
-                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="#" data-i18n="footer_terms">Terms of Service</a></li>
-                    </ul>
                 </div>
                 <div>
                     <h4 class="font-headline text-amber-200 mb-6" data-i18n="footer_contact">Contact</h4>

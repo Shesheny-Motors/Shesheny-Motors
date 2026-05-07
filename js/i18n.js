@@ -85,6 +85,7 @@ class I18nManager {
             this.lang = this.lang === 'en' ? 'ar' : 'en';
             localStorage.setItem('site_lang', this.lang);
             this.applyLanguage();
+            document.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: this.lang } }));
         };
 
         const handleCurrency = () => {
@@ -113,9 +114,9 @@ class I18nManager {
         if (!priceEgp && !priceUsd) return '';
         if(this.currency === 'USD') {
             const usd = priceUsd || Math.round(priceEgp / this.exchangeRate);
-            return '$' + Number(usd).toLocaleString();
+            return '$' + Number(Math.round(usd)).toLocaleString('en-US', {maximumFractionDigits: 0});
         } else {
-            return Number(priceEgp).toLocaleString() + ' EGP';
+            return Number(Math.round(priceEgp)).toLocaleString('en-US', {maximumFractionDigits: 0}) + ' EGP';
         }
     }
 
