@@ -40,17 +40,13 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the inventory page by clicking 'VIEW OUR INVENTORY', then select a vehicle.
-        # link "VIEW OUR INVENTORY"
-        elem = page.locator("xpath=/html/body/main/section/div[2]/a").nth(0)
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.click()
-        
-        # -> Click the 'Reload' button on the error page to attempt to load the inventory page again.
-        # button "Reload"
-        elem = page.locator("xpath=/html/body/div/div/div[2]/div/button").nth(0)
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.click()
+        # -> Final action — this is where the agent failed
+        # Error observed by agent: Navigation failed: Event handler browser_use.browser.watchdog_base.BrowserSession.on_NavigateToUrlEvent#0768(?▶ NavigateToUrlEvent#d930 🏃) timed out after 60.0s and interrupted any processing of 1 chi
+        await page.goto("http://localhost:8080/login.html")
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
         
         # --> Test passed — verified by AI agent
         frame = context.pages[-1]

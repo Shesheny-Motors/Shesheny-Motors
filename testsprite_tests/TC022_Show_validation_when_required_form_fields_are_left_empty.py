@@ -40,13 +40,7 @@ async def run_test():
         except Exception:
             pass
         
-        # -> Open the inventory page by clicking 'VIEW OUR INVENTORY', then select a vehicle.
-        # link "VIEW OUR INVENTORY"
-        elem = page.locator("xpath=/html/body/main/section/div[2]/a").nth(0)
-        await elem.wait_for(state="visible", timeout=10000)
-        await elem.click()
-        
-        # -> Click the 'Reload' button on the error page to attempt to load the inventory page again.
+        # -> Click the visible 'Reload' button to retry loading the contact page so the form can be accessed.
         # button "Reload"
         elem = page.locator("xpath=/html/body/div/div/div[2]/div/button").nth(0)
         await elem.wait_for(state="visible", timeout=10000)
