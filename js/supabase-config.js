@@ -21,7 +21,7 @@ if (typeof window.supabase !== "undefined") {
         auth: {
           persistSession: true,
           storageKey: "legend-admin-auth",
-          storage: window.sessionStorage,
+          storage: window.localStorage,
         },
       },
     );

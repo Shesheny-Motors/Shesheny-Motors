@@ -72,7 +72,7 @@ document.addEventListener('languageChanged', (e) => {
 });
 
 function renderVehicleDetails() {
-    const isAr = window.I18n ? window.I18n.language === 'ar' : false;
+    const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
     document.getElementById('detail-title').textContent = (isAr && currentVehicle.name_ar) ? currentVehicle.name_ar : currentVehicle.name;
     document.getElementById('detail-year').textContent = currentVehicle.version || '-';
     

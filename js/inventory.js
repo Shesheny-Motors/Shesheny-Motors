@@ -55,9 +55,11 @@ function populateFilters(vehicles) {
 
     const categorySelect = document.getElementById('filter-category');
     categorySelect.innerHTML = '<option value="" style="background:#353534;color:#e5e2e1;">All Types</option>';
+    const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
     if (Array.isArray(categories) && categories.length > 0 && typeof categories[0] === 'object') {
         categories.forEach(c => {
-            const opt = new Option(c.name, c.name);
+            const catName = (isAr && c.name_ar) ? c.name_ar : c.name;
+            const opt = new Option(catName, c.name);
             opt.style.background = '#353534';
             opt.style.color = '#e5e2e1';
             categorySelect.add(opt);
@@ -193,19 +195,22 @@ function renderGrid(vehicles) {
         const inCart = cart.includes(v.id);
         const cartIcon = inCart ? 'remove_shopping_cart' : 'add_shopping_cart';
 
+        const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
+        const vName = (isAr && v.name_ar) ? v.name_ar : v.name;
+
         return `
         <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative">
             <button class="cart-btn absolute top-4 right-4 z-10 w-10 h-10 bg-surface/50 backdrop-blur-md rounded-full flex items-center justify-center text-primary hover:scale-110 transition-transform" data-id="${v.id}" title="${inCart ? 'Remove from Cart' : 'Add to Cart'}">
                 <span class="material-symbols-outlined">${cartIcon}</span>
             </button>
             <div class="w-full aspect-[16/9] overflow-hidden relative ${v.is_sold_out ? 'group-hover:[&>img]:grayscale-0' : ''}">
-                <img alt="${v.name}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ease-out ${v.is_sold_out ? 'grayscale' : ''}" src="${optimizeImage(v.image_url, 800)}" />
+                <img alt="${vName}" class="w-full h-full object-cover transform group-hover:scale-[1.03] transition-all duration-700 ease-out ${v.is_sold_out ? 'grayscale' : ''}" src="${optimizeImage(v.image_url, 800)}" />
                 ${v.is_sold_out ? '<div class="absolute inset-0 flex items-center justify-center z-10 bg-black/40"><span class="text-red-600 font-bold border-4 border-red-600 rounded px-6 py-2 transform -rotate-12 text-3xl uppercase tracking-widest bg-black/50 shadow-2xl backdrop-blur-sm">Sold Out</span></div>' : ''}
             </div>
             <div class="p-8 flex flex-col flex-grow justify-between">
                 <div>
                     <div class="flex justify-between items-start mb-2">
-                        <h3 class="text-2xl font-serif text-on-surface">${v.name}</h3>
+                        <h3 class="text-2xl font-serif text-on-surface">${vName}</h3>
                         <span class="text-xl font-serif text-primary">${priceStr}</span>
                     </div>
                 </div>
