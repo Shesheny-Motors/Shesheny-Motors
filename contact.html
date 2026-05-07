@@ -123,7 +123,7 @@
 <div class="absolute inset-0 z-10 bg-gradient-to-t from-surface to-transparent"></div>
 <div class="relative z-20 text-center px-6 max-w-4xl mx-auto">
 <h1 class="text-5xl md:text-7xl font-headline text-on-surface mb-6 tracking-tight" data-i18n="contact_title">CONTACT US &amp; LOCATION</h1>
-<p class="text-lg md:text-xl text-on-surface-variant font-body font-light max-w-2xl mx-auto">
+<p class="text-lg md:text-xl text-on-surface-variant font-body font-light max-w-2xl mx-auto" data-i18n="contact_hero_desc">
                     Arrange a private viewing or inquire about bespoke commissions. Our atelier awaits your correspondence.
                 </p>
 </div>
@@ -137,40 +137,40 @@
 <form id="contact-form" class="space-y-8">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="relative">
-<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="firstName" name="firstName" placeholder="First Name" type="text"/>
-<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="firstName">First Name</label>
+<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="firstName" name="firstName" placeholder="First Name" type="text" data-i18n="contact_placeholder_first"/>
+<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="firstName" data-i18n="contact_first_name">First Name</label>
 </div>
 <div class="relative">
-<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="lastName" name="lastName" placeholder="Last Name" type="text"/>
-<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="lastName">Last Name</label>
+<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="lastName" name="lastName" placeholder="Last Name" type="text" data-i18n="contact_placeholder_last"/>
+<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="lastName" data-i18n="contact_last_name">Last Name</label>
 </div>
 </div>
 <div class="relative">
-<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="email" name="email" placeholder="Email Address" type="email"/>
-<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="email">Email Address</label>
+<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="email" name="email" placeholder="Email Address" type="email" data-i18n="contact_placeholder_email"/>
+<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="email" data-i18n="contact_email">Email Address</label>
 </div>
 <div class="relative">
-<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="phone" name="phone" placeholder="Phone Number" type="tel"/>
-<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="phone">Phone Number</label>
+<input class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent" id="phone" name="phone" placeholder="Phone Number" type="tel" data-i18n="contact_placeholder_phone"/>
+<label class="absolute left-0 -top-3.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-3 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-primary" for="phone" data-i18n="contact_phone">Phone Number</label>
 </div>
 <div class="relative">
 <select class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 appearance-none" id="inquiryType" name="inquiryType">
-<option class="text-on-surface-variant" disabled="" selected="" value="">Select Inquiry Type</option>
-<option value="viewing">Arrange Private Viewing</option>
-<option value="commission">Bespoke Commission</option>
-<option value="restoration">Service &amp; Restoration</option>
-<option value="general">General Inquiry</option>
+<option class="text-on-surface-variant" disabled="" selected="" value="" data-i18n="contact_inquiry_placeholder">Select Inquiry Type</option>
+<option value="viewing" data-i18n="contact_inquiry_viewing">Arrange Private Viewing</option>
+<option value="commission" data-i18n="contact_inquiry_commission">Bespoke Commission</option>
+<option value="restoration" data-i18n="contact_inquiry_restoration">Service &amp; Restoration</option>
+<option value="general" data-i18n="contact_inquiry_general">General Inquiry</option>
 </select>
 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center text-outline-variant">
 <span class="material-symbols-outlined text-sm">expand_more</span>
 </div>
 </div>
 <div class="relative pt-4">
-<textarea class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent resize-none" id="message" name="message" placeholder="Your Message" rows="4"></textarea>
-<label class="absolute left-0 -top-0.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-7 peer-focus:-top-0.5 peer-focus:text-xs peer-focus:text-primary" for="message">Your Message</label>
+<textarea class="peer w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant text-on-surface text-sm focus:ring-0 focus:border-primary px-0 py-3 transition-colors duration-300 placeholder-transparent resize-none" id="message" name="message" placeholder="Your Message" rows="4" data-i18n="contact_placeholder_message"></textarea>
+<label class="absolute left-0 -top-0.5 text-on-surface-variant text-xs transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:top-7 peer-focus:-top-0.5 peer-focus:text-xs peer-focus:text-primary" for="message" data-i18n="contact_message">Your Message</label>
 </div>
 <div class="pt-6">
-<button class="w-full sm:w-auto px-10 py-4 bg-gradient-primary text-on-primary font-medium text-sm tracking-wide rounded hover:scale-[1.02] transition-transform duration-200 ease-in-out shadow-ambient" type="submit">
+<button class="w-full sm:w-auto px-10 py-4 bg-gradient-primary text-on-primary font-medium text-sm tracking-wide rounded hover:scale-[1.02] transition-transform duration-200 ease-in-out shadow-ambient" type="submit" data-i18n="contact_send">
                                 SEND MESSAGE
                             </button>
 </div>

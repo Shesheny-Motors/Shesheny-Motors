@@ -50,12 +50,16 @@ class I18nManager {
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (this.translations[this.lang] && this.translations[this.lang][key]) {
-                if(el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    el.placeholder = this.translations[this.lang][key];
-                } else {
-                    el.innerHTML = this.translations[this.lang][key];
-                }
+            const val = this.translations[this.lang]?.[key];
+            if (!val) return;
+
+            const tag = el.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA') {
+                el.placeholder = val;
+            } else if (tag === 'OPTION') {
+                el.textContent = val;
+            } else {
+                el.innerHTML = val;
             }
         });
 

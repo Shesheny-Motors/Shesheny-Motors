@@ -33,7 +33,7 @@ class HeaderComponent extends HTMLElement {
                             <span class="material-symbols-outlined">menu</span>
                         </button>
                         <div id="desktop-auth-area" class="hidden md:block">
-                            <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="login.html">Sign In</a>
+                            <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="login.html" data-i18n="sign_in">Sign In</a>
                         </div>
                     </div>
                 </div>
