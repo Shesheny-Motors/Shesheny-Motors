@@ -1,5 +1,5 @@
 // sw.js - Service Worker for aggressive image caching
-const CACHE_NAME = 'shesheny-storage-cache-v1';
+const CACHE_NAME = 'Shesheny-storage-cache-v1';
 // Regex to match Supabase storage URLs (or mock googleusercontent URLs used in the mock data)
 const STORAGE_REGEX = /(supabase\.co\/storage\/v1\/object\/public|lh3\.googleusercontent\.com)/;
 

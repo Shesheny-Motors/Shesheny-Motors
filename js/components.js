@@ -221,8 +221,8 @@ class FooterComponent extends HTMLElement {
     }
 }
 
-customElements.define('shesheny-header', HeaderComponent);
-customElements.define('shesheny-footer', FooterComponent);
+customElements.define('Shesheny-header', HeaderComponent);
+customElements.define('Shesheny-footer', FooterComponent);
 
 // Global Service Worker Registration
 if ('serviceWorker' in navigator) {
