@@ -47,14 +47,6 @@ document.addEventListener('languageChanged', (e) => {
     }
 });
 
-document.addEventListener('currencyChanged', (e) => {
-    // Re-evaluate slider min/max based on currency
-    if(allVehicles.length > 0) {
-        updatePriceSliderLimits();
-        // Use currentVehicles to maintain active filters when switching currency
-        renderGrid(currentVehicles); 
-    }
-});
 
 function populateFilters(vehicles) {
     const brands = window.allBrands || [];
@@ -144,9 +136,7 @@ function populateFilters(vehicles) {
 function updatePriceSliderLimits() {
     if(allVehicles.length === 0) return;
 
-    const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-    const exchangeRate = window.settingsData?.exchange_rate || 50;
-    const maxPrice = Math.max(...allVehicles.map(v => isUsd ? (v.price_egp / exchangeRate) : v.price_egp));
+    const maxPrice = Math.max(...allVehicles.map(v => v.price_egp));
     
     const slider = document.getElementById('filter-price');
     if (slider) {
@@ -159,8 +149,7 @@ function updatePriceSliderLimits() {
 function updatePriceDisplay(val) {
     const display = document.getElementById('price-display');
     if (display) {
-        const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-        display.textContent = window.I18n ? window.I18n.formatPrice(val, val) : (isUsd ? `$${val}` : `${val} EGP`);
+        display.textContent = window.I18n ? window.I18n.formatPrice(val) : `${val} EGP`;
     }
 }
 
@@ -195,12 +184,9 @@ function renderGrid(vehicles) {
 
     grid.innerHTML = vehicles.map(v => {
         const isSoldOut = !!v.is_sold_out;
-        const isUsd = window.I18n ? window.I18n.currency === 'USD' : (localStorage.getItem('site_currency') === 'USD');
-        const exchangeRate = window.I18n?.exchangeRate || window.settingsData?.exchange_rate || 50;
-        const priceUsd = v.price_egp / exchangeRate;
         const priceStr = v.is_upon_request
             ? (isAr ? 'عند الطلب' : 'Upon Request')
-            : (window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${Math.round(priceUsd).toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`));
+            : (window.I18n ? window.I18n.formatPrice(v.price_egp) : `${v.price_egp.toLocaleString()} EGP`);
 
         // Check cart (only relevant for non-sold-out)
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');

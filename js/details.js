@@ -59,11 +59,6 @@ function showToast(msg, type = "success") {
     }, 3000);
 }
 
-document.addEventListener('currencyChanged', (e) => {
-    if(currentVehicle) {
-        updatePriceDisplay();
-    }
-});
 
 document.addEventListener('languageChanged', (e) => {
     if(currentVehicle) {
@@ -136,10 +131,7 @@ function renderVehicleDetails() {
 
 function updatePriceDisplay() {
     const priceEl = document.getElementById('detail-price');
-    const isUsd = window.I18n ? window.I18n.currency === 'USD' : (localStorage.getItem('site_currency') === 'USD');
-    const exchangeRate = window.I18n?.exchangeRate || window.settingsData?.exchange_rate || 50;
-    const priceUsd = currentVehicle.price_egp / exchangeRate;
-    const priceStr = window.I18n ? window.I18n.formatPrice(currentVehicle.price_egp, priceUsd) : (isUsd ? `$${Math.round(priceUsd).toLocaleString()}` : `${currentVehicle.price_egp.toLocaleString()} EGP`);
+    const priceStr = window.I18n ? window.I18n.formatPrice(currentVehicle.price_egp) : `${currentVehicle.price_egp.toLocaleString()} EGP`;
     priceEl.textContent = priceStr;
 }
 

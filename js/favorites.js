@@ -14,14 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-document.addEventListener('currencyChanged', (e) => {
-    // Re-render to show new currency
-    if(window.DbCache && window.supabaseClient) {
-        window.DbCache.fetch('products', () => window.supabaseClient.from('products').select('*')).then(({data}) => {
-            if(data) renderFavorites(data);
-        });
-    }
-});
 
 function renderFavorites(allVehicles) {
     const grid = document.getElementById('favorites-grid');
@@ -37,10 +29,7 @@ function renderFavorites(allVehicles) {
     }
 
     grid.innerHTML = favVehicles.map(v => {
-        const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-        const exchangeRate = window.settingsData?.exchange_rate || 50;
-        const priceUsd = v.price_egp / exchangeRate;
-        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
+        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp) : `${v.price_egp.toLocaleString()} EGP`;
 
         return `
         <article class="bg-surface-container-high rounded flex flex-col overflow-hidden group hover:bg-surface-container-highest transition-colors duration-300 border border-outline-variant/10 relative">

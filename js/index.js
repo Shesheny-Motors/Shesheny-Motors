@@ -45,10 +45,6 @@ document.addEventListener('languageChanged', async (e) => {
     }
 });
 
-document.addEventListener('currencyChanged', (e) => {
-    // Re-render featured prices if we were displaying them on cards 
-    // Currently index doesn't show prices, but if it did, we'd handle it here.
-});
 
 function renderFeatured(vehicles) {
     const grid = document.getElementById('featured-grid');
