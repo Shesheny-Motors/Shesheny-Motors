@@ -91,3 +91,23 @@ select:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
 }
+
+/* Lightbox */
+#lightbox {
+  animation: lightbox-fade-in 0.2s ease-out;
+}
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+#lightbox-img {
+  animation: lightbox-zoom-in 0.2s ease-out;
+}
+@keyframes lightbox-zoom-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

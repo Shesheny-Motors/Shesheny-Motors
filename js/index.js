@@ -72,7 +72,7 @@ function renderFeatured(vehicles) {
                     <div class="flex flex-col"><span class="text-outline mb-1" data-i18n="details_trans">Trans</span> ${v.transmission || '-'}</div>
                     <div class="flex flex-col"><span class="text-outline mb-1" data-i18n="details_hp">Fuel</span> ${v.fuel_type || '-'}</div>
                 </div>
-                <a href="details.html?id=${v.id}" class="block w-full py-3 border border-outline/30 text-primary hover:bg-surface-container-highest transition-colors duration-200 font-label text-sm uppercase tracking-wider rounded text-center" data-i18n="btn_details">View Details</a>
+                <a href="/details/?id=${v.id}" class="block w-full py-3 border border-outline/30 text-primary hover:bg-surface-container-highest transition-colors duration-200 font-label text-sm uppercase tracking-wider rounded text-center" data-i18n="btn_details">View Details</a>
             </div>
         </div>
         `;

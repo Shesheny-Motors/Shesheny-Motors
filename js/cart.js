@@ -56,7 +56,7 @@ function renderCart(products, depositIds) {
                     <span class="text-lg font-serif text-primary">${priceStr}</span>
                 </div>
                 
-                <a href="details.html?id=${v.id}" class="w-full py-2 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
+                <a href="/details/?id=${v.id}" class="w-full py-2 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
                     View Details
                 </a>
             </div>

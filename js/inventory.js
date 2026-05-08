@@ -254,7 +254,7 @@ function renderGrid(vehicles) {
                     ? `<div class="w-full py-3 border border-red-900/40 text-red-500/70 font-body text-sm font-semibold rounded tracking-wider text-center cursor-not-allowed select-none bg-red-950/20 uppercase">
                         ${soldOutLabel}
                        </div>`
-                    : `<a href="details.html?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
+                    : `<a href="/details/?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
                         View Details
                        </a>`
                 }

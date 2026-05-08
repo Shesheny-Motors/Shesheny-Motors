@@ -74,7 +74,7 @@ function renderFavorites(allVehicles) {
                         <span class="text-on-surface font-medium">${v.transmission || '-'}</span>
                     </div>
                 </div>
-                <a href="details.html?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
+                <a href="/details/?id=${v.id}" class="w-full py-3 border border-outline/30 text-primary font-body text-sm font-medium hover:bg-surface-container-lowest transition-colors duration-200 rounded tracking-wide block text-center" data-i18n="btn_details">
                     View Details
                 </a>
             </div>

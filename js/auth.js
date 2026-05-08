@@ -21,7 +21,7 @@ window.SheshenyAuth = (() => {
 
     async function signInWithGoogle() {
         const params = new URLSearchParams(window.location.search);
-        const redirect = params.get('redirect') || 'index.html';
+        const redirect = params.get('redirect') || '/';
         
         // Construct the full redirect path
         const directory = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
@@ -97,7 +97,7 @@ window.SheshenyAuth = (() => {
 
         if (!desktopAuthArea) return;
 
-        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const currentPath = window.location.pathname;
         const currentSearch = window.location.search;
         const redirectParam = encodeURIComponent(currentPath + currentSearch);
 
@@ -185,13 +185,13 @@ window.SheshenyAuth = (() => {
             }
         } else {
             desktopAuthArea.innerHTML = `
-                <a href="login.html?redirect=${redirectParam}" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm">
+                <a href="/login/?redirect=${redirectParam}" class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm">
                     Sign In
                 </a>
             `;
             if (mobileAuthArea) {
                 mobileAuthArea.innerHTML = `
-                    <a href="login.html?redirect=${redirectParam}" class="text-2xl font-headline text-amber-200">Sign In</a>
+                    <a href="/login/?redirect=${redirectParam}" class="text-2xl font-headline text-amber-200">Sign In</a>
                 `;
             }
         }

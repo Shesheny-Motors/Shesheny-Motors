@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+    <link rel="preconnect" href="https://pxawiulologsydofnipi.supabase.co" crossorigin>
+    <link rel="dns-prefetch" href="https://pxawiulologsydofnipi.supabase.co">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Special Events | Shesheny Motors</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: 'var(--color-primary, #c7a230)',
+              "on-primary": "#ffffff",
+              background: "#131313",
+              "surface-card": "#1c1b1b",
+              "outline-variant": "rgba(224, 220, 213, 0.15)",
+            },
+            fontFamily: {
+              headline: ["Manrope", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/png" href="../img/logo.png">
+    <style>
+        body { background-color: #131313; color: #e5e2e1; }
+        .admin-card {
+            background: rgba(28, 27, 27, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(224, 220, 213, 0.1);
+        }
+        select, input {
+            background-color: #0e0e0e !important;
+            border: 1px solid rgba(224, 220, 213, 0.1) !important;
+            color: #e5e2e1 !important;
+        }
+        select:focus, input:focus {
+            border-color: #c7a230 !important;
+            ring-color: #c7a230 !important;
+        }
+    </style>
+</head>
+<body class="font-body antialiased min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-background/80 backdrop-blur-xl border-b border-outline-variant sticky top-0 z-50">
+      <div class="w-full px-6 h-20 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-4"><a href="/" class="text-2xl font-bold tracking-wider text-primary font-headline uppercase">SHESHENY ADMIN</a></div>
+        </div>
+        <div id="user-info" class="hidden flex items-center gap-6">
+          <span id="user-email" class="text-sm text-neutral-400 font-medium"></span>
+          <button id="logout-btn" class="text-sm font-bold text-red-500 hover:text-red-400 uppercase tracking-widest">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-4 md:p-8 max-w-7xl mx-auto w-full">
+      <!-- Login Section -->
+      <div id="login-section" class="max-w-md mx-auto mt-20 hidden">
+        <div class="admin-card p-10 rounded-2xl shadow-2xl">
+          <div class="text-4xl font-bold tracking-tighter text-primary font-headline uppercase text-center mb-8">SHESHENY</div>
+          <h2 class="font-headline text-3xl font-extrabold mb-8 text-center tracking-tight">Admin Login</h2>
+          <form id="login-form" class="space-y-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-primary mb-2">Email</label>
+              <input type="email" id="email" class="w-full rounded-lg px-4 py-3 outline-none transition-all" required />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-primary mb-2">Password</label>
+              <input type="password" id="password" class="w-full rounded-lg px-4 py-3 outline-none transition-all" required />
+            </div>
+            <div id="login-error" class="text-red-500 text-sm hidden font-medium text-center"></div>
+            <button type="submit" class="w-full gold-shimmer text-on-primary font-headline font-bold py-4 rounded-lg transition-all hover:brightness-110 active:scale-95 shadow-xl">
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Events Dashboard -->
+      <div id="dashboard-section" class="hidden">
+        <div class="mb-10">
+          <h2 class="font-headline text-4xl font-extrabold tracking-tight mb-2">Special Events</h2>
+          <p class="text-neutral-400">Toggle website-wide themes for special events.</p>
+        </div>
+
+        <div class="admin-card p-10 rounded-2xl shadow-xl max-w-2xl">
+          <form id="event-form" class="space-y-8">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-widest text-primary mb-2">Active Event Theme</label>
+              <select id="active-event" class="w-full rounded-lg px-4 py-3 outline-none text-sm font-bold tracking-wide bg-[#0e0e0e]">
+                <option value="none">None (Default Theme)</option>
+                <optgroup label="Islamic Holidays">
+                    <option value="ramadan">Ramadan</option>
+                    <option value="eid-fitr">Eid al-Fitr</option>
+                    <option value="eid-adha">Eid al-Adha</option>
+                    <option value="hijri-new-year">Islamic New Year (Hijri New Year)</option>
+                    <option value="mawlid">Mawlid al-Nabi</option>
+                </optgroup>
+                <optgroup label="Coptic Holidays">
+                    <option value="coptic-christmas">Coptic Christmas (Jan 7)</option>
+                    <option value="easter">Easter</option>
+                    <option value="sham-el-nessim">Sham El Nessim (Spring Festival)</option>
+                </optgroup>
+                <optgroup label="National Holidays">
+                    <option value="police-day">Police Day (Jan 25)</option>
+                    <option value="sinai-liberation">Sinai Liberation Day (Apr 25)</option>
+                    <option value="revolution-day">Revolution Day (Jul 23)</option>
+                    <option value="armed-forces-day">Armed Forces Day (Oct 6)</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="pt-6 border-t border-outline-variant flex justify-end">
+              <button type="submit" id="save-btn" class="gold-shimmer text-on-primary font-headline font-bold py-4 px-12 rounded-lg transition-all hover:brightness-110 active:scale-95 shadow-xl">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../db/products.js"></script>
+    <script src="../db/brands.js"></script>
+    <script src="../db/categories.js"></script>
+    <script src="../db/messages.js"></script>
+    <script src="../db/settings.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

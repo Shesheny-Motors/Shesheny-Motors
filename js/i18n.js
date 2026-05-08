@@ -14,7 +14,7 @@ class I18nManager {
     async init() {
         // Load translations
         try {
-            const res = await fetch('translations.json');
+            const res = await fetch('/translations.json');
             this.translations = await res.json();
         } catch (e) {
             console.error("Failed to load translations.json", e);

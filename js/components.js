@@ -5,18 +5,18 @@ class HeaderComponent extends HTMLElement {
         this.innerHTML = `
             <nav class="fixed top-0 w-full z-50 bg-zinc-950/70 backdrop-blur-xl transition-all duration-300" id="main-nav">
                 <div class="flex justify-between items-center px-4 md:px-12 py-4 md:py-6 w-full max-w-screen-2xl mx-auto">
-                    <a href="index.html" class="text-xl font-headline font-bold tracking-tight text-amber-200">
+                    <a href="/" class="text-xl font-headline font-bold tracking-tight text-amber-200">
                         Shesheny Motors
                     </a>
                     <div class="hidden md:flex items-center space-x-8 rtl:space-x-reverse" id="desktop-nav-links">
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="index.html" data-i18n="nav_home">Home</a>
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="inventory.html" data-i18n="nav_inventory">Inventory</a>
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="about.html" data-i18n="nav_about">About</a>
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="contact.html" data-i18n="nav_contact">Contact</a>
-                        <a class="text-amber-200/80 hover:text-amber-200 transition-colors duration-200 font-body text-sm tracking-wide font-medium" href="request.html" data-i18n="nav_custom_request">Custom Request</a>
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="/" data-i18n="nav_home">Home</a>
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="/inventory/" data-i18n="nav_inventory">Inventory</a>
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="/about/" data-i18n="nav_about">About</a>
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-colors duration-200 font-body text-sm tracking-wide" href="/contact/" data-i18n="nav_contact">Contact</a>
+                        <a class="text-amber-200/80 hover:text-amber-200 transition-colors duration-200 font-body text-sm tracking-wide font-medium" href="/request/" data-i18n="nav_custom_request">Custom Request</a>
                     </div>
                     <div class="flex items-center space-x-3 md:space-x-4 rtl:space-x-reverse">
-                        <a class="text-zinc-400 hover:text-zinc-100 transition-all duration-200 font-body text-sm tracking-wide flex items-center gap-2 group" href="cart.html">
+                        <a class="text-zinc-400 hover:text-zinc-100 transition-all duration-200 font-body text-sm tracking-wide flex items-center gap-2 group" href="/cart/">
                             <div class="relative bg-zinc-800/60 p-2 rounded-full border border-zinc-700/50 group-hover:border-amber-200/30 group-hover:bg-zinc-800">
                                 <span class="material-symbols-outlined text-lg">shopping_bag</span>
                                 <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-amber-200 text-zinc-950 text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full hidden">0</span>
@@ -33,7 +33,7 @@ class HeaderComponent extends HTMLElement {
                             <span class="material-symbols-outlined">menu</span>
                         </button>
                         <div id="desktop-auth-area" class="hidden md:block">
-                            <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="login.html" data-i18n="sign_in">Sign In</a>
+                            <a class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2.5 rounded hover:scale-105 transition-transform duration-200 font-label font-medium text-sm" href="/login/" data-i18n="sign_in">Sign In</a>
                         </div>
                     </div>
                 </div>
@@ -51,11 +51,11 @@ class HeaderComponent extends HTMLElement {
                                 <span class="material-symbols-outlined text-xl">close</span>
                             </button>
                         </div>                 <div class="flex flex-col items-center space-y-6 flex-grow justify-center">
-                        <a href="index.html" class="text-3xl font-headline font-bold text-amber-200 tracking-tight" data-i18n="nav_home">Home</a>
-                        <a href="inventory.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_inventory">Inventory</a>
-                        <a href="about.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_about">About</a>
-                        <a href="contact.html" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_contact">Contact</a>
-                        <a href="request.html" class="text-2xl font-body font-semibold text-amber-200/80 tracking-widest uppercase py-4 border-y border-zinc-800/50 w-full text-center" data-i18n="nav_custom_request">Custom Request</a>
+                        <a href="/" class="text-3xl font-headline font-bold text-amber-200 tracking-tight" data-i18n="nav_home">Home</a>
+                        <a href="/inventory/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_inventory">Inventory</a>
+                        <a href="/about/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_about">About</a>
+                        <a href="/contact/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_contact">Contact</a>
+                        <a href="/request/" class="text-2xl font-body font-semibold text-amber-200/80 tracking-widest uppercase py-4 border-y border-zinc-800/50 w-full text-center" data-i18n="nav_custom_request">Custom Request</a>
                     </div>
                     
                     <div class="flex flex-col items-center gap-6 pt-8 border-t border-zinc-800/50 p-6">
@@ -83,12 +83,13 @@ class HeaderComponent extends HTMLElement {
 
     _highlightActiveLink() {
         const path = window.location.pathname;
-        const page = path.split("/").pop() || "index.html";
         
         // Desktop Links
         const links = this.querySelectorAll('#desktop-nav-links a');
         links.forEach(link => {
-            if (link.getAttribute('href') === page) {
+            const href = link.getAttribute('href');
+            // Match exact path or path with trailing slash
+            if (href === path || href === path + '/' || href + '/' === path || (href === '/' && (path === '/' || path === '/index.html'))) {
                 link.className = "text-amber-200 font-medium border-b-2 border-amber-200 pb-1 font-body text-sm tracking-wide";
             }
         });
@@ -154,9 +155,9 @@ class FooterComponent extends HTMLElement {
                 <div>
                     <h4 class="font-headline text-amber-200 mb-6" data-i18n="footer_contact">Contact</h4>
                     <ul class="space-y-3 font-body text-sm">
-                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html" data-i18n="footer_inquiries">Inquiries</a></li>
-                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="request.html" data-i18n="footer_custom_request">Custom Request</a></li>
-                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="contact.html" data-i18n="footer_appointments">Appointments</a></li>
+                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="/contact/" data-i18n="footer_inquiries">Inquiries</a></li>
+                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="/request/" data-i18n="footer_custom_request">Custom Request</a></li>
+                        <li><a class="text-zinc-500 hover:text-zinc-300 hover:translate-x-1 transition-transform duration-200 inline-block" href="/contact/" data-i18n="footer_appointments">Appointments</a></li>
                     </ul>
                 </div>
                 <div>
@@ -226,7 +227,7 @@ customElements.define('shesheny-footer', FooterComponent);
 // Global Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('SW registered!', reg))
             .catch(err => console.log('SW registration failed', err));
     });

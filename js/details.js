@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = parseInt(params.get('id'));
 
     if(!id) {
-        window.location.href = 'inventory.html';
+        window.location.href = '/inventory/';
         return;
     }
 
@@ -94,6 +94,9 @@ function renderVehicleDetails() {
         }
     }
 
+    // Populate color display
+    renderColorDisplay();
+
     updatePriceDisplay();
 
     // Apply sold-out visual treatment
@@ -150,7 +153,37 @@ function setupContactButtons(settings) {
     
     if(whatsappBtn) whatsappBtn.href = `https://wa.me/${settings.whatsapp_number.replace(/\D/g,'')}?text=${msg}`;
     if(callBtn) callBtn.href = `tel:${settings.phone_number.replace(/\D/g,'')}`;
-    if(inquireBtn) inquireBtn.href = `contact.html?vehicle=${encodeURIComponent(vehicleName)}`;
+    if(inquireBtn) inquireBtn.href = `/contact/?vehicle=${encodeURIComponent(vehicleName)}`;
+}
+
+function renderColorDisplay() {
+    const colorDisplay = document.getElementById('color-display');
+    const swatchesContainer = document.getElementById('color-swatches');
+    if (!colorDisplay || !swatchesContainer) return;
+
+    let variants = currentVehicle.color_variants || [];
+    if (typeof variants === 'string') {
+        try { variants = JSON.parse(variants); } catch(e) { variants = []; }
+    }
+
+    if (variants.length === 0) {
+        colorDisplay.classList.add('hidden');
+        return;
+    }
+
+    const isAr = window.I18n ? window.I18n.lang === 'ar' : (localStorage.getItem('site_lang') === 'ar');
+
+    swatchesContainer.innerHTML = variants.map(v => {
+        const name = (isAr && v.name_ar) ? v.name_ar : v.name;
+        return `
+            <div class="flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                <div class="w-5 h-5 rounded-full border border-white/20 flex-shrink-0" style="background:${v.hex || '#888'}"></div>
+                <span class="text-stone-300 text-sm font-medium">${name || ''}</span>
+            </div>
+        `;
+    }).join('');
+
+    colorDisplay.classList.remove('hidden');
 }
 
 function setupGallery() {
@@ -165,12 +198,20 @@ function setupGallery() {
 
     setMainImage(0);
 
+    // Clicking a thumbnail opens the lightbox
     document.querySelectorAll('.gallery-thumb').forEach(thumb => {
         thumb.addEventListener('click', (e) => {
             const idx = parseInt(e.currentTarget.getAttribute('data-index'));
-            setMainImage(idx);
+            openLightbox(idx);
         });
     });
+
+    // Clicking the hero image opens the lightbox at current index
+    const heroImg = document.getElementById('detail-hero-img');
+    if (heroImg) {
+        heroImg.style.cursor = 'pointer';
+        heroImg.addEventListener('click', () => openLightbox(currentGalleryIndex));
+    }
 
     document.getElementById('gallery-prev').addEventListener('click', () => {
         let newIdx = currentGalleryIndex - 1;
@@ -184,7 +225,8 @@ function setupGallery() {
         setMainImage(newIdx);
     });
 
-
+    // Setup lightbox controls
+    setupLightbox();
 }
 
 function setMainImage(index) {
@@ -211,7 +253,79 @@ function setMainImage(index) {
     });
 }
 
+// --- Lightbox ---
+let lightboxIndex = 0;
 
+function openLightbox(index) {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox || !galleryImages.length) return;
+    lightboxIndex = index;
+    updateLightboxImage();
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) lightbox.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+function updateLightboxImage() {
+    const img = document.getElementById('lightbox-img');
+    const counter = document.getElementById('lightbox-counter');
+    if (img) img.src = galleryImages[lightboxIndex];
+    if (counter) counter.textContent = `${lightboxIndex + 1} / ${galleryImages.length}`;
+}
+
+function lightboxPrev() {
+    lightboxIndex = lightboxIndex > 0 ? lightboxIndex - 1 : galleryImages.length - 1;
+    updateLightboxImage();
+}
+
+function lightboxNext() {
+    lightboxIndex = lightboxIndex < galleryImages.length - 1 ? lightboxIndex + 1 : 0;
+    updateLightboxImage();
+}
+
+function setupLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', lightboxPrev);
+    document.getElementById('lightbox-next').addEventListener('click', lightboxNext);
+
+    // Close on backdrop click (not on image or buttons)
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (lightbox.classList.contains('hidden')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') lightboxPrev();
+        if (e.key === 'ArrowRight') lightboxNext();
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) lightboxNext();
+            else lightboxPrev();
+        }
+    }, { passive: true });
+}
 
 async function setupDepositModal() {
     const btnDeposit = document.getElementById('btn-deposit');
@@ -266,7 +380,7 @@ async function setupDepositModal() {
             if (!session) {
                 // Redirect to login with return URL
                 const returnUrl = encodeURIComponent(window.location.href);
-                window.location.href = `login.html?redirect=${returnUrl}`;
+                window.location.href = `/login/?redirect=${returnUrl}`;
                 return;
             }
         }

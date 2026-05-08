@@ -206,7 +206,7 @@ function updateTranslations() {
 async function initAdmin() {
   // Load translations
   try {
-    const res = await fetch("data/translations.json");
+    const res = await fetch("/data/translations.json");
     window.translationsData = await res.json();
     updateTranslations();
   } catch (e) {
@@ -266,6 +266,36 @@ async function initAdmin() {
   document.getElementById("settings-form").addEventListener("submit", handleSaveSettings);
 
   document.getElementById("p-gallery").addEventListener("change", handleGalleryUpload);
+
+  // Drag-and-drop gallery upload
+  const dropZone = document.getElementById("gallery-drop-zone");
+  if (dropZone) {
+    ['dragenter', 'dragover'].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('border-primary', 'bg-primary/10');
+      });
+    });
+    ['dragleave', 'drop'].forEach(evt => {
+      dropZone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('border-primary', 'bg-primary/10');
+      });
+    });
+    dropZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files.length > 0) {
+        // Filter to only image files
+        const imageFiles = Array.from(dt.files).filter(f => f.type.startsWith('image/'));
+        if (imageFiles.length > 0) {
+          handleGalleryDropFiles(imageFiles);
+        }
+      }
+    });
+  }
+
   document.getElementById("add-color-variant-btn").addEventListener("click", () => addColorVariant());
 
   // Image previews
@@ -324,6 +354,38 @@ async function handleGalleryUpload(e) {
         if(btn) btn.disabled = false;
         // Reset file input so they can select the same file(s) again if needed
         e.target.value = "";
+    }
+}
+
+async function handleGalleryDropFiles(files) {
+    if (!files.length) return;
+
+    showToast(`Uploading ${files.length} image(s) sequentially...`);
+    const btn = document.getElementById("save-btn");
+    if(btn) btn.disabled = true;
+
+    try {
+        for (let i = 0; i < files.length; i++) {
+            const rawFile = files[i];
+            const file = await compressImageClient(rawFile);
+            const path = `gallery/${Date.now()}-${Math.random().toString(36).substring(2, 7)}-${sanitizeFilename(file.name)}`;
+            const { error } = await window.supabase.storage.from("vehicle-images").upload(path, file, { upsert: true });
+            if (error) throw error;
+            
+            const url = window.supabase.storage.from("vehicle-images").getPublicUrl(path).data.publicUrl;
+            currentGallery.push(url);
+            renderGalleryPreview();
+            
+            if (i < files.length - 1) {
+                showToast(`Uploaded ${i + 1} of ${files.length}...`);
+            }
+        }
+        showToast("Gallery upload complete!");
+    } catch (err) {
+        console.error('Gallery upload error:', err);
+        showToast("Upload failed: " + (err.message || err), "error");
+    } finally {
+        if(btn) btn.disabled = false;
     }
 }
 
@@ -437,7 +499,7 @@ function showAccessDenied() {
       <p class="text-zinc-400 max-w-md mb-6">This area is restricted to authorized administrators only. If you believe this is an error, please contact the site owner.</p>
       <p class="text-zinc-600 text-sm mb-4">Signed in as: <span class="text-zinc-400">${currentUser?.email || ''}</span></p>
       <div class="flex gap-4">
-        <a href="index.html" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
+        <a href="/" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
           ← Back to Site
         </a>
         <button onclick="window.handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
@@ -474,7 +536,7 @@ async function handleLogin(e) {
 }
 async function handleLogout() { 
   await window.supabase.auth.signOut(); 
-  window.location.href = 'index.html';
+  window.location.href = '/';
 }
 window.handleLogout = handleLogout;
 
@@ -1340,7 +1402,7 @@ function showAccessDenied() {
       <p class="text-zinc-400 max-w-md mb-6">This area is restricted to authorized administrators only. If you believe this is an error, please contact the site owner.</p>
       <p class="text-zinc-600 text-sm mb-4">Signed in as: <span class="text-zinc-400 font-bold">${currentUser?.email || ''}</span></p>
       <div class="flex gap-4">
-        <a href="index.html" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
+        <a href="/" class="px-6 py-2.5 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors font-medium text-sm">
           ← Back to Site
         </a>
         <button onclick="handleLogout()" class="px-6 py-2.5 bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors font-medium text-sm border border-red-500/20">
