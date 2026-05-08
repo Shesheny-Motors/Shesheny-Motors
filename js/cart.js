@@ -29,10 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderCart(products, depositIds) {
     const contentDiv = document.getElementById('cart-content');
     contentDiv.innerHTML = products.map(v => {
-        const isUsd = window.I18n ? window.I18n.currency === 'USD' : false;
-        const exchangeRate = window.settingsData?.exchange_rate || 50;
-        const priceUsd = v.price_egp / exchangeRate;
-        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp, priceUsd) : (isUsd ? `$${priceUsd.toLocaleString()}` : `${v.price_egp.toLocaleString()} EGP`);
+        const priceStr = window.I18n ? window.I18n.formatPrice(v.price_egp) : `${v.price_egp.toLocaleString()} EGP`;
         
         const hasDeposit = depositIds.includes(v.id);
         const depositBadge = hasDeposit ? 

@@ -26,9 +26,6 @@ class HeaderComponent extends HTMLElement {
                             <span class="material-symbols-outlined text-sm" style="font-size:14px">language</span>
                             <span id="lang-toggle-label">عربي</span>
                         </button>
-                        <button id="currency-toggle" class="flex items-center gap-1 text-zinc-400 hover:text-amber-200 font-body text-xs font-bold uppercase tracking-wider transition-all duration-200 bg-zinc-800/60 hover:bg-zinc-800 px-3 py-1.5 rounded-full border border-zinc-700/50 hover:border-amber-200/30">
-                            <span id="currency-toggle-label">EGP</span>
-                        </button>
                         <button class="md:hidden text-zinc-400 hover:text-zinc-100" id="mobile-menu-btn">
                             <span class="material-symbols-outlined">menu</span>
                         </button>
@@ -53,6 +50,8 @@ class HeaderComponent extends HTMLElement {
                         </div>                 <div class="flex flex-col items-center space-y-6 flex-grow justify-center">
                         <a href="/" class="text-3xl font-headline font-bold text-amber-200 tracking-tight" data-i18n="nav_home">Home</a>
                         <a href="/inventory/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_inventory">Inventory</a>
+                        <a href="/favorites/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_favorites">Favorites</a>
+                        <a href="/cart/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_cart">Cart</a>
                         <a href="/about/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_about">About</a>
                         <a href="/contact/" class="text-3xl font-headline font-bold text-zinc-100 tracking-tight" data-i18n="nav_contact">Contact</a>
                         <a href="/request/" class="text-2xl font-body font-semibold text-amber-200/80 tracking-widest uppercase py-4 border-y border-zinc-800/50 w-full text-center" data-i18n="nav_custom_request">Custom Request</a>
@@ -63,9 +62,6 @@ class HeaderComponent extends HTMLElement {
                             <button id="mobile-lang-toggle" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">language</span>
                                 <span id="mobile-lang-label">عربي</span>
-                            </button>
-                            <button id="mobile-currency-toggle" class="bg-zinc-900 border border-zinc-800 text-zinc-400 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-widest">
-                                <span id="mobile-currency-label">EGP</span>
                             </button>
                         </div>
                         <div id="mobile-auth-area">

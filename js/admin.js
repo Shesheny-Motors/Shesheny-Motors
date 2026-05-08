@@ -1315,7 +1315,6 @@ window.deleteRequest = (id) => showConfirm("Delete custom request?", async () =>
 async function loadSettings() {
     try {
         const s = await window.settingsDb.getAll();
-        document.getElementById("setting-egp-usd").value = s.exchange_rate || "50";
         document.getElementById("setting-location-pin").value = s.location_pin || "";
         document.getElementById("setting-map-embed").value = s.map_iframe_source || "";
         document.getElementById("current-hero-image").textContent = s.hero_image ? "Set" : "Not set";
@@ -1344,7 +1343,6 @@ async function handleSaveSettings(e) {
     btn.textContent = "Saving...";
     try {
         const updates = [
-            { key: "exchange_rate", value: document.getElementById("setting-egp-usd").value },
             { key: "location_pin", value: document.getElementById("setting-location-pin").value },
             { key: "map_iframe_source", value: document.getElementById("setting-map-embed").value }
         ];
