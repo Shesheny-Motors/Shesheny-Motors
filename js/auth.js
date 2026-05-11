@@ -39,6 +39,19 @@ window.SheshenyAuth = (() => {
         return { data, error };
     }
 
+    async function resetPasswordForEmail(email) {
+        const redirectTo = window.location.origin + '/login/update-password.html';
+        const { data, error } = await sb().auth.resetPasswordForEmail(email, {
+            redirectTo: redirectTo
+        });
+        return { data, error };
+    }
+
+    async function updateUserPassword(newPassword) {
+        const { data, error } = await sb().auth.updateUser({ password: newPassword });
+        return { data, error };
+    }
+
     async function signOut() {
         const { error } = await sb().auth.signOut();
         return { error };
@@ -201,6 +214,8 @@ window.SheshenyAuth = (() => {
         signUpWithEmail,
         signInWithEmail,
         signInWithGoogle,
+        resetPasswordForEmail,
+        updateUserPassword,
         signOut,
         getSession,
         getUser,

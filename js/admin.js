@@ -534,6 +534,36 @@ async function handleLogin(e) {
     errDiv.classList.remove("hidden");
   }
 }
+
+async function handleAdminForgotPassword(e) {
+  e.preventDefault();
+  const email = document.getElementById("email").value;
+  const errDiv = document.getElementById("login-error");
+  
+  if (!email) {
+    errDiv.textContent = "Please enter your email address first.";
+    errDiv.classList.remove("hidden");
+    return;
+  }
+  
+  const redirectTo = window.location.origin + '/login/update-password.html';
+  const { error } = await window.supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: redirectTo
+  });
+  if (error) {
+    errDiv.textContent = error.message;
+    errDiv.classList.remove("hidden");
+    errDiv.classList.add("text-red-500");
+    errDiv.classList.remove("text-green-500");
+  } else {
+    errDiv.textContent = "Password reset email sent! Check your inbox.";
+    errDiv.classList.remove("hidden");
+    errDiv.classList.remove("text-red-500");
+    errDiv.classList.add("text-green-500");
+  }
+}
+window.handleAdminForgotPassword = handleAdminForgotPassword;
+
 async function handleLogout() { 
   await window.supabase.auth.signOut(); 
   window.location.href = '/';
