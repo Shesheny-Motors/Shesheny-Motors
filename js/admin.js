@@ -546,7 +546,7 @@ async function handleAdminForgotPassword(e) {
     return;
   }
   
-  const redirectTo = window.location.origin + '/login/update-password.html';
+  const redirectTo = window.location.origin + '/login/update-password/';
   const { error } = await window.supabase.auth.resetPasswordForEmail(email, {
     redirectTo: redirectTo
   });

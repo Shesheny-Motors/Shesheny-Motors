@@ -40,7 +40,7 @@ window.SheshenyAuth = (() => {
     }
 
     async function resetPasswordForEmail(email) {
-        const redirectTo = window.location.origin + '/login/update-password.html';
+        const redirectTo = window.location.origin + '/login/update-password/';
         const { data, error } = await sb().auth.resetPasswordForEmail(email, {
             redirectTo: redirectTo
         });
