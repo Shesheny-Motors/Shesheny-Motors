@@ -808,9 +808,11 @@ async function handleSaveProduct(e) {
     btn.disabled = true;
     btn.textContent = "Saving...";
     try {
+        const nameEn = document.getElementById("p-name").value;
+        const descEn = document.getElementById("p-desc").value;
         const payload = {
-            name: document.getElementById("p-name").value,
-            name_ar: document.getElementById("p-name-ar").value,
+            name: nameEn,
+            name_ar: document.getElementById("p-name-ar").value || nameEn,
             price_egp: parseFloat(document.getElementById("p-price").value),
             discount_price: document.getElementById("p-discount").value ? parseFloat(document.getElementById("p-discount").value) : null,
             category: document.getElementById("p-category").value,
@@ -819,13 +821,16 @@ async function handleSaveProduct(e) {
             is_spotlight: document.getElementById("p-featured").checked,
             is_upon_request: document.getElementById("p-upon-request").checked,
             is_sold_out: document.getElementById("p-sold-out").checked,
-            description: document.getElementById("p-desc").value,
-            description_ar: document.getElementById("p-desc-ar").value,
+            description: descEn,
+            description_ar: document.getElementById("p-desc-ar").value || descEn,
             mileage: document.getElementById("p-mileage").value,
             transmission: document.getElementById("p-trans").value,
             fuel_type: document.getElementById("p-fuel").value,
             version: document.getElementById("p-version").value,
-            color_variants: currentColorVariants
+            color_variants: currentColorVariants.map(v => ({
+                ...v,
+                name_ar: v.name_ar || v.name
+            }))
         };
 
         let file = document.getElementById("p-image").files[0];
@@ -1001,9 +1006,10 @@ async function handleSaveCategory(e) {
     btn.disabled = true;
     btn.textContent = "Saving...";
     try {
+        const nameEn = document.getElementById("cat-name").value;
         const payload = {
-            name: document.getElementById("cat-name").value,
-            name_ar: document.getElementById("cat-name-ar").value
+            name: nameEn,
+            name_ar: document.getElementById("cat-name-ar").value || nameEn
         };
         if (editingCategoryId) await window.categoriesDb.update(editingCategoryId, payload);
         else await window.categoriesDb.create(payload);
