@@ -183,7 +183,7 @@ function setupGallery() {
     
     const thumbsContainer = document.getElementById('gallery-thumbs');
     thumbsContainer.innerHTML = galleryImages.map((img, idx) => `
-        <img class="gallery-thumb h-28 w-48 object-cover rounded-sm snap-start cursor-pointer transition-opacity ${idx === 0 ? 'border-2 border-[#c5a059] opacity-100' : 'opacity-50 hover:opacity-100'}" 
+        <img class="gallery-thumb h-16 w-24 md:h-28 md:w-48 flex-shrink-0 object-cover rounded-xl md:rounded-sm snap-start cursor-pointer transition-all duration-300 ${idx === 0 ? 'border-2 border-[#c5a059] opacity-100' : 'border border-white/20 opacity-60 hover:opacity-100'}" 
              src="${img}" 
              data-index="${idx}" />
     `).join('');
@@ -236,11 +236,21 @@ function setMainImage(index) {
     document.querySelectorAll('.gallery-thumb').forEach((thumb, idx) => {
         if(idx === index) {
             thumb.classList.add('border-2', 'border-[#c5a059]', 'opacity-100');
-            thumb.classList.remove('opacity-50');
-            // Removed scrollIntoView as it causes unexpected page scrolling
+            thumb.classList.remove('opacity-60', 'border', 'border-white/20');
+            
+            const container = document.getElementById('gallery-thumbs');
+            if (container) {
+                const thumbOffset = thumb.offsetLeft;
+                const thumbWidth = thumb.offsetWidth;
+                const containerWidth = container.offsetWidth;
+                container.scrollTo({
+                    left: thumbOffset - containerWidth / 2 + thumbWidth / 2,
+                    behavior: 'smooth'
+                });
+            }
         } else {
             thumb.classList.remove('border-2', 'border-[#c5a059]', 'opacity-100');
-            thumb.classList.add('opacity-50');
+            thumb.classList.add('opacity-60', 'border', 'border-white/20');
         }
     });
 }
@@ -273,11 +283,13 @@ function updateLightboxImage() {
 function lightboxPrev() {
     lightboxIndex = lightboxIndex > 0 ? lightboxIndex - 1 : galleryImages.length - 1;
     updateLightboxImage();
+    setMainImage(lightboxIndex);
 }
 
 function lightboxNext() {
     lightboxIndex = lightboxIndex < galleryImages.length - 1 ? lightboxIndex + 1 : 0;
     updateLightboxImage();
+    setMainImage(lightboxIndex);
 }
 
 function setupLightbox() {
